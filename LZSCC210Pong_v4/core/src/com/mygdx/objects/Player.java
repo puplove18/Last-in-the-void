@@ -9,43 +9,40 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.helpers.Constants;
 
-public class Player extends PlayerPaddle {
-	
-	public Player(float x, float y, Body body) {
-		super(x,y, body);
-		
-		Pixmap pixmap = new Pixmap(Constants.PLAYER_PADDLE_WIDTH, Constants.PLAYER_PADDLE_HEIGHT, Pixmap.Format.RGBA8888);
-		pixmap.setBlending(Pixmap.Blending.None);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        
-		this.texture = new Texture(pixmap);
-		
-		pixmap.dispose();
+Public class Player{
+    private String name;
+    private float health;
+    private float oxygen;
+    private Array inventory;
+
+    public void setHealth(val) {
+        this.health = val;
+    }
+
+    public float getHealth() {
+        return (float) this.health;
+    }
+
+    public void setOxygen(val) {
+        this.oxygen = val;
+    }
+
+    public float getOxygen() {
+        return (float) this.oxygen;
+    }    
+
+    public void setName(player_name) {
+        this.name = player_name;
+    }
+
+	public void setInventory(inventory) {
+		this.inventory = inventory;
 	}
-	
-	public void update() {
-		// Direction depends on user input
-		int direction = 0;
-		
-		if(Gdx.input.isKeyPressed(Input.Keys.UP))
-			direction = 1;
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
-			direction = -1;
-		
-		// Computation of potential new velocity, it depends on the distance to borders
-		this.velY = getNewVelocity(direction, Constants.PLAYER_PADDLE_MAX_SPEED);
-		
-		setNewVelocity(Constants.PLAYER_PADDLE_HEIGHT);
-		
-		x = body.getPosition().x * Constants.PPM - (Constants.PLAYER_PADDLE_WIDTH/2);
-		y = body.getPosition().y * Constants.PPM - (Constants.PLAYER_PADDLE_HEIGHT/2);
-					
+
+	public void getInventory() {
+		return this.inventory;
 	}
-	
-	@Override
-	public void render(SpriteBatch spriteBatch) {
-		spriteBatch.draw(texture, x, y, Constants.PLAYER_PADDLE_WIDTH, Constants.PLAYER_PADDLE_HEIGHT);
-	}
+
+    
 
 }
