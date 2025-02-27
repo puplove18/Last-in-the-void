@@ -1,9 +1,0 @@
-From https://www.dafont.com/bakso-sapi.font
-
-Note of the author
-
-Bakso Sapi is a free font from Locomotype that adopts handwriting style using markers. This will look very natural because of the opentype feature that allows the sequence of letters to change automatically. Make sure Contextual Alternates is enabled to access this feature.
-
-You can use Bakso Sapi to create designs for kids, comics, posters and quotes. It is free for personal and commercial purpose based on Locomotype's standard desktop license: https://bit.ly/LCMT-license . Feel free to contact us if you want to request a customized version.
-
-We've released the BaksoSapi Pro font. This new font features lowercase, kerning improvements and supports more languages. We also include BaksoSapi Script to support paired fonts. More info: https://bit.ly/NewBKSPro
