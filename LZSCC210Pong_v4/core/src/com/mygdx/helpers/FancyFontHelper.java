@@ -16,7 +16,7 @@ public class FancyFontHelper {
    private FreeTypeFontGenerator fontGenerator;
 
    private FancyFontHelper() {
-      fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("BaksoSapi.otf"));
+      fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("Orbitron-VariableFont_wght.otf"));
    }
 
    public static FancyFontHelper getInstance() {
