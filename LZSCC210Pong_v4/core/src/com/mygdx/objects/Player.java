@@ -1,6 +1,6 @@
-/*package com.mygdx.objects;
+package com.mygdx.objects;
 
-import com.badlogic.gdx.Gdx;
+/*import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -9,11 +9,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.helpers.Constants;*/
 
+
 public class Player{
     private String name;
     private double health = 100;
 	private double fuel = 100;
     private double oxygen = 100;
+
+    private Inventory inventory;
     //private Array<String> inventory = new Array<>();
 
     enum Stats {
@@ -70,14 +73,6 @@ public class Player{
     }
 }
 
-	/*public void setInventory(inventory) {
-		this.inventory = inventory;
-	}*/
-
-	/*public void getInventory() {
-		return this.inventory;
-	}*/
-
 	public void updateStat(Stats stat, double val) {
 		double old_val;
 		double new_val;
@@ -97,17 +92,38 @@ public class Player{
 			this.setOxygen(new_val);
 		}	
 	}
+
+
+    // Interaction with Inventory
+    public void addItemToInventory(String item) {
+        inventory.addItem(item);
+    }
+
+    public void removeItemFromInventory(String item, int quantity) {
+        inventory.removeItem(item, quantity);
+    }
+
+    public void showInventory() {
+		inventory.showInventory();
+	}
+
+
     public static void main(String[] args){
         Player tester = new Player();
+
         Stats health = Stats.HEALTH;
         Stats fuel = Stats.FUEL;
         Stats oxygen = Stats.OXYGEN;
+
         tester.updateStat(health, -40);
         tester.updateStat(fuel, -37.5);
         tester.updateStat(oxygen, 30);
+
         System.out.println(tester.getHealth());
         System.out.println(tester.getFuel());
         System.out.println(tester.getOxygen());
+
+        
 
     }
 }
