@@ -18,8 +18,6 @@ import com.mygdx.screens.GameScreen;
 public class InteractiveObject{
 
     public InteractiveObject(){
-
+//           Here should be some libgdx interactions stuff
     }
-
-
 }
