@@ -39,5 +39,13 @@ public class Alien extends InteractiveObject{
     public void interact() {
         System.out.println("Encountered " + type + " alien: " + attitude);
     }
+    public void greeting(){
+        if (this.attitude == Attitude.FRIEND){
+            System.out.println("\'Friedly greetimng from alien\'");
+        }
+        else{
+            System.out.println("\'You feel bad intentions from this alien\'");
+        }
+    }
 
 }
