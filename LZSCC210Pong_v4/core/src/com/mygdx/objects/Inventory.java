@@ -26,13 +26,13 @@ public class Inventory {
     }
 
     // Remove items
-    public boolean removeItem(String item) {
+    public boolean removeItem(String item, int quant) {
         if (items.containsKey(item)) {
             int quantity = items.get(item);
-            if (quantity == 1) {
+            if (quantity - quant < 1) {
                 items.remove(item); 
             } else {
-                items.put(item, quantity - 1);  
+                items.put(item, quantity - quant);  
             }
             System.out.println(item + " removed from inventory.");
             return true;

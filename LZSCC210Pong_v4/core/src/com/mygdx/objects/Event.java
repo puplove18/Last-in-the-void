@@ -24,8 +24,8 @@ public class Event {
         }
     }
 
-    public void resolveEvent(int choiceIndex) {
-        if (Math.random() * 100 < successChances.get(choiceIndex)) {
+    public void resolveEvent(int choiceIndex, int modifier) {
+        if (Math.random() * 100 < successChances.get(choiceIndex)-modifier) {
             System.out.println("Success");
         } else {
             System.out.println("You died lol");
