@@ -59,4 +59,7 @@ public class Inventory {
     public boolean hasItem(String item) {
         return items.containsKey(item);
     }
+    public Integer checkItemQuantity(String item) {
+        return items.getOrDefault(item, 0); // Returns 0 if the item is not found
+    } 
 }
