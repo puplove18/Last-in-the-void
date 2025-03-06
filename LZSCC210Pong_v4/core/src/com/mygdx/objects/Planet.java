@@ -14,6 +14,7 @@ import com.mygdx.helpers.ContactType;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.pong.PongGame;
+import com.mygdx.objects.InteractiveObject;
 
 public class Planet extends InteractiveObject{
 
@@ -26,9 +27,22 @@ public class Planet extends InteractiveObject{
         Organic
     }
 
+    Type gas = Type.Gas;
+    Type min = Type.Mineral;
+    Type org = Type.Organic;
+
     public Planet(String name, String type) {
         this.name = name;
         this.type = Type.valueOf(type);
+    }
+
+    private boolean makeNewPlanet(String name) {
+        this.name = name;
+        double typeVal = Math.random() * 3;
+        if (0 <= typeVal && typeVal < 1) { this.type = gas;}
+        else if (1<= typeVal && typeVal < 2) {this. type = min;}
+        else {this.type = org;}
+
     }
 
 }
