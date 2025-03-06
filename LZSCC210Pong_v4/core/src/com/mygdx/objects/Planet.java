@@ -28,7 +28,7 @@ public class Planet extends InteractiveObject{
 
     public Planet(String name, String type) {
         this.name = name;
-        this.type = Type.valueOf(type)
+        this.type = Type.valueOf(type);
     }
 
 }
