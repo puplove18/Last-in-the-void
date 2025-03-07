@@ -14,8 +14,10 @@ public class Player{
     private double health = 100;
 	private double fuel = 100;
     private double oxygen = 100;
-    //private Array<String> inventory = new Array<>();
-
+    
+    private Inventory inventory;
+    
+    
     enum Stats {
         HEALTH, FUEL, OXYGEN;
     }
@@ -70,14 +72,6 @@ public class Player{
     }
 }
 
-	/*public void setInventory(inventory) {
-		this.inventory = inventory;
-	}*/
-
-	/*public void getInventory() {
-		return this.inventory;
-	}*/
-
 	public void updateStat(Stats stat, double val) {
 		double old_val;
 		double new_val;
@@ -97,6 +91,21 @@ public class Player{
 			this.setOxygen(new_val);
 		}	
 	}
+
+    // Interaction with Inventory
+    public void addItemToInventory(String item) {
+        inventory.addItem(item);
+    }
+
+    public void removeItemFromInventory(String item, int quantity) {
+        inventory.removeItem(item, quantity);
+    }
+
+    public void showInventory() {
+        inventory.showInventory();
+    }
+
+    
     public static void main(String[] args){
         Player tester = new Player();
         Stats health = Stats.HEALTH;
