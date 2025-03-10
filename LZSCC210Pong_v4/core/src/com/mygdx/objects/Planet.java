@@ -66,6 +66,7 @@ public class Planet extends InteractiveObject{
 
         //To be implimented later when some way of tracking player progression exists, potentially inherited from Star System
         //this.tier = 
+        return true; // Added to ensure the program compiles, can change later
 
     }
 
