@@ -6,6 +6,8 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -20,155 +22,143 @@ import com.mygdx.helpers.ContactType;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.GameContactListener;
 import com.mygdx.helpers.ScreenType;
-import com.mygdx.objects.Ball;
 import com.mygdx.objects.Player;
-import com.mygdx.objects.PlayerAI;
-import com.mygdx.objects.Wall;
+import com.mygdx.objects.SpaceShip;
 import com.mygdx.pong.PongGame;
 
 /**
- * This is the main game screen
+ * This is the main game screen for the space exploration game
  */
-public class GameScreen extends ScreenAdapter{
+public class GameScreen extends ScreenAdapter {
 
-	private OrthographicCamera camera;
-	private SpriteBatch batch;
-	// World is needed within the Box2D library 
-	private World world;
-	// Uncomment for debugging
-	//private Box2DDebugRenderer debugRenderer;
-	private BitmapFont font;
-	
-	//objects
-	private Player player;
-	private PlayerAI ai;
-	private Ball ball;
-	private Wall upper;
-	private Wall lower;
-	
-	public GameScreen(OrthographicCamera camera) {
-		Box2D.init();
-		
-		this.camera = camera;
-		this.camera.position.set(new Vector3(PongGame.getInstance().getWindowWidth()/2, PongGame.getInstance().getWindowHeight()/2, 0));
-		this.batch = new SpriteBatch();
-		this.world = new World(new Vector2(0, 0), false);
-		
-		// Uncomment for debugging
-		//this.debugRenderer = new Box2DDebugRenderer();
-		
-		this.world.setContactListener(new GameContactListener(this)); // Contact listener initialisation
-	
-		// Body creation: paddles are kinematic bodies
-	    Body playerBody = BodyHelper.createRectangularBody(16, PongGame.getInstance().getWindowHeight() / 2, Constants.AI_PADDLE_WIDTH, Constants.AI_PADDLE_HEIGHT, BodyType.KinematicBody, 1f, getWorld(), ContactType.AI);
-		this.player = new Player(16, PongGame.getInstance().getWindowHeight() / 2, playerBody);
-		
-		Body aiBody = BodyHelper.createRectangularBody(PongGame.getInstance().getWindowWidth() - 16, PongGame.getInstance().getWindowHeight() / 2, Constants.AI_PADDLE_WIDTH, Constants.AI_PADDLE_HEIGHT, BodyType.KinematicBody, 1f, getWorld(), ContactType.AI);
-		this.ai = new PlayerAI(PongGame.getInstance().getWindowWidth() - 16, PongGame.getInstance().getWindowHeight() / 2, aiBody, this);
-		
-		this.ball = new Ball(this);
-		
-		this.upper = new Wall(PongGame.getInstance().getWindowHeight() - (Constants.UPPER_WALL_SIZE/2), Constants.UPPER_WALL_SIZE, this);
-		
-		this.lower = new Wall((Constants.LOWER_WALL_SIZE/2), Constants.LOWER_WALL_SIZE, this);
-		
-		this.font = FancyFontHelper.getInstance().getFont(Color.WHITE, 40);
-		
-	}
-	
-	public void update() {
-		this.world.step(1/60f, 6, 2);
-		
-		// updating all required bodies
-		
-		this.camera.update();
-		
-		this.player.update();
-		
-		this.ai.update();
-		
-		this.ball.update();
-		
-		this.batch.setProjectionMatrix(this.camera.combined);
-		
-		// Reset button in case the ball gets stuck horizontally 
-		if(Gdx.input.isKeyPressed(Input.Keys.R))
-			this.ball.reset();
-		
-		// To return to the menu screen
-		if(Gdx.input.isKeyPressed(Input.Keys.M))
-			PongGame.getInstance().changeScreen(this, ScreenType.MENU);
-		
-		// The ball is reset to the centre if it goes our of the screen
-		// player or AI scores are updated accordingly
-		if(this.ball.getX() + 3*this.ball.getRadius() < 0) {
-			this.ai.updateScrore();
-			this.ball.reset();
-		}
-		
-		if(this.ball.getX() - 3*this.ball.getRadius() > PongGame.getInstance().getWindowWidth()) {
-			this.player.updateScrore();
-			this.ball.reset();
-		}
-		
-		// Checks if the game is over, and transitions to the end game screen
-		if(hasPlayerWon() || hasAIWon())
-			PongGame.getInstance().changeScreen(this, ScreenType.END_GAME, getWinnerMessage());
-		
-	}
-	
-	@Override
-	public void render(float delta) {
-		update();
-		
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-		// Simple rendering of bodies and scores
-		
-		this.batch.begin();
-		
-		this.player.render(batch);
-		
-		this.ai.render(batch);
-		
-		this.ball.render(batch);
-		
-		this.upper.render(batch);
-		
-		this.lower.render(batch);
-		
-		this.font.draw(batch, ""+this.player.getScore(), 50, PongGame.getInstance().getWindowHeight() - Constants.UPPER_WALL_SIZE/2 + 15);
-		
-		this.font.draw(batch, ""+this.ai.getScore(), PongGame.getInstance().getWindowWidth() - 50, PongGame.getInstance().getWindowHeight() - Constants.UPPER_WALL_SIZE/2 + 15);
-		
-		this.batch.end();
-		
-		// Uncomment for debugging
-		//this.debugRenderer.render(world, camera.combined.scl(Constants.PPM));
-	}
+    private OrthographicCamera camera;
+    private SpriteBatch batch;
+    private World world;
+    private BitmapFont font;
+    
+    // Game objects
+    private SpaceShip playerShip;
+    private Player player;
+    
+    // Game tracking
+    private double health = 100;
+    private double fuel = 100;
+    private double oxygen = 100;
+    
+    public GameScreen(OrthographicCamera camera) {
+        Box2D.init();
+        
+        this.camera = camera;
+        this.camera.position.set(new Vector3(PongGame.getInstance().getWindowWidth()/2, 
+            PongGame.getInstance().getWindowHeight()/2, 0));
+        this.batch = new SpriteBatch();
+        this.world = new World(new Vector2(0, 0), false);
+        
+        this.world.setContactListener(new GameContactListener(this));
+    
+        // Initialize player (without passing to GameContactListener)
+        this.player = new Player();
+        
+        // Create spaceship
+        Body shipBody = BodyHelper.createRectangularBody(
+            PongGame.getInstance().getWindowWidth() / 2, 
+            PongGame.getInstance().getWindowHeight() / 2, 
+            Constants.PLAYER_PADDLE_WIDTH, 
+            Constants.PLAYER_PADDLE_HEIGHT,
+            BodyType.KinematicBody, 1f, getWorld(), ContactType.PLAYER);
+        this.playerShip = new SpaceShip(
+            PongGame.getInstance().getWindowWidth() / 2, 
+            PongGame.getInstance().getWindowHeight() / 2, 
+            shipBody);
+        
+        this.font = FancyFontHelper.getInstance().getFont(Color.WHITE, 20);
+    }
+    
+    
+    public void update() {
+        this.world.step(1/60f, 6, 2);
+        
+        // Update components
+        this.camera.update();
+        this.playerShip.update();
+        
+        this.batch.setProjectionMatrix(this.camera.combined);
+        
+        // Handle input
+        handleInput();
+        
+    }
+    
+    private void handleInput() {
+        // To return to the menu screen
+        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+            PongGame.getInstance().changeScreen(this, ScreenType.MENU);
+    }
+    
 
-	// Getter methods for world and ball
-	public World getWorld() {
-		return world;
-	}
-	
-	public Ball getBall() {
-		return this.ball;
-	}
+    @Override
+    public void render(float delta) {
+        update();
+        
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        this.batch.begin();
+        
+        // Draw spaceship
+        this.playerShip.render(batch);
+        
+        // Draw player stats
+        drawPlayerStats();
+        
+        this.batch.end();
+    }
 
-	// Private auxiliary method to check winning conditions and create the end game message
-	private boolean hasPlayerWon() {
-		return this.player.getScore() == Constants.END_SCORE;
-	}
-	
-	private boolean hasAIWon() {
-		return this.ai.getScore() == Constants.END_SCORE;
-	}
-	
-	private String getWinnerMessage() {
-		return hasPlayerWon() ? 
-				"You Won!\n  " + this.player.getScore() + " - " + this.ai.getScore() :
-				"You Lost!\n  " + this.player.getScore() + " - " + this.ai.getScore();
-	}
+    
+    private void drawPlayerStats() {
+        float statsX = 10;
+        float statsY = PongGame.getInstance().getWindowHeight() - 20;
+        
+        BitmapFont statsFont = FancyFontHelper.getInstance().getFont(Color.WHITE, 16);
+        
+        // Draw player name
+        statsFont.draw(batch, "Name: Space Explorer", statsX, statsY);
+        
+        // Health with color indication
+        Color healthColor = getResourceColor(health);
+        BitmapFont healthFont = FancyFontHelper.getInstance().getFont(healthColor, 16);
+        healthFont.draw(batch, "Health: " + (int)health + "%", statsX, statsY - 20);
+        
+        // Fuel with color indication
+        Color fuelColor = getResourceColor(fuel);
+        BitmapFont fuelFont = FancyFontHelper.getInstance().getFont(fuelColor, 16);
+        fuelFont.draw(batch, "Fuel: " + (int)fuel + "%", statsX, statsY - 40);
+        
+        // Oxygen with color indication
+        Color oxygenColor = getResourceColor(oxygen);
+        BitmapFont oxygenFont = FancyFontHelper.getInstance().getFont(oxygenColor, 16);
+        oxygenFont.draw(batch, "Oxygen: " + (int)oxygen + "%", statsX, statsY - 60);
+    }
+    
+    private Color getResourceColor(double value) {
+        if (value > 70) return Color.GREEN;
+        else if (value > 30) return Color.YELLOW;
+        else return Color.RED;
+    }
+    
+    
+    // Helper method to create a single pixel texture for stars
+    private Texture createPixel() {
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+        return texture;
+    }
+
+    // Getter methods
+    public World getWorld() {
+        return world;
+    }
 }

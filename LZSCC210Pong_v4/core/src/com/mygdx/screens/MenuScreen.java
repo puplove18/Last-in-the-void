@@ -59,8 +59,6 @@ public class MenuScreen extends ScreenAdapter{
 		
 		this.menu.draw(batch, getMenuText(), 10, PongGame.getInstance().getWindowHeight() / 2);
 		
-		this.footer.draw(batch, "by Fabio Papacchini", 10,  PongGame.getInstance().getWindowHeight() - 500);
-		
 		this.batch.end();
 		
 	}
