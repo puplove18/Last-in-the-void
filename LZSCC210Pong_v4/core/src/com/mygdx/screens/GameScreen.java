@@ -93,6 +93,9 @@ public class GameScreen extends ScreenAdapter {
         // To return to the menu screen
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             PongGame.getInstance().changeScreen(this, ScreenType.MENU);
+        // To open the inventory screen
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I))
+            PongGame.getInstance().changeScreen(this, ScreenType.INVENTORY);
     }
     
 

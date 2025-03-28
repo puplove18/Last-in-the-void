@@ -10,6 +10,7 @@ import com.mygdx.screens.EndGameScreen;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.screens.InfoScreen;
 import com.mygdx.screens.MenuScreen;
+import com.mygdx.screens.InventoryScreen;
 
 
 /**
@@ -72,6 +73,9 @@ public class PongGame extends Game {
 			setScreen(new MenuScreen());
 		if(newScreenType == ScreenType.INFO)
 			setScreen(new InfoScreen());
+
+		if(newScreenType == ScreenType.INVENTORY)
+			setScreen(new InventoryScreen(this));
 	}
 	
 	public void changeScreen(Screen currentScreen, ScreenType newScreenType, String message) {
