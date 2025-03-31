@@ -12,18 +12,20 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Box2D;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Box2D;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.helpers.BodyHelper;
 import com.mygdx.helpers.Constants;
 import com.mygdx.helpers.ContactType;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.GameContactListener;
 import com.mygdx.helpers.ScreenType;
+import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
 import com.mygdx.objects.SpaceShip;
+import com.mygdx.objects.Upgrades;
 import com.mygdx.pong.PongGame;
 
 /**
@@ -44,7 +46,10 @@ public class GameScreen extends ScreenAdapter {
     private double health = 100;
     private double fuel = 100;
     private double oxygen = 100;
-    
+    // inventory for items and upgrades
+    private Inventory inventory;
+    private Upgrades upgrades;
+    private boolean showUpgradesGUI = false;
     public GameScreen(OrthographicCamera camera) {
         Box2D.init();
         
@@ -55,10 +60,12 @@ public class GameScreen extends ScreenAdapter {
         this.world = new World(new Vector2(0, 0), false);
         
         this.world.setContactListener(new GameContactListener(this));
-    
+        this.inventory = new Inventory(1000); //Example inventory Maxsize for testing
+        this.upgrades = new Upgrades(inventory, "Iron", 50); // Example upgrade for testing
         // Initialize player (without passing to GameContactListener)
         this.player = new Player();
         
+
         // Create spaceship
         Body shipBody = BodyHelper.createRectangularBody(
             PongGame.getInstance().getWindowWidth() / 2, 
@@ -93,6 +100,8 @@ public class GameScreen extends ScreenAdapter {
         // To return to the menu screen
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             PongGame.getInstance().changeScreen(this, ScreenType.MENU);
+        if(Gdx.input.isKeyPressed(Input.Keys.U))
+            showUpgradesGUI = !showUpgradesGUI; 
     }
     
 
@@ -110,7 +119,9 @@ public class GameScreen extends ScreenAdapter {
         
         // Draw player stats
         drawPlayerStats();
-        
+        if (showUpgradesGUI) {
+            upgrades.render(batch);
+        }
         this.batch.end();
     }
 

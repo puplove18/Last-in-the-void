@@ -31,6 +31,6 @@ public class SpaceShip extends SpaceShipBody {
     
     @Override
     public void render(SpriteBatch spriteBatch) {
-        spriteBatch.draw(texture, x, y, Constants.PLAYER_PADDLE_WIDTH, Constants.PLAYER_PADDLE_HEIGHT);
+        //spriteBatch.draw(texture, x, y, Constants.PLAYER_PADDLE_WIDTH, Constants.PLAYER_PADDLE_HEIGHT);
     }
 }
