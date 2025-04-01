@@ -129,28 +129,33 @@ public class GameScreen extends ScreenAdapter {
     private void drawPlayerStats() {
         float statsX = 10;
         float statsY = PongGame.getInstance().getWindowHeight() - 20;
+
+        // Get stats directly from the Player object
+        double currentHealth = this.player.getHealth();
+        double currentFuel = this.player.getFuel();
+        double currentOxygen = this.player.getOxygen();
+
         
         BitmapFont statsFont = FancyFontHelper.getInstance().getFont(Color.WHITE, 16);
-        
-        // Draw player name
-        statsFont.draw(batch, "Name: Space Explorer", statsX, statsY);
-        
+        statsFont.draw(batch, "Name: Space Explorer", statsX, statsY); 
+
         // Health with color indication
-        Color healthColor = getResourceColor(health);
-        BitmapFont healthFont = FancyFontHelper.getInstance().getFont(healthColor, 16);
-        healthFont.draw(batch, "Health: " + (int)health + "%", statsX, statsY - 20);
-        
+        Color healthColor = getResourceColor(currentHealth);
+        BitmapFont healthFont = FancyFontHelper.getInstance().getFont(healthColor, 16); 
+        healthFont.draw(batch, "Health: " + (int)currentHealth + "%", statsX, statsY - 20);
+
         // Fuel with color indication
-        Color fuelColor = getResourceColor(fuel);
-        BitmapFont fuelFont = FancyFontHelper.getInstance().getFont(fuelColor, 16);
-        fuelFont.draw(batch, "Fuel: " + (int)fuel + "%", statsX, statsY - 40);
-        
+        Color fuelColor = getResourceColor(currentFuel);
+        BitmapFont fuelFont = FancyFontHelper.getInstance().getFont(fuelColor, 16); 
+        fuelFont.draw(batch, "Fuel: " + (int)currentFuel + "%", statsX, statsY - 40);
+
         // Oxygen with color indication
-        Color oxygenColor = getResourceColor(oxygen);
-        BitmapFont oxygenFont = FancyFontHelper.getInstance().getFont(oxygenColor, 16);
-        oxygenFont.draw(batch, "Oxygen: " + (int)oxygen + "%", statsX, statsY - 60);
+        Color oxygenColor = getResourceColor(currentOxygen);
+        BitmapFont oxygenFont = FancyFontHelper.getInstance().getFont(oxygenColor, 16); 
+        oxygenFont.draw(batch, "Oxygen: " + (int)currentOxygen + "%", statsX, statsY - 60);
     }
-    
+
+    // The getResourceColor method remains the same
     private Color getResourceColor(double value) {
         if (value > 70) return Color.GREEN;
         else if (value > 30) return Color.YELLOW;
