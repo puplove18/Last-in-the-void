@@ -6,10 +6,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.ScreenType;
+import com.mygdx.objects.Player;
 import com.mygdx.screens.EndGameScreen;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.screens.InfoScreen;
 import com.mygdx.screens.MenuScreen;
+import com.mygdx.UI.InventoryUI;
 
 
 /**
@@ -25,9 +27,19 @@ public class PongGame extends Game {
 	private int windowWidth, windowHeight;
 	
 	private OrthographicCamera ortographicCamera;
+
+	private Player player;
 	
 	private PongGame() {
 		INSTANCE = this;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 	
 	public static PongGame getInstance() {
@@ -72,6 +84,14 @@ public class PongGame extends Game {
 			setScreen(new MenuScreen());
 		if(newScreenType == ScreenType.INFO)
 			setScreen(new InfoScreen());
+		if(newScreenType == ScreenType.INVENTORY) {
+			// Use the stored player instead of null
+			if (player != null) {
+				setScreen(new InventoryUI(this, player));
+			} else {
+				setScreen(new InventoryUI(this, null));
+			}
+		}
 	}
 	
 	public void changeScreen(Screen currentScreen, ScreenType newScreenType, String message) {

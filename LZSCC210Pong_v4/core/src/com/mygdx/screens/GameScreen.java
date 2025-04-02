@@ -16,6 +16,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.helpers.BodyHelper;
 import com.mygdx.helpers.Constants;
 import com.mygdx.helpers.ContactType;
@@ -46,10 +48,19 @@ public class GameScreen extends ScreenAdapter {
     private double health = 100;
     private double fuel = 100;
     private double oxygen = 100;
+
     // inventory for items and upgrades
     private Inventory inventory;
+    private boolean inventoryOpen = false;
+    private Texture inventoryHUDTexture;
+    private SpriteBatch uiBatch;
+    private Stage inventoryStage;
+
     private Upgrades upgrades;
     private boolean showUpgradesGUI = false;
+
+
+
     public GameScreen(OrthographicCamera camera) {
         Box2D.init();
         
@@ -79,6 +90,10 @@ public class GameScreen extends ScreenAdapter {
             shipBody);
         
         this.font = FancyFontHelper.getInstance().getFont(Color.WHITE, 20);
+
+        this.uiBatch = new SpriteBatch();
+        loadInventoryTextures();
+        setupInventoryUI();
     }
     
     
@@ -102,6 +117,12 @@ public class GameScreen extends ScreenAdapter {
             PongGame.getInstance().changeScreen(this, ScreenType.MENU);
         if(Gdx.input.isKeyPressed(Input.Keys.U))
             showUpgradesGUI = !showUpgradesGUI; 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+            inventoryOpen = !inventoryOpen;
+            if (inventoryOpen) { 
+                pause();
+            }
+        } 
     }
     
 
@@ -123,6 +144,11 @@ public class GameScreen extends ScreenAdapter {
             upgrades.render(batch);
         }
         this.batch.end();
+        
+        // Draw inventory if open
+        if (inventoryOpen) {
+            renderInventoryUI();
+        }
     }
 
     
@@ -171,6 +197,36 @@ public class GameScreen extends ScreenAdapter {
         Texture texture = new Texture(pixmap);
         pixmap.dispose();
         return texture;
+    }
+
+    private void loadInventoryTextures() {
+        inventoryHUDTexture = new Texture(Gdx.files.internal("InventoryHUD.png"));
+    }
+
+    private void setupInventoryUI() {
+        inventoryStage = new Stage(new FitViewport(
+            PongGame.getInstance().getWindowWidth(), 
+            PongGame.getInstance().getWindowHeight()
+        ));
+    }
+
+    // Method to open the inventory screen
+    private void renderInventoryUI() {
+        uiBatch.begin();
+        
+        float scaledWidth = inventoryHUDTexture.getWidth() * 0.85f;
+        float scaledHeight = inventoryHUDTexture.getHeight() * 0.85f;
+    
+        // Draw inventory background
+        uiBatch.draw(inventoryHUDTexture,
+            (PongGame.getInstance().getWindowWidth() - scaledWidth) / 2,
+            (PongGame.getInstance().getWindowHeight() - scaledHeight) / 2,
+            scaledWidth, scaledHeight
+            );
+        uiBatch.end();
+
+        inventoryStage.act(Gdx.graphics.getDeltaTime());
+        inventoryStage.draw();
     }
 
     // Getter methods
