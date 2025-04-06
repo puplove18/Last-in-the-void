@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.pong.PongGame;
 import com.mygdx.helpers.ScreenType;
-
+import com.mygdx.audio.AudioManager;
 public class MenuScreenUi extends ScreenAdapter {
     private Stage stage;
     private Skin skin;
@@ -24,17 +24,14 @@ public class MenuScreenUi extends ScreenAdapter {
     public MenuScreenUi() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-
         skin = new Skin(Gdx.files.internal("uiskin.json"));
-
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-
         Label titleLabel = new Label("Last in the void", skin);
         titleLabel.setFontScale(2.0f);
-
         TextButton playButton = new TextButton("Play", skin);
+        TextButton creditsButton = new TextButton("Credits", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
         playButton.addListener(new ChangeListener() {
@@ -43,7 +40,12 @@ public class MenuScreenUi extends ScreenAdapter {
                 PongGame.getInstance().changeScreen(MenuScreenUi.this, ScreenType.GAME);
             }
         });
-
+        creditsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                PongGame.getInstance().changeScreen(MenuScreenUi.this, ScreenType.CREDITS);
+            }
+        });
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -52,28 +54,28 @@ public class MenuScreenUi extends ScreenAdapter {
         });
 
         Button musicButton = new Button(skin, "music");
+        musicButton.setChecked(true);
+        AudioManager.getInstance().playMusic();
         musicButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (musicButton.isChecked()) {
-                    // Code to turn music on.
+                    AudioManager.getInstance().toggleMusic();
                 } else {
-                    // Code to turn music off.
+                    AudioManager.getInstance().toggleMusic();
                 }
             }
         });
-
-        // Layout
         table.top();
         table.add(titleLabel).padTop(50).center();
         table.row().padTop(100);
         table.add(playButton).width(200).height(60).pad(10);
         table.row();
+        table.add(creditsButton).width(200).height(60).pad(10);
+        table.row();
         table.add(exitButton).width(200).height(60).pad(10);
         table.row().padTop(50);
         table.add(musicButton).width(60).height(60).pad(10).center();
-
-
     }
 
     @Override
