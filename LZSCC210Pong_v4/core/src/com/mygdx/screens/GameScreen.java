@@ -115,10 +115,17 @@ public class GameScreen extends ScreenAdapter {
         // To return to the menu screen
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             PongGame.getInstance().changeScreen(this, ScreenType.MENU);
-        if(Gdx.input.isKeyPressed(Input.Keys.U))
+        if(Gdx.input.isKeyJustPressed(Input.Keys.U)){
+
+            inventoryOpen = false;
             showUpgradesGUI = !showUpgradesGUI; 
+            if (showUpgradesGUI) { 
+                pause();
+            }
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             inventoryOpen = !inventoryOpen;
+            showUpgradesGUI = false;
             if (inventoryOpen) { 
                 pause();
             }
@@ -129,27 +136,27 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         update();
-        
+    
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
-        this.batch.begin();
-        
+    
+        batch.begin(); // Start drawing
         // Draw spaceship
-        this.playerShip.render(batch);
+        playerShip.render(batch);
         
         // Draw player stats
         drawPlayerStats();
         if (showUpgradesGUI) {
-            upgrades.render(batch);
+            upgrades.render(batch);  // Ensure this has batch.end() inside
         }
-        this.batch.end();
-        
+        batch.end();  // End drawing
+    
         // Draw inventory if open
         if (inventoryOpen) {
             renderInventoryUI();
         }
     }
+    
 
     
     private void drawPlayerStats() {
