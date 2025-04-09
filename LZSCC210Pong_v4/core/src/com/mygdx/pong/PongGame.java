@@ -12,7 +12,8 @@ import com.mygdx.screens.GameScreen;
 import com.mygdx.screens.InfoScreen;
 import com.mygdx.screens.MenuScreen;
 import com.mygdx.UI.InventoryUI;
-
+import com.mygdx.screens.CreditsScreen;
+import com.mygdx.screens.MenuScreenUi;
 
 /**
  * A singleton class representing the game. It takes care of
