@@ -28,7 +28,7 @@ public class CreditsScreen extends ScreenAdapter {
         table.setFillParent(true);
         stage.addActor(table);
 
-        Label titleLabel = new Label("Credits.", skin);
+        Label titleLabel = new Label("Credits", skin);
         titleLabel.setFontScale(1.0f);
         Label creditsLabel = new Label("Developed by Group 2\nMusic by ArtistName\nAssets by assets\nThank you for playing!", skin);
         creditsLabel.setWrap(true);
