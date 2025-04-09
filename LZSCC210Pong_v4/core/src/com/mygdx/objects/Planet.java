@@ -70,14 +70,14 @@ public class Planet extends InteractiveObject{
 
         Type planet_type;
         //Generate resource type of the planet
-        double typeVal = rand.nextDouble(3);
+        double typeVal = rand.nextDouble() * 3;
         if (0 <= typeVal && typeVal < 1) 
             {planet_type = gas;}
         else if (1<= typeVal && typeVal < 2) 
             {planet_type = min;}
         else 
             {planet_type = org;}
-        
+
         //Generates random size for the planet's texture, to be applied later
         int new_size = rand.nextInt(100-1)+1;
 

@@ -29,7 +29,7 @@ public class CreditsScreen extends ScreenAdapter {
         stage.addActor(table);
 
         Label titleLabel = new Label("Credits", skin);
-        titleLabel.setFontScale(2.0f);
+        titleLabel.setFontScale(1.0f);
         Label creditsLabel = new Label("Developed by Group 2\nMusic by ArtistName\nAssets by LibGDX\nThank you for playing!", skin);
         creditsLabel.setWrap(true);
         creditsLabel.setAlignment(Align.center);
@@ -38,7 +38,7 @@ public class CreditsScreen extends ScreenAdapter {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                PongGame.getInstance().changeScreen(CreditsScreen.this, ScreenType.MENU);
+                PongGame.getInstance().changeScreen(CreditsScreen.this, ScreenType.MENU_UI);
             }
         });
 
