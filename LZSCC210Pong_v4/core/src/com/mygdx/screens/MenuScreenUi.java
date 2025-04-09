@@ -3,6 +3,8 @@ package com.mygdx.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -11,29 +13,34 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.pong.PongGame;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.audio.AudioManager;
+
 public class MenuScreenUi extends ScreenAdapter {
     private Stage stage;
     private Skin skin;
     private Table table;
+    private Texture backgroundTexture;
 
     public MenuScreenUi() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
+        backgroundTexture = new Texture(Gdx.files.internal("bg5.jpg"));
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
         table = new Table();
         table.setFillParent(true);
+        table.setBackground(backgroundDrawable);
         stage.addActor(table);
         Label titleLabel = new Label("Last in the void", skin);
-        titleLabel.setFontScale(2.0f);
+        titleLabel.setFontScale(1.0f);
         TextButton playButton = new TextButton("Play", skin);
         TextButton creditsButton = new TextButton("Credits", skin);
         TextButton exitButton = new TextButton("Exit", skin);
-
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -52,18 +59,13 @@ public class MenuScreenUi extends ScreenAdapter {
                 PongGame.getInstance().exit(MenuScreenUi.this);
             }
         });
-
         Button musicButton = new Button(skin, "music");
         musicButton.setChecked(true);
         AudioManager.getInstance().playMusic();
         musicButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (musicButton.isChecked()) {
-                    AudioManager.getInstance().toggleMusic();
-                } else {
-                    AudioManager.getInstance().toggleMusic();
-                }
+                AudioManager.getInstance().toggleMusic();
             }
         });
         table.top();
@@ -95,5 +97,6 @@ public class MenuScreenUi extends ScreenAdapter {
     public void dispose() {
         stage.dispose();
         skin.dispose();
+        backgroundTexture.dispose();
     }
 }
