@@ -35,6 +35,7 @@ import com.mygdx.objects.Player;
 import com.mygdx.objects.SpaceShip;
 import com.mygdx.objects.Upgrades;
 import com.mygdx.pong.PongGame;
+import com.mygdx.audio.AudioManager;
 
 public class GameScreen extends ScreenAdapter {
     private OrthographicCamera camera;
@@ -125,6 +126,9 @@ public class GameScreen extends ScreenAdapter {
             world.step(1 / 60f, 6, 2);
             camera.update();
             playerShip.update();
+        }
+        else {
+            AudioManager.getInstance().stopMusic();
         }
     }
 
