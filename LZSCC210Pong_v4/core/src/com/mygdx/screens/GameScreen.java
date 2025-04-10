@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -50,7 +51,8 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     private Player player;
     private Inventory inventory;
     private boolean inventoryOpen = false;
-    private Texture inventoryHUDTexture;
+    private TextureAtlas backgroundAtlas;
+    private TextureAtlas.AtlasRegion inventoryBackground;
     private SpriteBatch uiBatch;
     private Stage inventoryStage;
     private Upgrades upgrades;
@@ -116,6 +118,7 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         this.uiStage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         createExitButton();
+        createInventoryButton(); 
         Gdx.input.setInputProcessor(uiStage); // Start with the main UI stage
         backgroundPlanetTexture = new Texture(Gdx.files.internal("planet1.png"));
         heroTexture = new Texture(Gdx.files.internal("entities/Astronaut.png"));
@@ -135,16 +138,6 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         table.top().right().pad(10);
         table.add(exitButton).width(100).height(50);
         uiStage.addActor(table);
-    }
-
-    private void loadInventoryTextures() {
-        inventoryHUDTexture = new Texture(Gdx.files.internal("InventoryHUD.png"));
-    }
-
-    private void setupInventoryUI() {
-        inventoryStage = new Stage(new FitViewport(
-                PongGame.getInstance().getWindowWidth(),
-                PongGame.getInstance().getWindowHeight()));
     }
 
     // I had to make changes to this method as the music would stop after an event was triggered
@@ -210,6 +203,37 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
      public void pause() {
         paused = true;
     }
+
+    
+    private void createInventoryButton() {
+        TextButton inventoryButton = new TextButton("Inventory", skin);
+        inventoryButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!eventUI.isVisible()) {
+                    inventoryOpen = !inventoryOpen;
+                    showUpgradesGUI = false;
+
+                    Gdx.input.setInputProcessor(inventoryOpen ? inventoryStage : uiStage);
+                }
+            }
+        });
+        
+        Table inventoryTable = new Table();
+        inventoryTable.setFillParent(true);
+        inventoryTable.bottom().left().pad(10);
+        inventoryTable.add(inventoryButton).width(120).height(50);
+        
+        // Add the table to the stage
+        uiStage.addActor(inventoryTable);
+    }
+
+    private void setupInventoryUI() {
+        inventoryStage = new Stage(new FitViewport(
+                PongGame.getInstance().getWindowWidth(),
+                PongGame.getInstance().getWindowHeight()));
+    }
+
 
     @Override
     public void render(float delta) {
@@ -328,19 +352,55 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
             return Color.RED;
     }
 
-     private void renderInventoryUI() {
-        // uiBatch should be started before calling this method
-        float scaledWidth = inventoryHUDTexture.getWidth() * 0.85f;
-        float scaledHeight = inventoryHUDTexture.getHeight() * 0.85f;
-        uiBatch.draw(inventoryHUDTexture,
-                (PongGame.getInstance().getWindowWidth() - scaledWidth) / 2,
-                (PongGame.getInstance().getWindowHeight() - scaledHeight) / 2,
-                scaledWidth, scaledHeight);
-        // uiBatch should be ended after calling this method
-        inventoryStage.act(Gdx.graphics.getDeltaTime()); // Still act the stage
-        inventoryStage.draw(); // Still draw the stage (it uses its own batch)
-    }
 
+    private void loadInventoryTextures() {
+        backgroundAtlas = new TextureAtlas(Gdx.files.internal("backgrounds.atlas"));
+        inventoryBackground = backgroundAtlas.findRegion("InventoryHUD002 (1)");
+    }
+    
+    private void renderInventoryUI() {        
+        float scaledWidth = inventoryBackground.getRegionWidth() * 0.85f;
+        float scaledHeight = inventoryBackground.getRegionHeight() * 0.85f;
+        
+        uiBatch.draw(inventoryBackground,
+            (PongGame.getInstance().getWindowWidth() - scaledWidth) / 2,
+            (PongGame.getInstance().getWindowHeight() - scaledHeight) / 2,
+            scaledWidth, scaledHeight);
+        
+        BitmapFont font = FancyFontHelper.getInstance().getFont(Color.WHITE, 16);
+        
+        float startX = (PongGame.getInstance().getWindowWidth() - scaledWidth) / 2 + 50;
+        float startY = (PongGame.getInstance().getWindowHeight() + scaledHeight) / 2 - 50;
+        
+        font.draw(uiBatch, "INVENTORY testing", startX, startY);
+
+        // close button
+        float closeX = (PongGame.getInstance().getWindowWidth() + scaledWidth) / 2 - 30;
+        float closeY = (PongGame.getInstance().getWindowHeight() + scaledHeight) / 2 - 30;
+        
+        font.draw(uiBatch, "X", closeX, closeY);
+
+        if (Gdx.input.justTouched()) {
+        int touchX = Gdx.input.getX();
+        int touchY = Gdx.input.getY();
+        
+        // Convert screen coordinates to world coordinates
+        // For UI, we need to invert Y and adjust for your game setup
+        touchY = PongGame.getInstance().getWindowHeight() - touchY;
+        
+        // Check if close button area was clicked
+        if (touchX >= closeX - 15 && touchX <= closeX + 15 && 
+            touchY >= closeY - 15 && touchY <= closeY + 15) {
+            inventoryOpen = false;
+            Gdx.input.setInputProcessor(uiStage);
+        }
+    }
+        
+        inventoryStage.act(Gdx.graphics.getDeltaTime());
+        inventoryStage.draw();
+
+
+    }
 
     @Override
     public void resize(int width, int height) {
@@ -363,7 +423,6 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         if (backgroundPlanetTexture != null) backgroundPlanetTexture.dispose();
         if (heroTexture != null) heroTexture.dispose();
         if (alienTexture != null) alienTexture.dispose();
-        if (inventoryHUDTexture != null) inventoryHUDTexture.dispose();
 
         // Dispose EventUI resources
         eventUI.dispose();
