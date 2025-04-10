@@ -231,11 +231,12 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         // Example entity rendering (adjust positions as needed)
         float heroX = 200; 
         float heroY = (screenHeight - heroTexture.getHeight()) / 2;
-        batch.draw(heroTexture, heroX, heroY); 
+        batch.draw(heroTexture, heroX + heroTexture.getWidth(), heroY, heroTexture.getWidth(), heroTexture.getHeight());
 
-        float alienX = screenWidth - alienTexture.getWidth() - 100; 
-        float alienY = (screenHeight - alienTexture.getHeight()) / 2;
-        batch.draw(alienTexture, alienX, alienY); 
+
+        float alienX = screenWidth - alienTexture.getWidth();
+        float alienY = (screenHeight - alienTexture.getHeight()) / 2 + 100;
+        batch.draw(alienTexture, alienX + alienTexture.getWidth(), alienY, -alienTexture.getWidth(), alienTexture.getHeight());
 
 
         playerShip.render(batch); 
