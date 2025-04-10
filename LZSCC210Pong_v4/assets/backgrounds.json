@@ -1,0 +1,108 @@
+{"frames": {
+
+"backgrounds.png":
+{
+	"frame": {"x":0,"y":787,"w":922,"h":787},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":922,"h":787},
+	"sourceSize": {"w":922,"h":787}
+},
+"GUI_big_screen.png":
+{
+	"frame": {"x":555,"y":317,"w":367,"h":470},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":367,"h":470},
+	"sourceSize": {"w":367,"h":470}
+},
+"GUI_choise.png":
+{
+	"frame": {"x":0,"y":125,"w":443,"h":127},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":443,"h":127},
+	"sourceSize": {"w":443,"h":127}
+},
+"GUI_gray.png":
+{
+	"frame": {"x":358,"y":0,"w":296,"h":98},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":296,"h":98},
+	"sourceSize": {"w":296,"h":98}
+},
+"GUI_label.png":
+{
+	"frame": {"x":195,"y":0,"w":163,"h":49},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":163,"h":49},
+	"sourceSize": {"w":163,"h":49}
+},
+"GUI_lectangle.png":
+{
+	"frame": {"x":67,"y":0,"w":128,"h":47},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":47},
+	"sourceSize": {"w":128,"h":47}
+},
+"GUI_note.png":
+{
+	"frame": {"x":443,"y":125,"w":190,"h":188},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":190,"h":188},
+	"sourceSize": {"w":190,"h":188}
+},
+"GUI_right_badge.png":
+{
+	"frame": {"x":654,"y":0,"w":138,"h":125},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":138,"h":125},
+	"sourceSize": {"w":138,"h":125}
+},
+"GUI_screen.png":
+{
+	"frame": {"x":633,"y":125,"w":219,"h":192},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":219,"h":192},
+	"sourceSize": {"w":219,"h":192}
+},
+"GUI_slot.png":
+{
+	"frame": {"x":0,"y":0,"w":27,"h":27},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":27,"h":27},
+	"sourceSize": {"w":27,"h":27}
+},
+"GUI_square.png":
+{
+	"frame": {"x":27,"y":0,"w":40,"h":44},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":40,"h":44},
+	"sourceSize": {"w":40,"h":44}
+},
+"InventoryHUD002 (1).png":
+{
+	"frame": {"x":0,"y":317,"w":555,"h":356},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":555,"h":356},
+	"sourceSize": {"w":555,"h":356}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "backgrounds.png",
+	"format": "RGBA8888",
+	"size": {"w":922,"h":1574},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:8352bcad7923802f20ab73e87b817b30:7e539f86928760a8d9a70f54d0d24584:f1d160bc8f29cda58a3095e4596a0f13$"
+}
+}
