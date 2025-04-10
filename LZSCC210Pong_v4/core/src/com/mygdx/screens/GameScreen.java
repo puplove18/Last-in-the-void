@@ -383,12 +383,9 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         if (Gdx.input.justTouched()) {
         int touchX = Gdx.input.getX();
         int touchY = Gdx.input.getY();
-        
-        // Convert screen coordinates to world coordinates
-        // For UI, we need to invert Y and adjust for your game setup
+
         touchY = PongGame.getInstance().getWindowHeight() - touchY;
         
-        // Check if close button area was clicked
         if (touchX >= closeX - 15 && touchX <= closeX + 15 && 
             touchY >= closeY - 15 && touchY <= closeY + 15) {
             inventoryOpen = false;
