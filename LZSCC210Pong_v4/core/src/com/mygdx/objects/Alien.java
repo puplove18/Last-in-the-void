@@ -14,15 +14,14 @@ import com.mygdx.helpers.ContactType;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.pong.PongGame;
-
 public class Alien extends InteractiveObject{
 
     private String type;
-    private Attitude attitude;
+    private Attitude attitude; 
 
     enum Attitude {
         FRIEND,
-        NUETRAL,
+        NEUTRAL, 
         ENEMY
     }
 
@@ -30,22 +29,31 @@ public class Alien extends InteractiveObject{
         this.type = type;
         if (type.equals("Humanoid")) {
             this.attitude = Attitude.FRIEND;
-
-        } else {
+        } else if (type.equals("Trader")) { // Example of potentially neutral
+             this.attitude = Attitude.NEUTRAL;
+        }
+        else {
             this.attitude = Attitude.ENEMY;
         }
     }
 
+    public String getType() {
+        return type;
+    }
+
+    // Keep the original interact and greeting methods
     public void interact() {
         System.out.println("Encountered " + type + " alien: " + attitude);
     }
     public void greeting(){
         if (this.attitude == Attitude.FRIEND){
-            System.out.println("\'Friedly greetimng from alien\'");
+            System.out.println("\'Friendly greeting from alien\'");
+        }
+        else if (this.attitude == Attitude.NEUTRAL) {
+             System.out.println("\'The alien seems indifferent to your presence.\'");
         }
         else{
             System.out.println("\'You feel bad intentions from this alien\'");
         }
     }
-
 }
