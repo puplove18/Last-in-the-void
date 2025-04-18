@@ -31,6 +31,12 @@ public class GameWorldManager {
         camera.update();
     }
     
+    // Method to handle screen size changes
+    public void resize(int width, int height) {
+        camera.setToOrtho(false, width, height);
+        camera.update();
+    }
+
     public World getWorld() {
         return world;
     }

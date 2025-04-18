@@ -43,6 +43,14 @@ public class RenderManager {
         heroTexture = new Texture(Gdx.files.internal("entities/Astronaut.png"));
         alienTexture = new Texture(Gdx.files.internal("entities/alien.gif"));
     }
+
+        // Method to handle screen size changes
+        public void resize(int width, int height) {
+            // Update rendering dimensions
+            camera.setToOrtho(false, width, height);
+            camera.update();
+            batch.setProjectionMatrix(camera.combined);
+        }
     
     public void render(boolean paused, boolean eventActive, boolean inventoryOpen, boolean upgradesOpen) {
         batch.setProjectionMatrix(camera.combined);

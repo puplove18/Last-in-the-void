@@ -1,13 +1,11 @@
 package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.audio.AudioManager;
-import com.mygdx.helpers.ScreenType;
 import com.mygdx.managers.EventManager;
 import com.mygdx.managers.GameWorldManager;
 import com.mygdx.managers.InputHandler;
@@ -43,14 +41,11 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         
         initializeManagers();
         
-
         Gdx.input.setInputProcessor(uiManager.getUIStage());
     }
     
     private void initializeManagers() {
-        
         Inventory inventory = new Inventory(1000);
-        
         Player player = new Player();
         
         worldManager = new GameWorldManager(camera, this);
@@ -121,8 +116,13 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     
     @Override
     public void resize(int width, int height) {
+        // Update camera
         camera.setToOrtho(false, width, height);
         camera.update();
+        
+        // Propagate resize to all managers
+        worldManager.resize(width, height);
+        renderManager.resize(width, height);
         uiManager.resize(width, height);
         eventManager.resize(width, height);
     }

@@ -56,6 +56,20 @@ public class PongGame extends Game {
 		setScreen(new MenuScreenUi());
 	}
 
+	    // Method to update window dimensions when screen size changes
+		@Override
+		public void resize(int width, int height) {
+			this.windowWidth = width;
+			this.windowHeight = height;
+			this.ortographicCamera.setToOrtho(false, width, height);
+			this.ortographicCamera.update();
+			
+			// Make sure the resize is passed to the current screen
+			if (getScreen() != null) {
+				getScreen().resize(width, height);
+			}
+		}
+
 	// Getter methods for windows width and height
 	public int getWindowWidth() {
 		return windowWidth;
