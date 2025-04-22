@@ -1,6 +1,5 @@
 package com.mygdx.screens;
 
-import javax.swing.event.ChangeEvent; 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
@@ -55,6 +54,8 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     private TextureAtlas.AtlasRegion inventoryBackground;
     private SpriteBatch uiBatch;
     private Stage inventoryStage;
+    private Stage upgradStage;
+    private Stage upgradeStage;
     private Upgrades upgrades;
     private boolean showUpgradesGUI = false;
     private Stage uiStage;
@@ -234,6 +235,10 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                 PongGame.getInstance().getWindowHeight()));
     }
 
+    private void createUpgradesUI(){
+        TextButton upgradesButton = new TextButton("Upgrades", skin);
+
+    }
 
     @Override
     public void render(float delta) {
