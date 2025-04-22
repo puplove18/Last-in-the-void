@@ -1,4 +1,4 @@
-package com.mygdx.UI;
+package com.mygdx.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
