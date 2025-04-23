@@ -2,6 +2,7 @@ package com.mygdx.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.helpers.FancyFontHelper;
@@ -20,6 +22,8 @@ import com.mygdx.objects.Player;
 import com.mygdx.objects.Upgrades;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
+import com.mygdx.ui.UpgradesUI;
+
 
 /**
  * Manages all UI elements including inventory, upgrades, and buttons
@@ -31,11 +35,15 @@ public class UIManager {
     private boolean inventoryOpen = false;
     private Upgrades upgrades;
     private boolean showUpgradesGUI = false;
-    
+
+    private UpgradesUI upgradesUI;
+    private Texture upgradesBackground;
+    private NinePatchDrawable upgradesPanel;
     // UI components
     private SpriteBatch uiBatch;
     private Stage uiStage;
     private Stage inventoryStage;
+    private Stage upgradesStage;
     private Skin skin;
     private TextureAtlas backgroundAtlas;
     private TextureAtlas.AtlasRegion inventoryBackground;
@@ -45,8 +53,10 @@ public class UIManager {
         this.player = player;
         this.gameScreen = gameScreen;
         this.upgrades = new Upgrades(inventory, "Iron", 50);
-        
+        this.upgradesUI = new UpgradesUI(); 
+
         initializeUI();
+        
     }
     
     private void initializeUI() {
@@ -55,9 +65,14 @@ public class UIManager {
         setupInventoryUI();
         this.uiStage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("uiskin.json"));
+        
+    
+        
         createExitButton();
         createInventoryButton();
+        createUpgradesButton();
     }
+    
     
     private void loadInventoryTextures() {
         backgroundAtlas = new TextureAtlas(Gdx.files.internal("backgrounds.atlas"));
@@ -106,6 +121,31 @@ public class UIManager {
         
         uiStage.addActor(inventoryTable);
     }
+
+    private void createUpgradesButton() {
+        TextButton upgradesButton = new TextButton("Upgrades", skin);
+        upgradesButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!gameScreen.getEventManager().isEventActive()) {
+                    toggleUpgrades();
+                    closeInventory();
+    
+                    upgradesUI.setVisible(showUpgradesGUI);
+                    Gdx.input.setInputProcessor(showUpgradesGUI ? upgradesStage : uiStage);
+
+                }
+            }
+        });
+    
+        Table upgradesTable = new Table();
+        upgradesTable.setFillParent(true);
+        upgradesTable.bottom().left().pad(10).padLeft(150); // Shift a bit right of inventory
+        upgradesTable.add(upgradesButton).width(120).height(50);
+    
+        uiStage.addActor(upgradesTable);
+    }
+    
     
     public void render(float delta) {
         // Render UI elements
@@ -117,10 +157,15 @@ public class UIManager {
         
         // Render the main UI stage unless event is showing
         if (!gameScreen.getEventManager().isEventActive()) {
-            uiStage.act(delta);
-            uiStage.draw();
+            if (showUpgradesGUI) {
+                upgradesUI.render(); // Handle background + UI draw
+            } else {
+                uiStage.act(delta);
+                uiStage.draw();
+            }
         }
-    }
+        }
+    
     
     private void renderInventoryUI() {
         float scaledWidth = inventoryBackground.getRegionWidth() * 0.85f;
@@ -173,6 +218,7 @@ public class UIManager {
         if (skin != null) skin.dispose();
         if (backgroundAtlas != null) backgroundAtlas.dispose();
         if (upgrades != null) upgrades.dispose();
+        if (upgradesUI != null) upgradesUI.dispose();
     }
     
     // Getters and state management
@@ -211,4 +257,8 @@ public class UIManager {
     public Upgrades getUpgrades() {
         return upgrades;
     }
+    public Stage getUpgradesStage() {
+        return upgradesStage;
+    }
+    
 }
