@@ -116,6 +116,11 @@ public class UpgradesUI {
         
         upgradeButton.addListener(new ClickListener() {
             @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Clicked Upgrade: " + name);
+                onUpgrades.run(); // <-- This was never called before
+            }
+            @Override
            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                if (pointer == -1) {
                    TextButton button = (TextButton) event.getListenerActor();
@@ -137,11 +142,14 @@ public class UpgradesUI {
            }
        });
         // Add the components to the table
-        upgradesTable.add(nameLabel);
-        upgradesTable.add(resourcesLabel);
-        upgradesTable.add(effectsLabel);
-        upgradesTable.add(upgradeButton);
-        upgradesTable.row();
+            upgradesTable.add(nameLabel);
+            upgradesTable.add(resourcesLabel);
+            upgradesTable.add(effectsLabel);
+            upgradesTable.add(upgradeButton);
+            upgradesTable.row();
+            setVisible(true); 
+
+            Gdx.input.setInputProcessor(stage);
     }
 
     private TextButton.TextButtonStyle createButtonStyle(BitmapFont font) {
@@ -215,6 +223,7 @@ public class UpgradesUI {
         }
     }
 
+    
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }

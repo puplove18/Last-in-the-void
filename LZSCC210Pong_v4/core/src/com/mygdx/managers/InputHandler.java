@@ -58,12 +58,14 @@ public class InputHandler {
             if (!eventManager.isEventActive()) {
                 uiManager.closeInventory();
                 uiManager.toggleUpgrades();
-                
-                // Ensure main UI gets input
-                Gdx.input.setInputProcessor(uiManager.getUIStage());
+    
+                // Set input processor depending on upgrades visibility
+                Gdx.input.setInputProcessor(uiManager.isUpgradesOpen() ?
+                    uiManager.getUpgradesStage() : uiManager.getUIStage());
             }
         }
     }
+    
     
     private void handleEventInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {

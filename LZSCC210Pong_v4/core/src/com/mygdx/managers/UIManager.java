@@ -65,7 +65,9 @@ public class UIManager {
         setupInventoryUI();
         this.uiStage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("uiskin.json"));
+        this.upgradesStage = new Stage(new ScreenViewport());
         
+
     
         
         createExitButton();
@@ -148,23 +150,26 @@ public class UIManager {
     
     
     public void render(float delta) {
-        // Render UI elements
+    // Render UI elements
         uiBatch.begin();
         if (inventoryOpen && !gameScreen.getEventManager().isEventActive()) {
             renderInventoryUI();
         }
         uiBatch.end();
-        
+
         // Render the main UI stage unless event is showing
         if (!gameScreen.getEventManager().isEventActive()) {
             if (showUpgradesGUI) {
+                Gdx.input.setInputProcessor(upgradesUI.getStage()); // <- force input here
                 upgradesUI.render(); // Handle background + UI draw
             } else {
+                Gdx.input.setInputProcessor(uiStage); // switch back
                 uiStage.act(delta);
                 uiStage.draw();
             }
         }
-        }
+    }
+
     
     
     private void renderInventoryUI() {
