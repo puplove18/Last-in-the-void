@@ -19,7 +19,7 @@ public class Player{
     private Inventory inventory;
     //private Array<String> inventory = new Array<>();
 
-    enum Stats {
+    public enum Stats {
         HEALTH, FUEL, OXYGEN;
     }
 
