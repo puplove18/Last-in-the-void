@@ -23,6 +23,8 @@ import com.mygdx.objects.Upgrades;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.ui.UpgradesUI;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -52,12 +54,19 @@ public class UIManager {
         this.inventory = inventory;
         this.player = player;
         this.gameScreen = gameScreen;
-        this.upgrades = new Upgrades(inventory, "Iron", 50);
-        this.upgradesUI = new UpgradesUI(); 
+
+        // Create a Map for upgrade costs, here it's just an example with "Iron" needing 50
+        Map<String, Integer> upgradeCost = new HashMap<>();
+        upgradeCost.put("Iron", 50); // Example, you can add more items and costs as needed
+
+        // Pass the map into the Upgrades constructor
+        this.upgrades = new Upgrades(inventory, upgradeCost);
+
+        this.upgradesUI = new UpgradesUI(inventory);
 
         initializeUI();
-        
     }
+
     
     private void initializeUI() {
         this.uiBatch = new SpriteBatch();

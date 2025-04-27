@@ -2,7 +2,6 @@ package com.mygdx.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,18 +11,17 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.helpers.FancyFontHelper;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.mygdx.objects.Inventory;
 
 public class UpgradesUI {
 
     private Stage stage;
     private Skin skin;
-
     private Table mainTable;
     private Table upgradesTable;
     private ScrollPane scrollPane;
@@ -32,6 +30,8 @@ public class UpgradesUI {
     private NinePatchDrawable panelBackground;
     private ObjectMap<TextButton, Drawable> originalButtonBackgrounds = new ObjectMap<>();
 
+    private Inventory inventory;
+
     private boolean isVisible = false;
 
     private static final Color TITLE_COLOR = Color.WHITE;
@@ -39,7 +39,8 @@ public class UpgradesUI {
     private static final Color BUTTON_COLOR = new Color(0.2f, 0.4f, 0.6f, 1f);
     private static final Color BUTTON_HOVER_COLOR = new Color(0.3f, 0.6f, 0.9f, 1f);
 
-    public UpgradesUI() {
+    public UpgradesUI(Inventory inventory) {
+        this.inventory = inventory;
         this.stage = new Stage(new ScreenViewport());
         this.skin = new Skin(Gdx.files.internal("uiskin.json"));
         initializePanelBackground();
@@ -51,9 +52,8 @@ public class UpgradesUI {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0.15f, 0.15f, 0.2f, 0.9f);
         pixmap.fill();
-        Texture bgTex = new Texture(pixmap);
-        panelBackground = new NinePatchDrawable(new NinePatch(bgTex, 0, 0, 0, 0));
-        backgroundTexture = bgTex;
+        backgroundTexture = new Texture(pixmap);
+        panelBackground = new NinePatchDrawable(new NinePatch(backgroundTexture, 0, 0, 0, 0));
         pixmap.dispose();
     }
 
@@ -61,30 +61,25 @@ public class UpgradesUI {
         mainTable = new Table();
         mainTable.setFillParent(true);
         mainTable.setBackground(panelBackground);
-        mainTable.center(); // Ensure the table is centered in the window
+        mainTable.center();
         stage.addActor(mainTable);
 
         upgradesTable = new Table(skin);
         upgradesTable.top().left().pad(10);
         upgradesTable.defaults().pad(5).left();
 
-        // Set a fixed font size (this size will not change when resizing the window)
-        int fontSize = 16; // Fixed font size for the labels and buttons
-
+        int fontSize = 13;
         BitmapFont headerFont = FancyFontHelper.getInstance().getFont(TITLE_COLOR, fontSize);
         Label.LabelStyle headerStyle = new Label.LabelStyle(headerFont, TITLE_COLOR);
 
-        // Fixed column widths (no scaling with screen size)
-        float width = 400; // fixed width for table columns, adjust based on needs
+        float width = 400;
 
-        // Add headers with fixed font size and dynamic width
         upgradesTable.add(new Label("Upgrade", headerStyle)).width(width * 0.25f).padBottom(10).padLeft(10);
         upgradesTable.add(new Label("Resources Needed", headerStyle)).width(width * 0.25f).padBottom(10);
         upgradesTable.add(new Label("Effects", headerStyle)).width(width * 0.25f).padBottom(10);
         upgradesTable.add(new Label("Action", headerStyle)).width(width * 0.25f).padBottom(10);
         upgradesTable.row();
 
-        // Set up scroll pane with updated sizes
         scrollPane = new ScrollPane(upgradesTable, skin);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);
@@ -96,60 +91,67 @@ public class UpgradesUI {
         mainTable.add(container).expand().fill();
     }
 
-    public void addUpgrades(String name, String resources, String effects, Runnable onUpgrades) {
-        // Fixed font size for labels and buttons
-        int fontSize = 12;
-
+    private void createUpgradeChain(String[] names, String[] resources, String[] effects) {
+        int fontSize = 10;
         BitmapFont font = FancyFontHelper.getInstance().getFont(TEXT_COLOR, fontSize);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, TEXT_COLOR);
         TextButton.TextButtonStyle buttonStyle = createButtonStyle(font);
 
-        // Fixed button width (no scaling)
-        float buttonWidth = 120; // fixed button width in pixels
+        final int[] levelToShow = {0}; // start at 0 index
+        final int maxLevels = names.length;
 
-        Label nameLabel = new Label(name, labelStyle);
-        Label resourcesLabel = new Label(resources, labelStyle);
-        Label effectsLabel = new Label(effects, labelStyle);
+        // Create labels and button
+        Label nameLabel = new Label(names[levelToShow[0]], labelStyle);
+        Label resourcesLabel = new Label(resources[levelToShow[0]], labelStyle);
+        Label effectsLabel = new Label(effects[levelToShow[0]], labelStyle);
         TextButton upgradeButton = new TextButton("Upgrade", buttonStyle);
-        upgradeButton.setSize(buttonWidth, 40); // Set fixed button size
-        // Add event listeners and button interactions
-        
+
+        upgradesTable.add(nameLabel).padLeft(10);
+        upgradesTable.add(resourcesLabel);
+        upgradesTable.add(effectsLabel);
+        upgradesTable.add(upgradeButton).width(120).height(40).padLeft(10);
+        upgradesTable.row();
+
+        // Setup button listener
         upgradeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Clicked Upgrade: " + name);
-                onUpgrades.run(); // <-- This was never called before
+                if (levelToShow[0] < maxLevels - 1) {
+                    levelToShow[0]++;
+                    nameLabel.setText(names[levelToShow[0]]);
+                    resourcesLabel.setText(resources[levelToShow[0]]);
+                    effectsLabel.setText(effects[levelToShow[0]]);
+                
+                    if (levelToShow[0] == maxLevels - 1) {
+                        upgradeButton.setText("Fully Upgraded");
+                        upgradeButton.setDisabled(true);
+                    }
+                }
+                
             }
+
             @Override
-           public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-               if (pointer == -1) {
-                   TextButton button = (TextButton) event.getListenerActor();
-                   button.getLabel().setColor(Color.WHITE);
-                   button.getStyle().up = button.getStyle().over;
-               }
-           }
-
-           @Override
-           public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 if (pointer == -1) {
-                   TextButton button = (TextButton) event.getListenerActor();
-                   button.getLabel().setColor(TEXT_COLOR);
-                   Drawable originalBg = originalButtonBackgrounds.get(button);
-                   if (originalBg != null) {
-                        button.getStyle().up = originalBg;
-                   }
-               }
-           }
-       });
-        // Add the components to the table
-            upgradesTable.add(nameLabel);
-            upgradesTable.add(resourcesLabel);
-            upgradesTable.add(effectsLabel);
-            upgradesTable.add(upgradeButton);
-            upgradesTable.row();
-            setVisible(true); 
+                    upgradeButton.getLabel().setColor(Color.WHITE);
+                    upgradeButton.getStyle().up = upgradeButton.getStyle().over;
+                }
+            }
 
-            Gdx.input.setInputProcessor(stage);
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                if (pointer == -1) {
+                    upgradeButton.getLabel().setColor(TEXT_COLOR);
+                    Drawable originalBg = originalButtonBackgrounds.get(upgradeButton);
+                    if (originalBg != null) {
+                        upgradeButton.getStyle().up = originalBg;
+                    }
+                }
+            }
+        });
+
+        // Save original background for restoring after hover
+        originalButtonBackgrounds.put(upgradeButton, upgradeButton.getStyle().up);
     }
 
     private TextButton.TextButtonStyle createButtonStyle(BitmapFont font) {
@@ -180,34 +182,37 @@ public class UpgradesUI {
     }
 
     private void possibleUpgrades() {
-        addUpgrades("Dark Matter Oven", "100 Dark Matter, 50 Iron", "+20% Cooking speed", new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("Applied: Dark Matter Oven");
+        createUpgradeChain(
+            new String[]{"Dark Matter Oven I", "Dark Matter Oven II", "Dark Matter Oven III", "Dark Matter Oven IV"},
+            new String[]{
+                "100 Dark Matter, 50 Iron",
+                "150 Dark Matter, 100 Iron",
+                "250 Dark Matter, 150 Iron",
+                "400 Dark Matter, 200 Iron"
+            },
+            new String[]{
+                "+20% Cooking speed",
+                "+35% Cooking speed",
+                "+50% Cooking speed",
+                "+70% Cooking speed"
             }
-        });
+        );
 
-        addUpgrades("Stronger Walls", "200 Stone, 100 Iron", "+50% wall durability", new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("Applied: Stronger Walls");
+        createUpgradeChain(
+            new String[]{"Stronger Walls I", "Stronger Walls II", "Stronger Walls III", "Stronger Walls IV"},
+            new String[]{
+                "200 Stone, 100 Iron",
+                "300 Stone, 200 Iron",
+                "450 Stone, 300 Iron",
+                "600 Stone, 500 Iron"
+            },
+            new String[]{
+                "+20% Durability",
+                "+35% Durability",
+                "+50% Durability",
+                "+70% Durability"
             }
-        });
-    }
-
-    public boolean isVisible() {
-        return isVisible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.isVisible = visible;
-        mainTable.setVisible(visible);
-
-        if (!visible) {
-            // Let GameScreen handle input processor reset
-        } else {
-            Gdx.input.setInputProcessor(stage);
-        }
+        );
     }
 
     public void render() {
@@ -223,7 +228,6 @@ public class UpgradesUI {
         }
     }
 
-    
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
@@ -232,16 +236,27 @@ public class UpgradesUI {
         return stage;
     }
 
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.isVisible = visible;
+        mainTable.setVisible(visible);
+
+        if (visible) {
+            Gdx.input.setInputProcessor(stage);
+        }
+    }
+
     public void dispose() {
         stage.dispose();
         backgroundTexture.dispose();
         if (panelBackground != null && panelBackground.getPatch() != null) {
-             // Dispose the texture used by the NinePatch if it's not shared/managed elsewhere
             try {
-                 panelBackground.getPatch().getTexture().dispose();
+                panelBackground.getPatch().getTexture().dispose();
             } catch (Exception e) {
-                 // Handle potential errors if texture is already disposed
-                 System.err.println("Error disposing panel background texture: " + e.getMessage());
+                System.err.println("Error disposing panel background texture: " + e.getMessage());
             }
         }
     }

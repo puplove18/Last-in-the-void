@@ -6,7 +6,7 @@ import java.util.Map;
 public class Inventory {
     private Map<String, Integer> items;
     private int maxSize;
-
+    private boolean avoidInfinteInventoryEmpty = false;
     public Inventory(int maxSize) {
         this.items = new HashMap<>();
         this.maxSize = maxSize;
@@ -45,15 +45,19 @@ public class Inventory {
     // Display contents
     public void showInventory() {
         if (items.isEmpty()) {
-            System.out.println("Inventory is empty.");
+            if (!avoidInfinteInventoryEmpty) {
+                System.out.println("Inventory is empty.");
+                avoidInfinteInventoryEmpty = true; // Mark it as already reported
+            }
         } else {
+            avoidInfinteInventoryEmpty = false; // Reset the flag because we have items again
             System.out.println("Inventory: ");
-            // Display item and quantity
             for (Map.Entry<String, Integer> entry : items.entrySet()) {
                 System.out.println(entry.getKey() + " x" + entry.getValue());
             }
         }
     }
+    
 
     // Check if inventory contains an item
     public boolean hasItem(String item) {
