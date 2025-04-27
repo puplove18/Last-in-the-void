@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.audio.AudioManager;
+import com.mygdx.events.AlienEncounterEvent; // Updated import from the new package
 import com.mygdx.managers.EventManager;
 import com.mygdx.managers.GameWorldManager;
 import com.mygdx.managers.InputHandler;
@@ -13,7 +14,6 @@ import com.mygdx.managers.PlayerManager;
 import com.mygdx.managers.RenderManager;
 import com.mygdx.managers.UIManager;
 import com.mygdx.objects.Alien;
-import com.mygdx.objects.AlienEncounterEvent;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
