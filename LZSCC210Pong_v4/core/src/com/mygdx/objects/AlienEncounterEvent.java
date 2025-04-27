@@ -1,9 +1,6 @@
-package com.mygdx.events;
+package com.mygdx.objects;
 
 import java.util.function.Consumer;
-import com.mygdx.objects.Alien;
-import com.mygdx.objects.Event;
-import com.mygdx.objects.Player;
 
 /**
  * A simple example event representing an encounter with an alien.
