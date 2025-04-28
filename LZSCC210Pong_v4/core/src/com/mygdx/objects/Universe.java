@@ -10,7 +10,7 @@ public class Universe {
 
     //Player's current universe they're explporing, all on screen events take place here
     private StarSystem currentPosition;
-    Random rand = new Random();
+    static Random rand = new Random();
 
     public StarSystem[] getDestinations(){
         return this.destinations;
@@ -62,13 +62,17 @@ public class Universe {
 
         for (int i = 0; i <= systemsNum-1; i++){
             String newName = generateName();
-            StarSystem dest = new StarSystem(newName, tier);
+
+            int starSize = rand.nextInt(2000-200)+200;
+            int numPlanets = rand.nextInt(9)+3;
+
+            StarSystem dest = new StarSystem(newName, starSize, tier, numPlanets);
+
             dest.genrateStarPlanets(newName, tier);
             newDestinations[i] = dest;
         }
         this.destinations = newDestinations;
     }
-
 
     // Method for selecting a destination universe and generating new choices for the player right away
     private void chooseDestination(int destination) {
@@ -86,6 +90,14 @@ public class Universe {
     }
 
     private void printDestinations() {
+        for (int i = 0; i <= this.destinations.length-1; i++) {
+            StarSystem cur = this.destinations[i];
+            int tier = this.destinations[i].getTier();
+            System.out.println("System " + cur.getName() + " of size " + cur.getNumPlanets() + " and tier " + tier);
+        }
+    }
+
+    private void printAllDestinations() {
 
         for (int i = 0; i <= this.destinations.length-1; i++)
         {
@@ -106,8 +118,17 @@ public class Universe {
         for (int i = 0; i <= planets.length-1; i ++) {
             planets[i].printPlanet();
         }
+
         System.out.println("\n");
         test.printDestinations();
+
+        for (int x = 0; x <= 100; x ++) {
+            int choice = rand.nextInt(test.getDestinations().length);
+            test.chooseDestination(choice);
+            System.out.println("Chose destination " + choice);
+            test.printDestinations();
+            
+        }
 
     }
 }
