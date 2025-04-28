@@ -1,26 +1,52 @@
 package com.mygdx.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.mygdx.helpers.Constants;
-
-import java.util.Map;
-import java.util.HashMap; 
 
 public class Player{
     private String name;
     private double health = 100;
+    private int healthUpgradeLevel = 0; 
 	private double fuel = 100;
+    private int fuelUpgradeLevel = 0; 
     private double oxygen = 100;
-
+    private int oxygenUpgradeLevel = 0; 
     private Inventory inventory;
 
-
+    public double getFuelCapacity() {
+        fuel *= 2;
+        return fuel;
+    }
+    public double getHealthCapacity() {
+        health *= 2;
+        return health;
+    }
+    public double getOxygenCapacity() {
+        oxygen *= 2;
+        return oxygen;
+    }
+    public void upgradeFuel() {
+        if (fuelUpgradeLevel < 4) { // Max 4 levels
+            fuelUpgradeLevel++;
+            System.out.println("Fuel upgraded! New capacity: " + getFuelCapacity());
+        } else {
+            System.out.println("Fuel fully upgraded!");
+        }
+    }
+    public void upgradeOxygen() {
+        if (healthUpgradeLevel < 4) { // Max 4 levels
+            healthUpgradeLevel++;
+            System.out.println("Oxygen upgraded! New health: " + getOxygenCapacity());
+        } else {
+            System.out.println("Oxygen fully upgraded!");   
+        }
+    }
+    public void upgradeHealth() {
+        if (oxygenUpgradeLevel < 4) { // Max 4 levels
+            oxygenUpgradeLevel++;
+            System.out.println("Health upgraded! New capacity: " + getHealthCapacity());
+        } else {
+            System.out.println("Health fully upgraded!");
+        }
+    }
 
     public enum Stats {
         HEALTH, FUEL, OXYGEN;
@@ -132,7 +158,7 @@ public class Player{
         return inventory;
     }
 
-
+    
     public static void main(String[] args){
         Player tester = new Player();
 

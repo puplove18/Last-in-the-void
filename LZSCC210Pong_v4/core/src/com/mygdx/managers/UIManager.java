@@ -1,9 +1,7 @@
 package com.mygdx.managers;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,17 +11,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
+import com.mygdx.objects.Universe;
 import com.mygdx.objects.Upgrades;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
-import com.mygdx.ui.UpgradesUI;
 import com.mygdx.ui.InventoryUI;
+import com.mygdx.ui.UpgradesUI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +35,7 @@ public class UIManager {
     private boolean inventoryOpen = false;
     private Upgrades upgrades;
     private boolean showUpgradesGUI = false;
+    private Universe universe;
 
     private UpgradesUI upgradesUI;
     private InventoryUI inventoryUI;
@@ -52,10 +50,11 @@ public class UIManager {
     private TextureAtlas backgroundAtlas;
     private TextureAtlas.AtlasRegion inventoryBackground;
     
-    public UIManager(Inventory inventory, Player player, GameScreen gameScreen) {
+    public UIManager(Inventory inventory, Player player, GameScreen gameScreen, Universe universe) {
         this.inventory = inventory;
         this.player = player;
         this.gameScreen = gameScreen;
+        this.universe = universe;
 
         // Create a Map for upgrade costs, here it's just an example with "Iron" needing 50
         Map<String, Integer> upgradeCost = new HashMap<>();
@@ -63,7 +62,7 @@ public class UIManager {
 
         // Pass the map into the Upgrades constructor
         this.upgrades = new Upgrades(inventory, upgradeCost);
-        this.upgradesUI = new UpgradesUI(inventory);
+        this.upgradesUI = new UpgradesUI(player,player.getInventory(), universe);
 
         this.inventoryUI = new InventoryUI(PongGame.getInstance(), player);
         inventoryUI.setCloseButtonListener(new InventoryUI.CloseButtonListener() {

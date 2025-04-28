@@ -14,9 +14,9 @@ import com.mygdx.managers.RenderManager;
 import com.mygdx.managers.UIManager;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
+import com.mygdx.objects.Universe;
 import com.mygdx.pong.PongGame;
 import com.mygdx.ui.EventUI;
-
 
 public class GameScreen extends ScreenAdapter implements EventUI.EventCompletionListener {
     private OrthographicCamera camera;
@@ -46,11 +46,11 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     private void initializeManagers() {
         Inventory inventory = new Inventory(1000);
         Player player = new Player();
-
+        Universe universe = new Universe();
         worldManager = new GameWorldManager(camera, this);
         playerManager = new PlayerManager(player, inventory, worldManager.getWorld());
         renderManager = new RenderManager(camera, playerManager, worldManager);
-        uiManager = new UIManager(inventory, player, this);
+        uiManager = new UIManager(inventory, player, this, universe);
         eventManager = new EventManager(player, this);
         inputHandler = new InputHandler(this, uiManager, eventManager);
     }

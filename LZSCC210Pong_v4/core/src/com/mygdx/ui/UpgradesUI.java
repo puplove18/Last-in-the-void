@@ -17,6 +17,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.objects.Inventory;
+import com.mygdx.objects.Player;
+import com.mygdx.objects.Universe;
 
 public class UpgradesUI {
 
@@ -25,13 +27,15 @@ public class UpgradesUI {
     private Table mainTable;
     private Table upgradesTable;
     private ScrollPane scrollPane;
+    private final Player player;
+    private Universe universe;
+    private int destinationChoice = 1;
 
     private Texture backgroundTexture;
     private NinePatchDrawable panelBackground;
     private ObjectMap<TextButton, Drawable> originalButtonBackgrounds = new ObjectMap<>();
 
-    private Inventory inventory;
-
+    private final Inventory inventory;
     private boolean isVisible = false;
 
     private static final Color TITLE_COLOR = Color.WHITE;
@@ -39,8 +43,10 @@ public class UpgradesUI {
     private static final Color BUTTON_COLOR = new Color(0.2f, 0.4f, 0.6f, 1f);
     private static final Color BUTTON_HOVER_COLOR = new Color(0.3f, 0.6f, 0.9f, 1f);
 
-    public UpgradesUI(Inventory inventory) {
+    public UpgradesUI(Player player, Inventory inventory, Universe universe) {
+        this.player = player;
         this.inventory = inventory;
+        this.universe = universe; 
         this.stage = new Stage(new ScreenViewport());
         this.skin = new Skin(Gdx.files.internal("uiskin.json"));
         initializePanelBackground();
@@ -91,16 +97,15 @@ public class UpgradesUI {
         mainTable.add(container).expand().fill();
     }
 
-    private void createUpgradeChain(String[] names, String[] resources, String[] effects) {
+    private void createUpgradeChain(String[] names, String[] resources, String[] effects, Runnable upgradeAction) {
         int fontSize = 10;
         BitmapFont font = FancyFontHelper.getInstance().getFont(TEXT_COLOR, fontSize);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, TEXT_COLOR);
         TextButton.TextButtonStyle buttonStyle = createButtonStyle(font);
 
-        final int[] levelToShow = {0}; // start at 0 index
+        final int[] levelToShow = {0};
         final int maxLevels = names.length;
 
-        // Create labels and button
         Label nameLabel = new Label(names[levelToShow[0]], labelStyle);
         Label resourcesLabel = new Label(resources[levelToShow[0]], labelStyle);
         Label effectsLabel = new Label(effects[levelToShow[0]], labelStyle);
@@ -112,28 +117,31 @@ public class UpgradesUI {
         upgradesTable.add(upgradeButton).width(120).height(40).padLeft(10);
         upgradesTable.row();
 
-        // Setup button listener
         upgradeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 String requiredResources = resources[levelToShow[0]];
                 boolean canUpgrade = checkResources(requiredResources);
 
-                if (canUpgrade && levelToShow[0] < maxLevels - 1) {
-                    // Deduct the required resources from inventory if upgrade is possible
+                if (canUpgrade && levelToShow[0] < maxLevels) {
                     deductResources(requiredResources);
 
-                    levelToShow[0]++;
-                    nameLabel.setText(names[levelToShow[0]]);
-                    resourcesLabel.setText(resources[levelToShow[0]]);
-                    effectsLabel.setText(effects[levelToShow[0]]);
+                    if (upgradeAction != null) {
+                        upgradeAction.run();
+                    }
 
-                    if (levelToShow[0] == maxLevels - 1) {
+                    levelToShow[0]++;
+                    if (levelToShow[0] < maxLevels) {
+                        nameLabel.setText(names[levelToShow[0]]);
+                        resourcesLabel.setText(resources[levelToShow[0]]);
+                        effectsLabel.setText(effects[levelToShow[0]]);
+                    }
+
+                    if (levelToShow[0] == maxLevels) {
                         upgradeButton.setText("Fully Upgraded");
                         upgradeButton.setDisabled(true);
                     }
                 } else if (!canUpgrade) {
-                    // Notify the user if there are not enough resources
                     System.out.println("Not enough resources to upgrade!");
                 }
             }
@@ -158,7 +166,6 @@ public class UpgradesUI {
             }
         });
 
-        // Save original background for restoring after hover
         originalButtonBackgrounds.put(upgradeButton, upgradeButton.getStyle().up);
     }
 
@@ -190,43 +197,122 @@ public class UpgradesUI {
     }
 
     private void possibleUpgrades() {
-        // Check each upgrade for resources in inventory before allowing upgrades
         createUpgradeChain(
-            new String[]{"Dark Matter Oven I", "Dark Matter Oven II", "Dark Matter Oven III", "Dark Matter Oven IV"},
+            new String[]{"Fuel Capacity I", "Fuel Capacity II", "Fuel Capacity III", "Fuel Capacity IV"},
             new String[]{
-                "10 Common Building Materials",
-                "30 Uncommon Building Materials",
-                "40 Rare Building Materials",
-                "60 Epic Building Materials"
+            "10 Common Building Materials",
+            "30 Uncommon Building Materials",
+            "50 Rare Building Materials",
+            "70 Epic Building Materials"
             },
             new String[]{
-                "+20% Cooking speed",
-                "+35% Cooking speed",
-                "+50% Cooking speed",
-                "+70% Cooking speed"
+            "Double Fuel Capacity",
+            "Double Fuel Capacity",
+            "Double Fuel Capacity",
+            "Double Fuel Capacity"
+            },
+            new Runnable() {
+            @Override
+            public void run() {
+                // Ensure the player object is initialized before calling upgradeFuel
+                if (player != null) {
+                player.upgradeFuel(); // Action when upgrading fuel
+                } else {
+                System.out.println("Player object is not initialized!");
+                }
             }
+            }
+        );
+            createUpgradeChain(
+                new String[]{"Health I", "Health II", "Health III", "Health IV"},
+                new String[]{
+                "10 Common Building Materials", //need to be verify/changed to the correct resources, with the correct String
+                "30 Uncommon Building Materials",
+                "50 Rare Building Materials",
+                "70 Epic Building Materials"
+                },
+                new String[]{
+                "Double Health",
+                "Double Health",
+                "Double Health",
+                "Double Health"
+                },
+                new Runnable() {
+                @Override
+                public void run() {
+                    // Ensure the player object is initialized before calling upgradeFuel
+                    if (player != null) {
+                    player.upgradeHealth(); // Action when upgrading fuel
+                    } else {
+                    System.out.println("Player object is not initialized!");
+                    }
+                }
+                }
         );
 
         createUpgradeChain(
-            new String[]{"Stronger Walls I", "Stronger Walls II", "Stronger Walls III", "Stronger Walls IV"},
+                new String[]{"Oxygen I", "Oxygen II", "Oxygen III", "Oxygen IV"},
+                new String[]{
+                "10 Common Building Materials",//need to be verify/changed to the correct resources, with the correct String
+                "30 Uncommon Building Materials",
+                "50 Rare Building Materials",
+                "70 Epic Building Materials"
+                },
+                new String[]{
+                "Double Oxygen",
+                "Double Oxygen",
+                "Double Oxygen",
+                "Double Oxygen"
+                },
+                new Runnable() {
+                @Override
+                public void run() {
+                    // Ensure the player object is initialized before calling upgradeFuel
+                    if (player != null) {
+                    player.upgradeOxygen(); // Action when upgrading fuel
+                    } else {
+                    System.out.println("Player object is not initialized!");
+                    }
+                }
+                }
+        );
+        createUpgradeChain(
+            new String[]{
+                "Destination Scanner I",
+                "Destination Scanner II",
+                "Advanced Navigation",
+                "Precision Landing System"
+            },
             new String[]{
                 "10 Common Building Materials",
                 "30 Uncommon Building Materials",
-                "40 Rare Building Materials",
-                "60 Epic Building Materials"
+                "50 Rare Building Materials",
+                "70 Epic Building Materials"
             },
             new String[]{
-                "+20% Wall durability",
-                "+35% Wall durability",
-                "+50% Wall durability",
-                "+70% Wall durability"
+                "Choose between 1 locations",
+                "Choose between 2 locations",
+                "Choose between 3 locations",
+                "Choose between 4 locations"
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    if (universe != null) {
+                    destinationChoice ++; 
+                    } else {
+                        System.out.println("Player object is not initialized!");
+                    }
+                }
             }
-        );
+);
+
+
+        
     }
 
     private boolean checkResources(String requiredResources) {
-        // Parse the resources string (it's in the format: "100 Common Building Materials")
-        String[] resourceParts = requiredResources.split(" ", 2); // Split only once to keep multi-word names intact
+        String[] resourceParts = requiredResources.split(" ", 2);
         if (resourceParts.length != 2) {
             System.out.println("Error parsing resources: " + requiredResources);
             return false;
@@ -238,21 +324,13 @@ public class UpgradesUI {
             System.out.println("Invalid resource quantity: " + resourceParts[0]);
             return false;
         }
-        String resourceName = resourceParts[1]; // The full resource name is now in the second part
-        
-        // Check if inventory has enough of the required resource
+        String resourceName = resourceParts[1];
         int availableQuantity = inventory.checkItemQuantity(resourceName);
-        if (availableQuantity >= requiredQuantity) {
-            return true;
-        } else {
-            System.out.println("Not enough resources: " + resourceName);
-            return false;
-        }
+        return availableQuantity >= requiredQuantity;
     }
-    
+
     private void deductResources(String requiredResources) {
-        // Parse the resources string (it's in the format: "100 Common Building Materials")
-        String[] resourceParts = requiredResources.split(" ", 2); // Split only once to keep multi-word names intact
+        String[] resourceParts = requiredResources.split(" ", 2);
         if (resourceParts.length != 2) {
             System.out.println("Error parsing resources: " + requiredResources);
             return;
@@ -264,19 +342,12 @@ public class UpgradesUI {
             System.out.println("Invalid resource quantity: " + resourceParts[0]);
             return;
         }
-        String resourceName = resourceParts[1]; // The full resource name is in the second part
-        
-        // Deduct resources from inventory
+        String resourceName = resourceParts[1];
         if (inventory.checkItemQuantity(resourceName) >= requiredQuantity) {
             inventory.removeItem(resourceName, requiredQuantity);
             System.out.println("Resources deducted: " + requiredQuantity + " " + resourceName);
-        } else {
-            System.out.println("Not enough resources to deduct: " + resourceName);
         }
     }
-    
-    
-    
 
     public void render() {
         if (isVisible) {
