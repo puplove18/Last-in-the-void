@@ -84,4 +84,11 @@ public class Inventory {
     public Integer checkItemQuantity(String item) {
         return items.getOrDefault(item, 0); // Returns 0 if the item is not found
     } 
+
+    public Map<String, Integer> getItems() {
+        if (items == null) {
+            items = new HashMap<>();
+        }
+        return items;
+    }
 }
