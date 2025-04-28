@@ -201,7 +201,7 @@ public class UIManager {
     
     public void toggleUpgrades() {
     showUpgradesGUI = !showUpgradesGUI;
-    upgradesUI.setVisible(showUpgradesGUI); // move it here
+    upgradesUI.setVisible(showUpgradesGUI);
     if (showUpgradesGUI) {
         Gdx.input.setInputProcessor(upgradesUI.getStage());
     } else {
