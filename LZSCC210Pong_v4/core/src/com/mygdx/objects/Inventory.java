@@ -6,7 +6,9 @@ import java.util.Map;
 public class Inventory {
     private Map<String, Integer> items;
     private int maxSize;
-    private boolean avoidInfinteInventoryEmpty = false;
+    private boolean avoidInfiniteInventoryEmpty = false;
+    private boolean hasPrintedInventory = false; // Added flag to track if inventory has been printed
+
     public Inventory(int maxSize) {
         this.items = new HashMap<>();
         this.maxSize = maxSize;
@@ -22,6 +24,7 @@ public class Inventory {
         // Increment the quantity if the item is already in the inventory
         items.put(item, items.getOrDefault(item, 0) + 1);
         System.out.println(item + " added to inventory.");
+        hasPrintedInventory = false; // Reset flag when inventory changes
         return true;
     }
 
@@ -39,7 +42,8 @@ public class Inventory {
     
         // Increment the quantity if the item is already in the inventory, or add it.
         items.put(item, items.getOrDefault(item, 0) + quantity); 
-        System.out.println(quantity + "x " + item + " added to inventory."); 
+        System.out.println(quantity + "x " + item + " added to inventory.");
+        hasPrintedInventory = false; // Reset flag when inventory changes
         return true;
     }
 
@@ -53,6 +57,7 @@ public class Inventory {
                 items.put(item, quantity - quant);  
             }
             System.out.println(item + " removed from inventory.");
+            hasPrintedInventory = false; // Reset flag when inventory changes
             return true;
         } else {
             System.out.println(item + " not found in inventory.");
@@ -63,27 +68,31 @@ public class Inventory {
     // Display contents
     public void showInventory() {
         if (items.isEmpty()) {
-            if (!avoidInfinteInventoryEmpty) {
+            if (!avoidInfiniteInventoryEmpty) {
                 System.out.println("Inventory is empty.");
-                avoidInfinteInventoryEmpty = true; // Mark it as already reported
+                avoidInfiniteInventoryEmpty = true; // Mark it as already reported
             }
         } else {
-            avoidInfinteInventoryEmpty = false; // Reset the flag because we have items again
-            System.out.println("Inventory: ");
-            for (Map.Entry<String, Integer> entry : items.entrySet()) {
-                System.out.println(entry.getKey() + " x" + entry.getValue());
+            // Only print the inventory once until it's modified
+            if (!hasPrintedInventory) {
+                System.out.println("Inventory: ");
+                for (Map.Entry<String, Integer> entry : items.entrySet()) {
+                    System.out.println(entry.getKey() + " x" + entry.getValue());
+                }
+                hasPrintedInventory = true; // Mark that the inventory has been printed
             }
         }
     }
     
-
     // Check if inventory contains an item
     public boolean hasItem(String item) {
         return items.containsKey(item);
     }
+
+    // Check quantity of a specific item
     public Integer checkItemQuantity(String item) {
         return items.getOrDefault(item, 0); // Returns 0 if the item is not found
-    } 
+    }
 
     public Map<String, Integer> getItems() {
         if (items == null) {
