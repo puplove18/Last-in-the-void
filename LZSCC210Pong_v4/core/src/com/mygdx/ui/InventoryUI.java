@@ -74,6 +74,16 @@ public class InventoryUI {
         createUI();
     }
 
+    public interface CloseButtonListener {
+        void onCloseButtonClicked();
+    }
+
+    private CloseButtonListener closeButtonListener;
+
+    public void setCloseButtonListener(CloseButtonListener listener) {
+        this.closeButtonListener = listener;
+    }
+
     private void initializePanelBackground() {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0.15f, 0.15f, 0.2f, 0.9f);
@@ -100,7 +110,9 @@ public class InventoryUI {
         closeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                setVisible(false);
+                if (closeButtonListener != null) {
+                    closeButtonListener.onCloseButtonClicked();
+                }
             }
         });
         headerTable.add(closeButton).size(30, 30).right().padRight(10);
