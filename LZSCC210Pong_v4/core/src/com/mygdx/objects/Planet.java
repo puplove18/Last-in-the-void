@@ -1,20 +1,5 @@
 package com.mygdx.objects;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Pixmap.Blending;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.mygdx.helpers.BodyHelper;
-import com.mygdx.helpers.Constants;
-import com.mygdx.helpers.ContactType;
-import com.mygdx.pong.PongGame;
-import com.mygdx.screens.GameScreen;
-import com.mygdx.pong.PongGame;
-import com.mygdx.objects.InteractiveObject;
 //import com.mygdx.assets.Texture;
 import java.util.Random;
 
@@ -24,11 +9,13 @@ public class Planet extends InteractiveObject{
     private Type type;
     private int tier;
     private int size;
+    private String playerSize;
+    private int maxPlanetSize = 100;
     //private Texture texture;
     Random rand = new Random();
 
 
-    enum Type {
+    public enum Type {
         Gas,
         Mineral,
         Organic,
@@ -36,6 +23,25 @@ public class Planet extends InteractiveObject{
         Event
     }
 
+    public String getName() {
+        return this.name;
+    }
+    
+    public Type getType() {
+        return this.type;
+    }
+
+    public int getTier() {
+        return this.tier;
+    }
+
+    public int getSize() {
+        return this.size;
+    }
+
+    public String getPlayerSize() {
+        return this.playerSize;
+    }
 
     //Set types for easy access
     Type gas = Type.Gas;
@@ -44,6 +50,15 @@ public class Planet extends InteractiveObject{
     Type star = Type.Star;
 
     //Manual planet maker, pass through generate to add more data
+
+    public Planet(String name, Type star2, int size, String pSize, int tier) {
+        this.name = name;
+        this.type = star2;
+        this.size = size;
+        this.playerSize = pSize;
+        this.tier = tier;
+    }
+
     public Planet(String name, Type star2, int size, int tier) {
         this.name = name;
         this.type = star2;
@@ -61,6 +76,7 @@ public class Planet extends InteractiveObject{
         System.out.println("Name: " + this.name);
         System.out.println("Type: " + this.type);
         System.out.println("Size: " + this.size);
+        System.out.println("Player Size: " + this.playerSize);
         System.out.println("Tier: " + this.tier);
     }
 
@@ -79,12 +95,32 @@ public class Planet extends InteractiveObject{
             {planet_type = org;}
 
         //Generates random size for the planet's texture, to be applied later
-        int new_size = rand.nextInt(100-1)+1;
+        int new_size = rand.nextInt(maxPlanetSize-1)+1;
+
+        if (new_size < 20) {
+            playerSize = "Dwarf Planet";
+        }
+        else if (new_size < 40) {
+            playerSize = "Small Planet";
+        }
+        else if (new_size < 60) {
+            playerSize = "Midplanet";
+        }
+        else if (new_size < 80) {
+            playerSize = "Giant Planet";
+        }
+        else {
+            playerSize = "Gargantuant Planet";
+        }
+
 
         //To be implimented later when some way of tracking player progression exists, potentially inherited from Star System
-        int planet_tier = rand.nextInt(systemTier-1) + 1;
+        int planet_tier = 1;
+        if (systemTier != 1){
+            planet_tier = rand.nextInt(systemTier-1) + 1;
+        }
 
-        Planet new_planet = new Planet(new_name, planet_type, new_size, planet_tier);
+        Planet new_planet = new Planet(new_name, planet_type, new_size, playerSize, planet_tier);
 
         return new_planet; // Added to ensure the program compiles, can change later
 
