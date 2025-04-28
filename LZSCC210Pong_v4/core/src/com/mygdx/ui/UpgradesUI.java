@@ -46,6 +46,7 @@ public class UpgradesUI {
         initializePanelBackground();
         createUI();
         possibleUpgrades();
+        
     }
 
     private void initializePanelBackground() {
