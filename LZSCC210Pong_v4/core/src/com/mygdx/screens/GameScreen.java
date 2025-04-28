@@ -12,17 +12,12 @@ import com.mygdx.managers.InputHandler;
 import com.mygdx.managers.PlayerManager;
 import com.mygdx.managers.RenderManager;
 import com.mygdx.managers.UIManager;
-import com.mygdx.objects.Alien;
-import com.mygdx.events.AlienEncounterEvent;
-import com.mygdx.objects.Event;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
 import com.mygdx.pong.PongGame;
 import com.mygdx.ui.EventUI;
 
-/*
- *  Central control class for game screen
- */
+
 public class GameScreen extends ScreenAdapter implements EventUI.EventCompletionListener {
     private OrthographicCamera camera;
     private GameWorldManager worldManager;
@@ -32,22 +27,26 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     private InputHandler inputHandler;
     private EventManager eventManager;
     public boolean paused = false;
-    
-    
+
+    //if true, show star-system view else show in-world play
+    private boolean systemView = true;
+
     public GameScreen(OrthographicCamera camera) {
         this.camera = camera;
-        this.camera.position.set(new Vector3(PongGame.getInstance().getWindowWidth() / 2,
-                PongGame.getInstance().getWindowHeight() / 2, 0));
-        
+        this.camera.position.set(new Vector3(
+                PongGame.getInstance().getWindowWidth() / 2,
+                PongGame.getInstance().getWindowHeight() / 2,
+                0
+        ));
+
         initializeManagers();
-        
         Gdx.input.setInputProcessor(uiManager.getUIStage());
     }
-    
+
     private void initializeManagers() {
         Inventory inventory = new Inventory(1000);
         Player player = new Player();
-        
+
         worldManager = new GameWorldManager(camera, this);
         playerManager = new PlayerManager(player, inventory, worldManager.getWorld());
         renderManager = new RenderManager(camera, playerManager, worldManager);
@@ -55,25 +54,22 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         eventManager = new EventManager(player, this);
         inputHandler = new InputHandler(this, uiManager, eventManager);
     }
-    
+
+    /** Core update logic */
     public void update() {
         if (!eventManager.isEventActive()) {
             inputHandler.handleInput();
         }
-
         if (!paused) {
-            // Game logic only runs if not paused
             worldManager.update();
             playerManager.update();
         }
-
         updateAudio();
-        
         if (eventManager.isEventActive()) {
             eventManager.render();
         }
     }
-    
+
     private void updateAudio() {
         if (paused && !eventManager.isEventActive()) {
             AudioManager.getInstance().stopMusic();
@@ -81,42 +77,68 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
             AudioManager.getInstance().playMusic();
         }
     }
-    
+
     @Override
     public void render(float delta) {
         update();
 
-        // Clear screen
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Delegate rendering to specialized managers
-        renderManager.render(paused, eventManager.isEventActive(), uiManager.isInventoryOpen(), uiManager.isUpgradesOpen());
-        
-        // Render UI if not showing event
+        if (systemView) {
+            //handle click to select a planet
+            if (Gdx.input.justTouched()) {
+                Vector3 touch = new Vector3(
+                        Gdx.input.getX(),
+                        Gdx.input.getY(),
+                        0
+                );
+                camera.unproject(touch);
+                int idx = renderManager.getPlanetIndexAt(touch.x, touch.y);
+                if (idx >= 0) {
+                    worldManager.travelTo(idx);
+                    systemView = false;
+                    camera.position.set(
+                            PongGame.getInstance().getWindowWidth() / 2,
+                            PongGame.getInstance().getWindowHeight() / 2,
+                            0
+                    );
+                    camera.update();
+                }
+            }
+            //draw the starsystem UI
+            renderManager.renderSystemView();
+            return;
+        }
+
+        //in-world renre
+        renderManager.render(
+                paused,
+                eventManager.isEventActive(),
+                uiManager.isInventoryOpen(),
+                uiManager.isUpgradesOpen()
+        );
+
+
         if (!eventManager.isEventActive()) {
             uiManager.render(delta);
         }
-        
-        // Render event UI (on top of everything) if active
         if (eventManager.isEventActive()) {
             eventManager.render();
         }
     }
-    
+
     @Override
     public void resize(int width, int height) {
-        // Update camera
         camera.setToOrtho(false, width, height);
         camera.update();
-        
-        // Propagate resize to all managers
+
         worldManager.resize(width, height);
         renderManager.resize(width, height);
         uiManager.resize(width, height);
         eventManager.resize(width, height);
     }
-    
+
     @Override
     public void dispose() {
         worldManager.dispose();
@@ -124,41 +146,20 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         uiManager.dispose();
         eventManager.dispose();
     }
-    
-    // Required getters 
-    public GameWorldManager getWorldManager() {
-        return worldManager;
-    }
-    
-    public PlayerManager getPlayerManager() {
-        return playerManager;
-    }
-    
-    public UIManager getUiManager() {
-        return uiManager;
-    }
-    
-    public EventManager getEventManager() {
-        return eventManager;
-    }
-    
-    public boolean isPaused() {
-        return paused;
-    }
-    
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-    }
-    
-    public void togglePause() {
-        this.paused = !this.paused;
-    }
-    
-    // EventCompletionListener implementation
+
+
     @Override
     public void onEventCompleted() {
         paused = false;
         Gdx.input.setInputProcessor(uiManager.getUIStage());
         System.out.println("Event completed!");
     }
+
+    public GameWorldManager getWorldManager() { return worldManager; }
+    public PlayerManager getPlayerManager() { return playerManager; }
+    public UIManager getUiManager() { return uiManager; }
+    public EventManager getEventManager() { return eventManager; }
+    public boolean isPaused() { return paused; }
+    public void setPaused(boolean paused) { this.paused = paused; }
+    public void togglePause() { this.paused = !this.paused; }
 }
