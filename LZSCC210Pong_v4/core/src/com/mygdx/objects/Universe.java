@@ -7,6 +7,8 @@ public class Universe {
     private int universeLength = 100;
     private int depth;
     private StarSystem[] destinations;
+
+    //Player's current universe they're explporing, all on screen events take place here
     private StarSystem currentPosition;
     Random rand = new Random();
 
@@ -20,6 +22,16 @@ public class Universe {
 
     public StarSystem getCurrentPosition() {
         return this.currentPosition;
+    }
+
+
+    //Getters and setters for upgrade functionality
+    public int getMaxDest() {
+        return this.maxDest;
+    }
+
+    public void setMaxDest(int newMax) {
+        this.maxDest = newMax;
     }
 
     //Main constructor to build an empty universe with the starting universe as current destination and generate the first set of choices for travel
@@ -57,12 +69,17 @@ public class Universe {
         this.destinations = newDestinations;
     }
 
+
+    // Method for selecting a destination universe and generating new choices for the player right away
     private void chooseDestination(int destination) {
         this.depth += 1;
+
+        //Check if the player exceeded maximum universe size, might be removed
         if (depth >= universeLength) {
             System.out.println("Game Over Condition");
             return;
         } 
+        //Update current position
         this.currentPosition = this.destinations[destination];
         this.generateDestinations((depth/25)+1);
         return;
