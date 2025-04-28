@@ -46,7 +46,6 @@ public class UpgradesUI {
         initializePanelBackground();
         createUI();
         possibleUpgrades();
-        
     }
 
     private void initializePanelBackground() {
@@ -117,18 +116,26 @@ public class UpgradesUI {
         upgradeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (levelToShow[0] < maxLevels - 1) {
+                String requiredResources = resources[levelToShow[0]];
+                boolean canUpgrade = checkResources(requiredResources);
+
+                if (canUpgrade && levelToShow[0] < maxLevels - 1) {
+                    // Deduct the required resources from inventory if upgrade is possible
+                    deductResources(requiredResources);
+
                     levelToShow[0]++;
                     nameLabel.setText(names[levelToShow[0]]);
                     resourcesLabel.setText(resources[levelToShow[0]]);
                     effectsLabel.setText(effects[levelToShow[0]]);
-                
+
                     if (levelToShow[0] == maxLevels - 1) {
                         upgradeButton.setText("Fully Upgraded");
                         upgradeButton.setDisabled(true);
                     }
+                } else if (!canUpgrade) {
+                    // Notify the user if there are not enough resources
+                    System.out.println("Not enough resources to upgrade!");
                 }
-                
             }
 
             @Override
@@ -183,13 +190,14 @@ public class UpgradesUI {
     }
 
     private void possibleUpgrades() {
+        // Check each upgrade for resources in inventory before allowing upgrades
         createUpgradeChain(
             new String[]{"Dark Matter Oven I", "Dark Matter Oven II", "Dark Matter Oven III", "Dark Matter Oven IV"},
             new String[]{
-                "100 Dark Matter, 50 Iron",
-                "150 Dark Matter, 100 Iron",
-                "250 Dark Matter, 150 Iron",
-                "400 Dark Matter, 200 Iron"
+                "10 Common Building Materials",
+                "30 Uncommon Building Materials",
+                "40 Rare Building Materials",
+                "60 Epic Building Materials"
             },
             new String[]{
                 "+20% Cooking speed",
@@ -202,19 +210,73 @@ public class UpgradesUI {
         createUpgradeChain(
             new String[]{"Stronger Walls I", "Stronger Walls II", "Stronger Walls III", "Stronger Walls IV"},
             new String[]{
-                "200 Stone, 100 Iron",
-                "300 Stone, 200 Iron",
-                "450 Stone, 300 Iron",
-                "600 Stone, 500 Iron"
+                "10 Common Building Materials",
+                "30 Uncommon Building Materials",
+                "40 Rare Building Materials",
+                "60 Epic Building Materials"
             },
             new String[]{
-                "+20% Durability",
-                "+35% Durability",
-                "+50% Durability",
-                "+70% Durability"
+                "+20% Wall durability",
+                "+35% Wall durability",
+                "+50% Wall durability",
+                "+70% Wall durability"
             }
         );
     }
+
+    private boolean checkResources(String requiredResources) {
+        // Parse the resources string (it's in the format: "100 Common Building Materials")
+        String[] resourceParts = requiredResources.split(" ", 2); // Split only once to keep multi-word names intact
+        if (resourceParts.length != 2) {
+            System.out.println("Error parsing resources: " + requiredResources);
+            return false;
+        }
+        int requiredQuantity;
+        try {
+            requiredQuantity = Integer.parseInt(resourceParts[0]);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid resource quantity: " + resourceParts[0]);
+            return false;
+        }
+        String resourceName = resourceParts[1]; // The full resource name is now in the second part
+        
+        // Check if inventory has enough of the required resource
+        int availableQuantity = inventory.checkItemQuantity(resourceName);
+        if (availableQuantity >= requiredQuantity) {
+            return true;
+        } else {
+            System.out.println("Not enough resources: " + resourceName);
+            return false;
+        }
+    }
+    
+    private void deductResources(String requiredResources) {
+        // Parse the resources string (it's in the format: "100 Common Building Materials")
+        String[] resourceParts = requiredResources.split(" ", 2); // Split only once to keep multi-word names intact
+        if (resourceParts.length != 2) {
+            System.out.println("Error parsing resources: " + requiredResources);
+            return;
+        }
+        int requiredQuantity;
+        try {
+            requiredQuantity = Integer.parseInt(resourceParts[0]);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid resource quantity: " + resourceParts[0]);
+            return;
+        }
+        String resourceName = resourceParts[1]; // The full resource name is in the second part
+        
+        // Deduct resources from inventory
+        if (inventory.checkItemQuantity(resourceName) >= requiredQuantity) {
+            inventory.removeItem(resourceName, requiredQuantity);
+            System.out.println("Resources deducted: " + requiredQuantity + " " + resourceName);
+        } else {
+            System.out.println("Not enough resources to deduct: " + resourceName);
+        }
+    }
+    
+    
+    
 
     public void render() {
         if (isVisible) {
