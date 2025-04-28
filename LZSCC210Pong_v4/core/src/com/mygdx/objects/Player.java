@@ -20,9 +20,7 @@ public class Player{
 
     private Inventory inventory;
 
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
-    }
+
 
     public enum Stats {
         HEALTH, FUEL, OXYGEN;
@@ -32,7 +30,7 @@ public class Player{
         this.inventory = new Inventory(24);
 
         // test items in the beginning
-        this.inventory.addItem("Iron", 5);
+        this.inventory.addItem("Common Metal", 5);
         this.inventory.addItem("Oxygen", 10);
         this.inventory.addItem("Fuel", 8);
     }

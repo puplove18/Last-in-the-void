@@ -29,6 +29,7 @@ import com.mygdx.objects.Player;
 import com.mygdx.pong.PongGame;
 
 import java.util.Map;
+import com.badlogic.gdx.utils.Align;
 
 
 public class InventoryUI {
@@ -55,12 +56,8 @@ public class InventoryUI {
 
     private static final Color TITLE_COLOR = Color.WHITE;
     private static final Color TEXT_COLOR = Color.LIGHT_GRAY;
-    private static final Color SLOT_COLOR = new Color(0.2f, 0.3f, 0.4f, 1f);
     
-    // Fixed dimensions for inventory
-    private static final int INVENTORY_WIDTH = 600;
-    private static final int INVENTORY_HEIGHT = 400;
-    
+
 
     public InventoryUI(PongGame game, Player player) {
         this.game = game;
@@ -116,8 +113,8 @@ public class InventoryUI {
         panel.add(headerTable).growX().height(50).padTop(10).row();
         panel.add(inventoryTable).grow().pad(20);
         
-        // 2nd window
-        mainTable.add(panel).width(700).height(550);
+        // inner window
+        mainTable.add(panel).width(750).height(580);
         
         refreshInventoryGrid();
     }
@@ -135,6 +132,7 @@ public class InventoryUI {
         inventoryTable.clear();
         
         Map<String, Integer> items = player.getInventory().getItems();
+        System.out.println("DEBUG: Inventory items: " + items);
        
         // Create inventory slots
         int index = 0;
@@ -146,12 +144,13 @@ public class InventoryUI {
                 slotContainer.setBackground(slotBg);
                 
                 // Add item if this slot has one
-                if (items != null && index < items.size()) {
+                if (items != null && index < items.keySet().size()) {
                     String itemName = (String) items.keySet().toArray()[index];
                     int quantity = items.get(itemName);
                     
                     // Item name (top)
-                    Label nameLabel = new Label(itemName, new Label.LabelStyle(FancyFontHelper.getInstance().getFont(TEXT_COLOR, 12), TEXT_COLOR));
+                    String displayString = itemName.length() > 10 ? itemName.substring(0, 6) + "..." : itemName;
+                    Label nameLabel = new Label(displayString, new Label.LabelStyle(FancyFontHelper.getInstance().getFont(TEXT_COLOR, 12), TEXT_COLOR));
                     itemContainer.add(nameLabel).center().padBottom(5).row();
                     itemContainer.add(slotContainer).size(65, 65).row();
 
@@ -162,13 +161,13 @@ public class InventoryUI {
                     index++;
                 } else {
                     // Empty slot
-                    itemContainer.add().height(20).row(); // Empty space for consistency
+                    itemContainer.add().height(20).row();
                     itemContainer.add(slotContainer).size(65, 65).row();
-                    itemContainer.add().height(20); // Empty space for consistency
+                    itemContainer.add().height(20); 
                 }
 
                 // Add slot to grid
-                inventoryTable.add(itemContainer).pad(6).padLeft(20).padRight(20);
+                inventoryTable.add(itemContainer).width(105).pad(8);
             }
             inventoryTable.row();
         }
