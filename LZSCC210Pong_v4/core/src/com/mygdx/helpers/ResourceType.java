@@ -6,17 +6,17 @@ public class ResourceType {
     public static final String UNCOMMON_METAL = "Uncommon Metal";
     public static final String RARE_METAL = "Rare Metal";
     public static final String SUPERIOR_METAL = "Superior Metal";
-    
+
     // Planet 2
-    public static final String OXYGEN = "Oxygen";
-    public static final String HYDROGEN = "Hydrogen";
-    public static final String HELIUM = "Helium";
-    public static final String EXOTIC_GAS = "Fuel";
-    
+    public static final String COMMON_FUEL = "Oxygen";
+    public static final String UNCOMMON_FUEL = "Hydrogen";
+    public static final String RARE_FUEL = "Helium";
+    public static final String EXOTIC_FUEL = "Exotic Gas";
+
     // Planet 3
-    public static final String FOOD = "Food";
-    public static final String WATER = "Water";
-    public static final String MEDICAL_SUPPLIES = "Medical Supplies";
-    public static final String PLANT_FIBER = "Plant Fiber";
+    public static final String COMMON_ORGANIC = "Oxygen";
+    public static final String UNCOMMON_ORGANIC = "Water";
+    public static final String RARE_ORGANIC = "Alien Plant";
+    public static final String SUPERIOR_ORGANIC = "Alien Flesh";
 }
 

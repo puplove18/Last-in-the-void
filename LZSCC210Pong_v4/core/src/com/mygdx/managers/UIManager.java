@@ -66,6 +66,12 @@ public class UIManager {
         this.upgradesUI = new UpgradesUI(inventory);
 
         this.inventoryUI = new InventoryUI(PongGame.getInstance(), player);
+        inventoryUI.setCloseButtonListener(new InventoryUI.CloseButtonListener() {
+            @Override
+            public void onCloseButtonClicked() {
+                toggleInventory();
+            }
+        });
 
         initializeUI();
     }
@@ -110,7 +116,7 @@ public class UIManager {
                     closeUpgrades();
                     
                     inventoryUI.setVisible(inventoryOpen);
-                    Gdx.input.setInputProcessor(inventoryOpen ? inventoryStage : uiStage);
+                    Gdx.input.setInputProcessor(uiStage);
                 }
             }
         });
@@ -197,17 +203,22 @@ public class UIManager {
     public void toggleInventory() {
         inventoryOpen = !inventoryOpen;
         inventoryUI.setVisible(inventoryOpen);
+        if (inventoryOpen) {
+            Gdx.input.setInputProcessor(inventoryUI.getStage());
+        } else {
+            Gdx.input.setInputProcessor(uiStage);
+        }
     }
     
     public void toggleUpgrades() {
-    showUpgradesGUI = !showUpgradesGUI;
-    upgradesUI.setVisible(showUpgradesGUI);
-    if (showUpgradesGUI) {
-        Gdx.input.setInputProcessor(upgradesUI.getStage());
-    } else {
-        Gdx.input.setInputProcessor(uiStage);
+        showUpgradesGUI = !showUpgradesGUI;
+        upgradesUI.setVisible(showUpgradesGUI);
+        if (showUpgradesGUI) {
+            Gdx.input.setInputProcessor(upgradesUI.getStage());
+        } else {
+            Gdx.input.setInputProcessor(uiStage);
+        }
     }
-}
 
     
     public void closeInventory() {
