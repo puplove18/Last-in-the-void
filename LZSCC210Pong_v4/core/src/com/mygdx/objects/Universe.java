@@ -92,8 +92,9 @@ public class Universe {
             Planet[] planets = this.destinations[i].getPlanets();
             for (int j = 0; j <= planets.length-1; j++) {
                 planets[j].printPlanet();
-                System.out.println("System Printing Done\n");
+            
             }
+            System.out.println("System Printing Done\n");
         }
 
     }
@@ -105,6 +106,8 @@ public class Universe {
         for (int i = 0; i <= planets.length-1; i ++) {
             planets[i].printPlanet();
         }
+        System.out.println("\n");
+        test.printDestinations();
 
     }
 }
