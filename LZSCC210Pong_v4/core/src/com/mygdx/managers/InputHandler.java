@@ -6,6 +6,14 @@ import com.mygdx.helpers.ScreenType;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
 
+// Added imports for event testing - can be removed later
+import com.mygdx.objects.Alien; 
+import com.mygdx.events.AlienEncounterEvent; 
+import com.mygdx.objects.Planet; 
+import com.mygdx.events.PlanetLandingEvent; 
+import com.mygdx.objects.Event;
+import com.mygdx.managers.UIManager; 
+
 /**
  * Handles all input processing for the game screen
  */
@@ -66,15 +74,29 @@ public class InputHandler {
         }
     }
     
-    
+    // This entire method is for testing events, it can be removed 
     private void handleEventInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            if (!eventManager.isEventActive() && eventManager.hasEvent()) {
+            if (!eventManager.isEventActive()) {
+                Alien sampleAlien = new Alien("Grumpy Trader"); 
+                Event alienEvent = new AlienEncounterEvent(sampleAlien);
+                eventManager.setCurrentEvent(alienEvent);
                 eventManager.showCurrentEvent();
                 gameScreen.setPaused(true);
                 uiManager.closeInventory();
                 uiManager.closeUpgrades();
-                // EventUI sets its own input processor when shown
+            }
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            if (!eventManager.isEventActive()) { 
+                Planet testPlanet = new Planet("Test Gas Planet", Planet.Type.Mineral, 50, 4);
+                Event planetEvent = new PlanetLandingEvent(testPlanet);
+                eventManager.setCurrentEvent(planetEvent);
+                eventManager.showCurrentEvent();
+                gameScreen.setPaused(true);
+                uiManager.closeInventory();
+                uiManager.closeUpgrades();
             }
         }
     }

@@ -19,8 +19,12 @@ public class Player{
     private Inventory inventory;
     //private Array<String> inventory = new Array<>();
 
-    enum Stats {
+    public enum Stats {
         HEALTH, FUEL, OXYGEN;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     public void setHealth(double val) {
@@ -97,6 +101,15 @@ public class Player{
     // Interaction with Inventory
     public void addItemToInventory(String item) {
         inventory.addItem(item);
+    }
+
+    // Additional method in cases where we need to add multiple items, you can delete the old method if you want
+    public void addItemToInventory(String item, int quantity) { // Added quantity parameter
+        if (inventory != null) { // Good practice to check if inventory exists
+           inventory.addItem(item, quantity); // Call inventory's method with quantity
+        } else {
+            System.err.println("Player inventory not initialized, cannot add item: " + item);
+        }
     }
 
     public void removeItemFromInventory(String item, int quantity) {

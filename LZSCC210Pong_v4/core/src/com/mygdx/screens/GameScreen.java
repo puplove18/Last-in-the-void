@@ -13,7 +13,7 @@ import com.mygdx.managers.PlayerManager;
 import com.mygdx.managers.RenderManager;
 import com.mygdx.managers.UIManager;
 import com.mygdx.objects.Alien;
-import com.mygdx.objects.AlienEncounterEvent;
+import com.mygdx.events.AlienEncounterEvent;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
@@ -54,16 +54,6 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         uiManager = new UIManager(inventory, player, this);
         eventManager = new EventManager(player, this);
         inputHandler = new InputHandler(this, uiManager, eventManager);
-        
-        // Tester for the event system - should be removed later
-        setupTestEvent();
-    }
-    
-    // To be removed later
-    private void setupTestEvent() {
-        Alien sampleAlien = new Alien("<alien type here>");
-        Event sampleEvent = new AlienEncounterEvent(sampleAlien);
-        eventManager.setCurrentEvent(sampleEvent);
     }
     
     public void update() {

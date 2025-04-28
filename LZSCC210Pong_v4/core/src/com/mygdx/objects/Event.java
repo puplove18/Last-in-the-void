@@ -13,6 +13,8 @@ public abstract class Event {
     protected String title;
     protected String description;
     protected List<Choice> choices;
+    protected String successMessage = "";
+    protected String failureMessage = "";
 
     
     // Represents a single choice in an event with its description and consequences.
@@ -81,5 +83,21 @@ public abstract class Event {
 
     public List<Choice> getChoices() {
         return choices;
+    }
+    
+    protected void setSuccessMessage(String message) {
+        this.successMessage = message;
+    }
+    
+    protected void setFailureMessage(String message) {
+        this.failureMessage = message;
+    }
+    
+    public String getSuccessMessage() {
+        return successMessage;
+    }
+    
+    public String getFailureMessage() {
+        return failureMessage;
     }
 }
