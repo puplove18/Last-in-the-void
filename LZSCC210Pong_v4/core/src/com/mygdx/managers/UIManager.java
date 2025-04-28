@@ -62,9 +62,10 @@ public class UIManager {
 
         // Pass the map into the Upgrades constructor
         this.upgrades = new Upgrades(inventory, upgradeCost);
-        this.upgradesUI = new UpgradesUI(player,player.getInventory(), universe);
-
         this.inventoryUI = new InventoryUI(PongGame.getInstance(), player);
+        this.upgradesUI = new UpgradesUI(player,player.getInventory(), universe, inventoryUI);
+        
+        
         inventoryUI.setCloseButtonListener(new InventoryUI.CloseButtonListener() {
             @Override
             public void onCloseButtonClicked() {

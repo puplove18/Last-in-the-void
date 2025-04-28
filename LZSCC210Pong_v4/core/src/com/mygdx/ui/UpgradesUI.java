@@ -29,7 +29,8 @@ public class UpgradesUI {
     private ScrollPane scrollPane;
     private final Player player;
     private Universe universe;
-    private int destinationChoice = 1;
+    private int dis = 1;
+    private int inventoryCapacity = 1; 
 
     private Texture backgroundTexture;
     private NinePatchDrawable panelBackground;
@@ -43,16 +44,20 @@ public class UpgradesUI {
     private static final Color BUTTON_COLOR = new Color(0.2f, 0.4f, 0.6f, 1f);
     private static final Color BUTTON_HOVER_COLOR = new Color(0.3f, 0.6f, 0.9f, 1f);
 
-    public UpgradesUI(Player player, Inventory inventory, Universe universe) {
+    private InventoryUI inventoryUI;
+
+    public UpgradesUI(Player player, Inventory inventory, Universe universe, InventoryUI inventoryUI) {
         this.player = player;
         this.inventory = inventory;
-        this.universe = universe; 
+        this.universe = universe;
+        this.inventoryUI = inventoryUI; // Store the reference to InventoryUI
         this.stage = new Stage(new ScreenViewport());
         this.skin = new Skin(Gdx.files.internal("uiskin.json"));
         initializePanelBackground();
         createUI();
         possibleUpgrades();
     }
+
 
     private void initializePanelBackground() {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -299,18 +304,51 @@ public class UpgradesUI {
                 @Override
                 public void run() {
                     if (universe != null) {
-                    destinationChoice ++; 
+                    dis++;
+                    universe.setMaxDest(dis);
                     } else {
                         System.out.println("Player object is not initialized!");
                     }
                 }
             }
-);
+);          
+        createUpgradeChain(
+            new String[]{
+                "Inventory Capacity I",
+                "Inventory Capacity II",
+                "Inventory Capacity III",
+                "Inventory Capacity IV"
+            },
+            new String[]{
+                "10 Common Building Materials",
+                "30 Uncommon Building Materials",
+                "50 Rare Building Materials",
+                "70 Epic Building Materials"
+            },
+            new String[]{
+                "More Inventory Space",
+                "More Inventory Space", 
+                "More Inventory Space",
+                "More Inventory Space"
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    if (universe != null) {
+                        inventoryCapacity++; 
+                        inventoryUI.setInventoryCapacity(inventoryCapacity);
+
+                    } else {
+                        System.out.println("Player object is not initialized!");
+                    }
+                }
+            }
+        );
 
 
         
     }
-
+    
     private boolean checkResources(String requiredResources) {
         String[] resourceParts = requiredResources.split(" ", 2);
         if (resourceParts.length != 2) {

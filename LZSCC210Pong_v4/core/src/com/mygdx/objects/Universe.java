@@ -32,6 +32,7 @@ public class Universe {
 
     public void setMaxDest(int newMax) {
         this.maxDest = newMax;
+        System.err.println("Max Dest set to " + newMax);
     }
 
     //Main constructor to build an empty universe with the starting universe as current destination and generate the first set of choices for travel

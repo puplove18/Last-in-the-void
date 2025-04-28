@@ -1,10 +1,7 @@
 package com.mygdx.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,23 +10,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.helpers.FancyFontHelper;
-import com.mygdx.helpers.ScreenType;
 import com.mygdx.objects.Player;
 import com.mygdx.pong.PongGame;
-
 import java.util.Map;
-import com.badlogic.gdx.utils.Align;
 
 
 public class InventoryUI {
@@ -56,7 +48,7 @@ public class InventoryUI {
 
     private static final Color TITLE_COLOR = Color.WHITE;
     private static final Color TEXT_COLOR = Color.LIGHT_GRAY;
-    
+    private int inventoryCapacity = 1;
 
 
     public InventoryUI(PongGame game, Player player) {
@@ -73,7 +65,17 @@ public class InventoryUI {
         initializePanelBackground();
         createUI();
     }
+    // Getter for inventoryCapacity
+    public int getInventoryCapacity() {
+        return inventoryCapacity;
+    }
 
+    // Setter for inventoryCapacity
+    public void setInventoryCapacity(int inventoryCapacity) {
+        if (inventoryCapacity >= 0 && inventoryCapacity <=4) { 
+            this.inventoryCapacity = inventoryCapacity;
+        }
+    }
     public interface CloseButtonListener {
         void onCloseButtonClicked();
     }
@@ -148,7 +150,7 @@ public class InventoryUI {
        
         // Create inventory slots
         int index = 0;
-        for (int row = 0; row < 4; row++) {
+        for (int row = 0; row < inventoryCapacity; row++) {
             for (int col = 0; col < 6; col++) {
                 // Create slot container
                 Table itemContainer = new Table();
