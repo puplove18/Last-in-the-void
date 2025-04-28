@@ -25,6 +25,24 @@ public class Inventory {
         return true;
     }
 
+    // Additional add item method so we can add multiple of an item, you can delete the old method if necessary
+    public boolean addItem(String item, int quantity) { // Added quantity parameter
+        if (quantity <= 0) {
+            System.out.println("Cannot add zero or negative quantity of " + item);
+            return false; 
+        }
+    
+        if (!items.containsKey(item) && items.size() >= maxSize) {
+             System.out.println("Inventory is full (max distinct item types reached). Cannot add new item " + item);
+             return false;
+        }
+    
+        // Increment the quantity if the item is already in the inventory, or add it.
+        items.put(item, items.getOrDefault(item, 0) + quantity); 
+        System.out.println(quantity + "x " + item + " added to inventory."); 
+        return true;
+    }
+
     // Remove items
     public boolean removeItem(String item, int quant) {
         if (items.containsKey(item)) {

@@ -1,5 +1,6 @@
 package com.mygdx.ui;
 
+import javax.swing.event.ChangeEvent;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -26,6 +27,7 @@ import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Player;
 import com.mygdx.pong.PongGame;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 
 
 /**
@@ -209,67 +211,115 @@ public class EventUI {
     }
 
     private void handleChoice(int choiceIndex) {
-        if (currentEvent != null && player != null) {
-            Event.Choice choice = currentEvent.getChoices().get(choiceIndex);
-            boolean success = choice.execute(player);
+        if (currentEvent == null || player == null) return; 
 
-            choicesTable.clear();
-            originalButtonBackgrounds.clear(); // Clear stored backgrounds
+        Event.Choice choice = currentEvent.getChoices().get(choiceIndex);
+        boolean success = choice.execute(player);
+        String outcomeMessage = success ? currentEvent.getSuccessMessage() : currentEvent.getFailureMessage();
 
-            BitmapFont resultFont = FancyFontHelper.getInstance().getFont(
-                    success ? SUCCESS_COLOR : FAILURE_COLOR, 24);
-            Label.LabelStyle resultStyle = new Label.LabelStyle(resultFont,
-                    success ? SUCCESS_COLOR : FAILURE_COLOR);
-            Label resultLabel = new Label(
-                    success ? "Success!" : "Failed!", resultStyle);
-            resultLabel.setAlignment(Align.center);
-
-            BitmapFont buttonFont = FancyFontHelper.getInstance().getFont(TEXT_COLOR, 18);
-            TextButton.TextButtonStyle buttonStyle = createButtonStyle(buttonFont);
-
-            TextButton continueButton = new TextButton("Continue", buttonStyle);
-            originalButtonBackgrounds.put(continueButton, buttonStyle.up); // Store bg for continue button
-
-            continueButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    hideEvent();
-                }
-            });
-
-            continueButton.addListener(new ClickListener() {
-                 @Override
-                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    if (pointer == -1) {
-                        TextButton button = (TextButton) event.getListenerActor();
-                        button.getLabel().setColor(Color.WHITE);
-                        button.getStyle().up = button.getStyle().over;
-                    }
-                }
-
-                @Override
-                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                     if (pointer == -1) {
-                        TextButton button = (TextButton) event.getListenerActor();
-                        button.getLabel().setColor(TEXT_COLOR);
-                        Drawable originalBg = originalButtonBackgrounds.get(button);
-                        if (originalBg != null) {
-                             button.getStyle().up = originalBg;
-                        }
-                    }
-                }
-            });
-
-            resultLabel.addAction(Actions.sequence(
-                    Actions.scaleTo(1.2f, 1.2f, 0.2f),
-                    Actions.scaleTo(1f, 1f, 0.2f)
-            ));
-
-            choicesTable.add(resultLabel).pad(20).expandX().fillX().row();
-            // Add outcome description here if needed (see previous response)
-            choicesTable.add(continueButton).pad(10).width(200).height(50).expandX().center();
-        }
+        clearChoiceUI();
+        displayOutcomeUI(success, outcomeMessage);
     }
+
+    
+     // Clears the choices table and resets stored button backgrounds.
+    private void clearChoiceUI() {
+        choicesTable.clear(); // Clear the table holding previous buttons
+        originalButtonBackgrounds.clear(); // Clear stored backgrounds
+    }
+
+    private void displayOutcomeUI(boolean success, String outcomeMessage) {
+        Label resultLabel = createResultLabel(success);
+        TextButton continueButton = createContinueButton(); // Create button before message label if message depends on it
+
+        choicesTable.add(resultLabel).pad(20).expandX().fillX().row();
+
+        // Only add the message label and scroll pane if there's a message
+        if (outcomeMessage != null && !outcomeMessage.isEmpty()) {
+            addOutcomeMessage(outcomeMessage);
+        }
+
+        choicesTable.add(continueButton).pad(10).width(200).height(50).expandX().center();
+
+        // Add animation to the result label
+        resultLabel.addAction(Actions.sequence(
+                Actions.scaleTo(1.2f, 1.2f, 0.2f),
+                Actions.scaleTo(1f, 1f, 0.2f)
+        ));
+    }
+
+    private Label createResultLabel(boolean success) {
+        Color color = success ? SUCCESS_COLOR : FAILURE_COLOR;
+        String text = success ? "Success!" : "Failed!";
+
+        BitmapFont resultFont = FancyFontHelper.getInstance().getFont(color, 24);
+        Label.LabelStyle resultStyle = new Label.LabelStyle(resultFont, color);
+        Label resultLabel = new Label(text, resultStyle);
+        resultLabel.setAlignment(Align.center);
+        return resultLabel;
+    }
+
+     private void addOutcomeMessage(String outcomeMessage) {
+         BitmapFont messageFont = FancyFontHelper.getInstance().getFont(TEXT_COLOR, 18);
+         Label.LabelStyle messageStyle = new Label.LabelStyle(messageFont, TEXT_COLOR);
+         Label messageLabel = new Label(outcomeMessage, messageStyle);
+         messageLabel.setWrap(true);
+         messageLabel.setAlignment(Align.center);
+
+         Table scrollTable = new Table();
+         scrollTable.add(messageLabel).width(PongGame.getInstance().getWindowWidth() * 0.6f).pad(10);
+
+         ScrollPane scrollPane = new ScrollPane(scrollTable); // Pass the table, not the label directly
+         scrollPane.setFadeScrollBars(false);
+         scrollPane.setScrollingDisabled(true, false); // Allow only vertical scrolling
+
+         choicesTable.add(scrollPane).maxHeight(200).expandX().fillX().pad(10).row();
+     }
+
+    private TextButton createContinueButton() {
+        BitmapFont buttonFont = FancyFontHelper.getInstance().getFont(TEXT_COLOR, 18);
+        TextButton.TextButtonStyle buttonStyle = createButtonStyle(buttonFont); 
+        TextButton continueButton = new TextButton("Continue", buttonStyle);
+
+        originalButtonBackgrounds.put(continueButton, buttonStyle.up); 
+
+        // Listener to hide the event
+        continueButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                hideEvent();
+            }
+        });
+
+        // Listener for hover effects 
+        addHoverListener(continueButton); 
+
+        return continueButton;
+    }
+
+    private void addHoverListener(final TextButton button) {
+         button.addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                if (pointer == -1) { // Mouse hover
+                    button.getLabel().setColor(Color.WHITE);
+                    button.getStyle().up = button.getStyle().over; // Use hover background
+                }
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                 if (pointer == -1) { // Mouse hover
+                    button.getLabel().setColor(TEXT_COLOR);
+                    Drawable originalBg = originalButtonBackgrounds.get(button);
+                    if (originalBg != null) {
+                        button.getStyle().up = originalBg; // Restore original background
+                    }
+                }
+            }
+        });
+    }
+
 
     public void hideEvent() {
         if (!isVisible) return;

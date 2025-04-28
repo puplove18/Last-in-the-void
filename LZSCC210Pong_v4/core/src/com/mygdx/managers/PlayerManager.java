@@ -32,6 +32,7 @@ public class PlayerManager {
     public PlayerManager(Player player, Inventory inventory, World world) {
         this.player = player;
         this.inventory = inventory;
+        this.player.setInventory(inventory);
         
         // Initialize space ship
         Body shipBody = BodyHelper.createRectangularBody(
