@@ -200,8 +200,15 @@ public class UIManager {
     }
     
     public void toggleUpgrades() {
-        showUpgradesGUI = !showUpgradesGUI;
+    showUpgradesGUI = !showUpgradesGUI;
+    upgradesUI.setVisible(showUpgradesGUI); // move it here
+    if (showUpgradesGUI) {
+        Gdx.input.setInputProcessor(upgradesUI.getStage());
+    } else {
+        Gdx.input.setInputProcessor(uiStage);
     }
+}
+
     
     public void closeInventory() {
         inventoryOpen = false;
