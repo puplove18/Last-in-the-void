@@ -135,6 +135,7 @@ public class InventoryUI {
         inventoryTable.clear();
         
         Map<String, Integer> items = player.getInventory().getItems();
+        System.out.println("DEBUG: Inventory items: " + items);
        
         // Create inventory slots
         int index = 0;
@@ -146,7 +147,7 @@ public class InventoryUI {
                 slotContainer.setBackground(slotBg);
                 
                 // Add item if this slot has one
-                if (items != null && index < items.size()) {
+                if (items != null && index < items.keySet().size()) {
                     String itemName = (String) items.keySet().toArray()[index];
                     int quantity = items.get(itemName);
                     
@@ -162,9 +163,9 @@ public class InventoryUI {
                     index++;
                 } else {
                     // Empty slot
-                    itemContainer.add().height(20).row(); // Empty space for consistency
+                    itemContainer.add().height(20).row();
                     itemContainer.add(slotContainer).size(65, 65).row();
-                    itemContainer.add().height(20); // Empty space for consistency
+                    itemContainer.add().height(20); 
                 }
 
                 // Add slot to grid
