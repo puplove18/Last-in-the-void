@@ -54,7 +54,6 @@ public class InputHandler {
                 uiManager.toggleInventory();
                 uiManager.closeUpgrades();
                 
-                // Set appropriate input processor
                 Gdx.input.setInputProcessor(uiManager.isInventoryOpen() ? 
                         uiManager.getInventoryStage() : uiManager.getUIStage());
             }
@@ -67,7 +66,6 @@ public class InputHandler {
                 uiManager.closeInventory();
                 uiManager.toggleUpgrades();
     
-                // Set input processor depending on upgrades visibility
                 Gdx.input.setInputProcessor(uiManager.isUpgradesOpen() ?
                     uiManager.getUpgradesStage() : uiManager.getUIStage());
             }

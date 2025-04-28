@@ -23,6 +23,7 @@ import com.mygdx.objects.Upgrades;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.ui.UpgradesUI;
+import com.mygdx.ui.InventoryUI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +40,7 @@ public class UIManager {
     private boolean showUpgradesGUI = false;
 
     private UpgradesUI upgradesUI;
+    private InventoryUI inventoryUI;
     private Texture upgradesBackground;
     private NinePatchDrawable upgradesPanel;
     // UI components
@@ -61,8 +63,9 @@ public class UIManager {
 
         // Pass the map into the Upgrades constructor
         this.upgrades = new Upgrades(inventory, upgradeCost);
-
         this.upgradesUI = new UpgradesUI(inventory);
+
+        this.inventoryUI = new InventoryUI(PongGame.getInstance(), player);
 
         initializeUI();
     }
@@ -70,32 +73,18 @@ public class UIManager {
     
     private void initializeUI() {
         this.uiBatch = new SpriteBatch();
-        loadInventoryTextures();
-        setupInventoryUI();
         this.uiStage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         this.upgradesStage = new Stage(new ScreenViewport());
+        this.inventoryStage = inventoryUI.getStage();
         
-
-    
         
         createExitButton();
         createInventoryButton();
         createUpgradesButton();
     }
     
-    
-    private void loadInventoryTextures() {
-        backgroundAtlas = new TextureAtlas(Gdx.files.internal("backgrounds.atlas"));
-        inventoryBackground = backgroundAtlas.findRegion("InventoryHUD002 (1)");
-    }
-    
-    private void setupInventoryUI() {
-        inventoryStage = new Stage(new FitViewport(
-                PongGame.getInstance().getWindowWidth(),
-                PongGame.getInstance().getWindowHeight()));
-    }
-    
+
     private void createExitButton() {
         TextButton exitButton = new TextButton("Exit", skin);
         exitButton.addListener(new ChangeListener() {
@@ -120,6 +109,7 @@ public class UIManager {
                     toggleInventory();
                     closeUpgrades();
                     
+                    inventoryUI.setVisible(inventoryOpen);
                     Gdx.input.setInputProcessor(inventoryOpen ? inventoryStage : uiStage);
                 }
             }
@@ -159,70 +149,30 @@ public class UIManager {
     
     
     public void render(float delta) {
-    // Render UI elements
-        uiBatch.begin();
-        if (inventoryOpen && !gameScreen.getEventManager().isEventActive()) {
-            renderInventoryUI();
-        }
-        uiBatch.end();
-
-        // Render the main UI stage unless event is showing
+        // Render UI elements
         if (!gameScreen.getEventManager().isEventActive()) {
             if (showUpgradesGUI) {
-                Gdx.input.setInputProcessor(upgradesUI.getStage()); // <- force input here
-                upgradesUI.render(); // Handle background + UI draw
-            } else {
-                Gdx.input.setInputProcessor(uiStage); // switch back
+                Gdx.input.setInputProcessor(upgradesUI.getStage());
+                upgradesUI.render(); 
+            } 
+            else if (inventoryOpen) {
+                Gdx.input.setInputProcessor(inventoryUI.getStage());
+                inventoryUI.render(); 
+            }
+            else {
+                Gdx.input.setInputProcessor(uiStage);
                 uiStage.act(delta);
                 uiStage.draw();
             }
         }
     }
 
-    
-    
-    private void renderInventoryUI() {
-        float scaledWidth = inventoryBackground.getRegionWidth() * 0.85f;
-        float scaledHeight = inventoryBackground.getRegionHeight() * 0.85f;
-        
-        uiBatch.draw(inventoryBackground,
-            (PongGame.getInstance().getWindowWidth() - scaledWidth) / 2,
-            (PongGame.getInstance().getWindowHeight() - scaledHeight) / 2,
-            scaledWidth, scaledHeight);
-        
-        BitmapFont font = FancyFontHelper.getInstance().getFont(Color.WHITE, 16);
-        
-        float startX = (PongGame.getInstance().getWindowWidth() - scaledWidth) / 2 + 50;
-        float startY = (PongGame.getInstance().getWindowHeight() + scaledHeight) / 2 - 50;
-        
-        font.draw(uiBatch, "INVENTORY testing", startX, startY);
-
-        // close button
-        float closeX = (PongGame.getInstance().getWindowWidth() + scaledWidth) / 2 - 30;
-        float closeY = (PongGame.getInstance().getWindowHeight() + scaledHeight) / 2 - 30;
-        
-        font.draw(uiBatch, "X", closeX, closeY);
-
-        if (Gdx.input.justTouched()) {
-            int touchX = Gdx.input.getX();
-            int touchY = Gdx.input.getY();
-
-            touchY = PongGame.getInstance().getWindowHeight() - touchY;
-            
-            if (touchX >= closeX - 15 && touchX <= closeX + 15 && 
-                touchY >= closeY - 15 && touchY <= closeY + 15) {
-                inventoryOpen = false;
-                Gdx.input.setInputProcessor(uiStage);
-            }
-        }
-        
-        inventoryStage.act(Gdx.graphics.getDeltaTime());
-        inventoryStage.draw();
-    }
-    
     public void resize(int width, int height) {
         uiStage.getViewport().update(width, height, true);
         inventoryStage.getViewport().update(width, height, true);
+        upgradesStage.getViewport().update(width, height, true);
+        inventoryUI.resize(width, height);
+        upgradesUI.resize(width, height);
     }
     
     public void dispose() {
@@ -246,6 +196,7 @@ public class UIManager {
     
     public void toggleInventory() {
         inventoryOpen = !inventoryOpen;
+        inventoryUI.setVisible(inventoryOpen);
     }
     
     public void toggleUpgrades() {

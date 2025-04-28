@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.helpers.Constants;
 
+import java.util.Map;
+import java.util.HashMap; 
 
 public class Player{
     private String name;
@@ -17,14 +19,22 @@ public class Player{
     private double oxygen = 100;
 
     private Inventory inventory;
-    //private Array<String> inventory = new Array<>();
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
 
     public enum Stats {
         HEALTH, FUEL, OXYGEN;
     }
 
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
+    public Player() {
+        this.inventory = new Inventory(24);
+
+        // test items in the beginning
+        this.inventory.addItem("Iron", 5);
+        this.inventory.addItem("Oxygen", 10);
+        this.inventory.addItem("Fuel", 8);
     }
 
     public void setHealth(double val) {
@@ -119,6 +129,10 @@ public class Player{
     public void showInventory() {
 		inventory.showInventory();
 	}
+
+    public Inventory getInventory() {
+        return inventory;
+    }
 
 
     public static void main(String[] args){
