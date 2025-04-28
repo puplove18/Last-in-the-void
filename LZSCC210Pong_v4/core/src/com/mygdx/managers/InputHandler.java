@@ -37,8 +37,10 @@ public class InputHandler {
     }
     
     private void handleExitInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            PongGame.getInstance().changeScreen(gameScreen, ScreenType.MENU_UI);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            Gdx.app.postRunnable(() -> {
+                PongGame.getInstance().changeScreen(gameScreen, ScreenType.MENU_UI);
+            });
         }
     }
     
