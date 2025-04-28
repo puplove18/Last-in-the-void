@@ -58,7 +58,7 @@ public class RenderManager {
         alienTexture = new Texture(Gdx.files.internal("entities/alien.gif"));
 
         planetTextures = new EnumMap<>(Planet.Type.class);
-        planetTextures.put(Planet.Type.Star,    new Texture(Gdx.files.internal("organic0.png")));
+        planetTextures.put(Planet.Type.Star,    new Texture(Gdx.files.internal("gas5.png")));
         planetTextures.put(Planet.Type.Gas,     new Texture(Gdx.files.internal("organic0.png")));
         planetTextures.put(Planet.Type.Mineral, new Texture(Gdx.files.internal("organic0.png")));
         planetTextures.put(Planet.Type.Organic, new Texture(Gdx.files.internal("organic0.png")));
@@ -109,21 +109,42 @@ public class RenderManager {
 
     private void renderStarSystem() {
         planetBounds.clear();
+
         StarSystem current = universe.getCurrentPosition();
         Planet[] planets   = current.getPlanets();
 
         float sw = PongGame.getInstance().getWindowWidth();
         float sh = PongGame.getInstance().getWindowHeight();
-        float spacing = sw / (planets.length + 1);
-        float iconSize = sh * 0.10f;
+        float centerX = sw  * 0.5f;
+        float centerY = sh  * 0.5f;
 
-        for (int i = 0; i < planets.length; i++) {
-            Planet p = planets[i];
-            Texture tex = planetTextures.get(p.getType());
-            float x = spacing * (i + 1) - iconSize * 0.5f;
-            float y = sh * 0.75f - iconSize * 0.5f;
-            planetBounds.add(new Rectangle(x, y, iconSize, iconSize));
-            batch.draw(tex, x, y, iconSize, iconSize);
+        Texture starTex = planetTextures.get(planets[0].getType());
+        float starSize  = sh * 0.12f;
+        float starX     = centerX - starSize * 0.5f;
+        float starY     = centerY - starSize * 0.5f;
+        planetBounds.add(new Rectangle(starX, starY, starSize, starSize));
+        batch.draw(starTex, starX, starY, starSize, starSize);
+
+        //remaining planets sit on orbits
+        int n = planets.length - 1;
+        if (n <= 0) return;
+
+        float maxRadius   = Math.min(sw, sh) * 0.45f;
+        float orbitStep   = maxRadius / n;
+        float planetSize  = sh * 0.08f;
+
+        for (int i = 1; i < planets.length; i++) {
+            Texture tex = planetTextures.get(planets[i].getType());
+
+            //spacing around the star
+            float angle  = (float)(2 * Math.PI * (i - 1) / n);
+            float radius = orbitStep * (i);
+
+            float px = centerX + radius * (float)Math.cos(angle) - planetSize * 0.5f;
+            float py = centerY + radius * (float)Math.sin(angle) - planetSize * 0.5f;
+
+            planetBounds.add(new Rectangle(px, py, planetSize, planetSize));
+            batch.draw(tex, px, py, planetSize, planetSize);
         }
     }
 
