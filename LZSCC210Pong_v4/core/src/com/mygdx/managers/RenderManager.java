@@ -59,9 +59,9 @@ public class RenderManager {
 
         planetTextures = new EnumMap<>(Planet.Type.class);
         planetTextures.put(Planet.Type.Star,    new Texture(Gdx.files.internal("gas5.png")));
-        planetTextures.put(Planet.Type.Gas,     new Texture(Gdx.files.internal("organic0.png")));
-        planetTextures.put(Planet.Type.Mineral, new Texture(Gdx.files.internal("organic0.png")));
-        planetTextures.put(Planet.Type.Organic, new Texture(Gdx.files.internal("organic0.png")));
+        planetTextures.put(Planet.Type.Gas,     new Texture(Gdx.files.internal("planetTextures/gas/gas0.png")));
+        planetTextures.put(Planet.Type.Mineral, new Texture(Gdx.files.internal("planetTextures/mineral/mineral0.png")));
+        planetTextures.put(Planet.Type.Organic, new Texture(Gdx.files.internal("planetTextures/organic/organic0.png")));
         planetTextures.put(Planet.Type.Event,   new Texture(Gdx.files.internal("organic0.png")));
     }
 
