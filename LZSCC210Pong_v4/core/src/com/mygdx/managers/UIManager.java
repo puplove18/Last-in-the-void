@@ -74,8 +74,16 @@ public class UIManager {
         });
 
         initializeUI();
-    }
+        upgradesUI.setCloseButtonListener(new UpgradesUI.CloseButtonListener() {
+            @Override
+            public void onCloseButtonClicked() {
+                toggleUpgrades();
+            }
+        });
 
+        initializeUI();
+    }
+        
     
     private void initializeUI() {
         this.uiBatch = new SpriteBatch();

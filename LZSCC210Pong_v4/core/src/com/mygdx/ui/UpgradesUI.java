@@ -58,7 +58,15 @@ public class UpgradesUI {
         possibleUpgrades();
     }
 
+    public interface CloseButtonListener {
+        void onCloseButtonClicked();
+    }
 
+    private CloseButtonListener closeButtonListener;
+
+    public void setCloseButtonListener(CloseButtonListener listener) {
+        this.closeButtonListener = listener;
+    }
     private void initializePanelBackground() {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0.15f, 0.15f, 0.2f, 0.9f);
@@ -74,34 +82,54 @@ public class UpgradesUI {
         mainTable.setBackground(panelBackground);
         mainTable.center();
         stage.addActor(mainTable);
+    
+        // Close button aligned to top-right
+        TextButton closeButton = new TextButton("X", skin);
 
+    
+        // Row for close button
+        Table closeButtonTable = new Table();
+        closeButtonTable.add(closeButton).top().right().padTop(5).padRight(5);
+        closeButtonTable.top().right();
+        closeButtonTable.setFillParent(true);
+        closeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (closeButtonListener != null) {
+                    closeButtonListener.onCloseButtonClicked();
+                }
+            }
+        });
+        stage.addActor(closeButtonTable); // Add it as a separate actor for guaranteed top-right positioning
+    
+        // Upgrades Table
         upgradesTable = new Table(skin);
         upgradesTable.top().left().pad(10);
         upgradesTable.defaults().pad(5).left();
-
+    
         int fontSize = 13;
         BitmapFont headerFont = FancyFontHelper.getInstance().getFont(TITLE_COLOR, fontSize);
         Label.LabelStyle headerStyle = new Label.LabelStyle(headerFont, TITLE_COLOR);
-
+    
         float width = 400;
-
         upgradesTable.add(new Label("Upgrade", headerStyle)).width(width * 0.25f).padBottom(10).padLeft(10);
         upgradesTable.add(new Label("Resources Needed", headerStyle)).width(width * 0.25f).padBottom(10);
         upgradesTable.add(new Label("Effects", headerStyle)).width(width * 0.25f).padBottom(10);
         upgradesTable.add(new Label("Action", headerStyle)).width(width * 0.25f).padBottom(10);
         upgradesTable.row();
-
+    
         scrollPane = new ScrollPane(upgradesTable, skin);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);
-
+    
         Table container = new Table();
         container.setFillParent(true);
         container.add(scrollPane).expand().fill();
 
         mainTable.add(container).expand().fill();
     }
-
+    
+    
     private void createUpgradeChain(String[] names, String[] resources, String[] effects, Runnable upgradeAction) {
         int fontSize = 10;
         BitmapFont font = FancyFontHelper.getInstance().getFont(TEXT_COLOR, fontSize);
