@@ -32,7 +32,6 @@ public class Universe {
 
     public void setMaxDest(int newMax) {
         this.maxDest = newMax;
-        System.err.println("Max Dest set to " + newMax);
     }
 
     //Main constructor to build an empty universe with the starting universe as current destination and generate the first set of choices for travel
@@ -58,7 +57,7 @@ public class Universe {
     // Method to generate three brand new star systems as destinations and add them to a list
     private void generateDestinations(int tier) {
 
-        int systemsNum = rand.nextInt(maxDest-2)+2;
+        int systemsNum = rand.nextInt(maxDest)+1;
         StarSystem[] newDestinations = new StarSystem[systemsNum];
 
         for (int i = 0; i <= systemsNum-1; i++){
@@ -86,7 +85,7 @@ public class Universe {
         } 
         //Update current position
         this.currentPosition = this.destinations[destination];
-        this.generateDestinations((depth/(this.maxDest/4))+1);
+        this.generateDestinations((depth/(this.universeLength/4))+1);
         return;
     }
 
