@@ -55,7 +55,7 @@ public class StarSystem{
         this.maxPlanets = 4;
         this.planets = new Planet[4];
 
-        this.planets[0] = new Planet("Deep Space Star", Type.Star, 2000, 1);
+        this.planets[0] = new Planet("Deep Space Star", Type.Star, 2000,"Gargantuant", 1);
         this.planets[1] = new Planet("Deep Space Mineral Planet", Type.Mineral, 50, "Midplanet", 1);
         this.planets[2] = new Planet("Deep Space Organic Planet", Type.Organic, 50, "Midplanet", 1);
         this.planets[3] = new Planet("Deep Space Gas Planet", Type.Gas, 50, "Midplanet", 1);

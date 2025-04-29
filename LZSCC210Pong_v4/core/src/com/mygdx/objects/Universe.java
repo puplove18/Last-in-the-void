@@ -24,7 +24,7 @@ public class Universe {
         return this.currentPosition;
     }
 
-
+    
     //Getters and setters for upgrade functionality
     public int getMaxDest() {
         return this.maxDest;
@@ -37,7 +37,7 @@ public class Universe {
 
     //Main constructor to build an empty universe with the starting universe as current destination and generate the first set of choices for travel
     public Universe(){
-        this.maxDest = 5;
+        this.maxDest = 3;
         this.depth = 0;
         this.currentPosition = new StarSystem();
         this.generateDestinations(1);
@@ -58,7 +58,7 @@ public class Universe {
     // Method to generate three brand new star systems as destinations and add them to a list
     private void generateDestinations(int tier) {
 
-        int systemsNum = rand.nextInt(maxDest-3)+3;
+        int systemsNum = rand.nextInt(maxDest-2)+2;
         StarSystem[] newDestinations = new StarSystem[systemsNum];
 
         for (int i = 0; i <= systemsNum-1; i++){
@@ -86,7 +86,7 @@ public class Universe {
         } 
         //Update current position
         this.currentPosition = this.destinations[destination];
-        this.generateDestinations((depth/25)+1);
+        this.generateDestinations((depth/(this.maxDest/4))+1);
         return;
     }
 
@@ -107,7 +107,7 @@ public class Universe {
                 planets[j].printPlanet();
             
             }
-            System.out.println("System Printing Done\n");
+            System.out.println("System Psrinting Done\n");
         }
 
     }
@@ -130,6 +130,7 @@ public class Universe {
             test.printDestinations();
             
         }
+        test.printAllDestinations();
 
     }
 }
