@@ -1,11 +1,11 @@
 package com.mygdx.events;
 
-import java.util.Random;
-import java.util.HashMap;
-import java.util.Map;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Planet;
 import com.mygdx.objects.Player;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Event that occurs when landing on a planet.
@@ -22,6 +22,7 @@ public class PlanetLandingEvent extends Event {
     private static final String ORGANIC_RESOURCE = "Biomass";
     private static final String GAS_RESOURCE = "Fuel";
     private static final String MINERAL_RESOURCE = "Building Materials";
+
     
     private static final String[] RARITIES = {
         "Common",
@@ -84,7 +85,7 @@ public class PlanetLandingEvent extends Event {
         // Determine resource rarities based on planet tier AND PROBABILITY
         for (int i = 0; i < planet.getTier(); i++) {
             if (i >= RARITIES.length) break;
-    
+            if (player.getResourcePermissionLevel() < planet.getTier()) break; 
             String rarity = RARITIES[i];
             String resourceName = rarity + " " + resourceType;
     
@@ -125,15 +126,14 @@ public class PlanetLandingEvent extends Event {
         harvestResultMessage = resultMessage.toString().trim(); // Trim newline at end
         System.out.println(harvestResultMessage);
     }
-    
+
     private int calculateResourceAmount() {
         // Base amount is planet size
         int baseAmount = planet.getSize();
-    
         // Add some randomness (±10%)
         int randomFactor = random.nextInt(Math.max(1, baseAmount / 5)) - (baseAmount / 10);
     
-        return Math.max(1, baseAmount + randomFactor);
+        return Math.max(1, baseAmount + randomFactor );
     }
     
     public Map<String, Integer> getHarvestedResources() {

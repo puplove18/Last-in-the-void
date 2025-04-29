@@ -10,7 +10,8 @@ public class Player{
     private double oxygen = 100;
     private int oxygenUpgradeLevel = 0; 
     private Inventory inventory;
-
+    private int addingFactor = 0;
+    private int resourcePermissionLevel = 1; 
     public double getFuelCapacity() {
         fuel *= 2;
         return fuel;
@@ -130,7 +131,13 @@ public class Player{
 			this.setOxygen(new_val);
 		}	
 	}
+    public int getAddingFactor() {
+        return addingFactor;
+    }
 
+    public void setAddingFactor(int addingFactor) {
+        this.addingFactor = addingFactor;
+    }
 
     // Interaction with Inventory
     public void addItemToInventory(String item) {
@@ -140,7 +147,8 @@ public class Player{
     // Additional method in cases where we need to add multiple items, you can delete the old method if you want
     public void addItemToInventory(String item, int quantity) { // Added quantity parameter
         if (inventory != null) { // Good practice to check if inventory exists
-           inventory.addItem(item, quantity); // Call inventory's method with quantity
+            int upgradedResourceGathering =quantity + addingFactor; // Add the adding factor to the quantity
+           inventory.addItem(item, upgradedResourceGathering); // Call inventory's method with quantity
         } else {
             System.err.println("Player inventory not initialized, cannot add item: " + item);
         }
@@ -157,8 +165,15 @@ public class Player{
     public Inventory getInventory() {
         return inventory;
     }
-
-    
+    public int getResourcePermissionLevel() {
+        return resourcePermissionLevel; 
+    }
+    public void setResourcePermissionLevel(int resourcePermissionLevel) {
+        if (resourcePermissionLevel > 0) {
+        
+        this.resourcePermissionLevel = resourcePermissionLevel; 
+    }
+    }
     public static void main(String[] args){
         Player tester = new Player();
 

@@ -30,7 +30,8 @@ public class UpgradesUI {
     private final Player player;
     private Universe universe;
     private int dis = 1;
-    private int inventoryCapacity = 1; 
+    private int inventoryCapacity = 1;
+    private int resourcesLevel = 1; 
 
     private Texture backgroundTexture;
     private NinePatchDrawable panelBackground;
@@ -372,7 +373,38 @@ public class UpgradesUI {
                 }
             }
         );
+        createUpgradeChain(
+            new String[]{
+                "Resources Level I",
+                "Resources Level II",
+                "Resources Level III",
+                "Resources Level IV"
+            },
+            new String[]{
+                "10 Common Building Materials",
+                "30 Uncommon Building Materials",
+                "50 Rare Building Materials",
+                "70 Epic Building Materials"
+            },
+            new String[]{
+                "+1 resource level",
+                "+1 resource level", 
+                "+1 resource level",
+                "+1 resource level"
+            },
+            new Runnable() {
+                @Override
+                public void run() {
+                    if (universe != null) {
+                        resourcesLevel++; 
+                        player.setResourcePermissionLevel(resourcesLevel);
 
+                    } else {
+                        System.out.println("Player object is not initialized!");
+                    }
+                }
+            }
+        );
 
         
     }

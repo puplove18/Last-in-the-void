@@ -2,17 +2,14 @@ package com.mygdx.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.mygdx.events.AlienEncounterEvent;
+import com.mygdx.events.PlanetLandingEvent;
 import com.mygdx.helpers.ScreenType;
+import com.mygdx.objects.Alien;
+import com.mygdx.objects.Event;
+import com.mygdx.objects.Planet;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
-
-// Added imports for event testing - can be removed later
-import com.mygdx.objects.Alien; 
-import com.mygdx.events.AlienEncounterEvent; 
-import com.mygdx.objects.Planet; 
-import com.mygdx.events.PlanetLandingEvent; 
-import com.mygdx.objects.Event;
-import com.mygdx.managers.UIManager; 
 
 /**
  * Handles all input processing for the game screen
