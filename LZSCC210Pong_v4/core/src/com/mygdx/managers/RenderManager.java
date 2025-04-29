@@ -158,15 +158,23 @@ public class RenderManager {
         float maxRadius = Math.min(sw, sh) * 0.45f;
         float orbitStep = maxRadius / count;
         //float planetSize = sh * 0.08f;
+        float renderCap = 30.00f;
+        float renderMin = 30.00f;
 
         for (int i = 1; i < currentSystemTextures.size(); i++) {
             float angle = (float)(2 * Math.PI * (i - 1) / count);
             float radius = orbitStep * i;
-            float planetSize = sh * this.currentSystemPlanets.get(i).getSize() * 0.0015f;
+            Planet planet = this.currentSystemPlanets.get(i);
+            float planetSize = sh * (planet.getSize()*planet.renderSize);
+            if ((planetSize >= renderCap) || (planetSize < renderMin)) {
+                planetSize = renderCap;
+            }
+            //System.out.println(planetSize);
             float px = cx + radius * (float)Math.cos(angle) - planetSize * 0.5f;
             float py = cy + radius * (float)Math.sin(angle) - planetSize * 0.5f;
             planetBounds.add(new Rectangle(px, py, planetSize, planetSize));
             batch.draw(currentSystemTextures.get(i), px, py, planetSize, planetSize);
+            renderCap += 10.0f;
         }
     }
 

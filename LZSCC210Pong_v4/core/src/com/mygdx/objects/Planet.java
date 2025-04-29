@@ -9,6 +9,7 @@ public class Planet {
     private Type type;
     private int tier;
     private int size;
+    public float renderSize;
     private String playerSize;
     private int maxPlanetSize = 100;
     //private Texture texture;
@@ -22,6 +23,12 @@ public class Planet {
         Star,
         Event
     }
+
+    //Set types for easy access
+    Type gas = Type.Gas;
+    Type min = Type.Mineral;
+    Type org = Type.Organic;
+    Type star = Type.Star;
 
     public String getName() {
         return this.name;
@@ -43,11 +50,27 @@ public class Planet {
         return this.playerSize;
     }
 
-    //Set types for easy access
-    Type gas = Type.Gas;
-    Type min = Type.Mineral;
-    Type org = Type.Organic;
-    Type star = Type.Star;
+    private void calculateRenderSize() {
+        float typeMod;
+
+        if (this.type == gas) {
+            typeMod = 1.5f;
+        }
+
+        else if (this.type == min) {
+            typeMod = 0.8f;
+        }
+
+        else if (this.type == org) {
+            typeMod = 1.0f;
+        }
+
+        else { typeMod = 0.1f;}
+
+        this.renderSize = typeMod * 0.0015f;
+    }
+
+    
 
     //Manual planet maker, pass through generate to add more data
 
@@ -121,6 +144,7 @@ public class Planet {
         }
 
         Planet new_planet = new Planet(new_name, planet_type, new_size, playerSize, planet_tier);
+        new_planet.calculateRenderSize();
 
         return new_planet; // Added to ensure the program compiles, can change later
 
