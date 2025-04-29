@@ -5,6 +5,10 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.audio.AudioManager;
 import com.mygdx.managers.EventManager;
 import com.mygdx.managers.GameWorldManager;
@@ -15,9 +19,12 @@ import com.mygdx.managers.UIManager;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
 import com.mygdx.objects.Planet;
+import com.mygdx.objects.StarSystem;
 import com.mygdx.objects.Universe;
 import com.mygdx.pong.PongGame;
 import com.mygdx.ui.EventUI;
+
+import java.util.Random;
 
 public class GameScreen extends ScreenAdapter implements EventUI.EventCompletionListener {
     private OrthographicCamera camera;
@@ -27,8 +34,12 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     private UIManager uiManager;
     private InputHandler inputHandler;
     private EventManager eventManager;
-    public boolean paused = false;
+    private boolean paused = false;
     private boolean systemView = true;
+
+    private Skin skin;
+    private TextButton nextButton;
+    private static final Random rand = new Random();
 
     public GameScreen(OrthographicCamera camera) {
         this.camera = camera;
@@ -44,13 +55,33 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     private void initializeManagers() {
         Inventory inventory = new Inventory(1000);
         Player player = new Player();
-        Universe universe = new Universe();
+
         worldManager = new GameWorldManager(camera, this);
+        Universe universe = worldManager.getUniverse();
         playerManager = new PlayerManager(player, inventory, worldManager.getWorld());
         renderManager = new RenderManager(camera, playerManager, worldManager);
         uiManager = new UIManager(inventory, player, this, universe);
         eventManager = new EventManager(player, this);
         inputHandler = new InputHandler(this, uiManager, eventManager);
+
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        nextButton = new TextButton("Next System", skin);
+        nextButton.setPosition(
+                PongGame.getInstance().getWindowWidth() - 500,
+                PongGame.getInstance().getWindowHeight() - 50
+        );
+        nextButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                StarSystem[] dests = worldManager.getUniverse().getDestinations();
+                int idx = rand.nextInt(dests.length);
+                renderManager.setSelectedBackgroundType(
+                        dests[idx].getPlanets()[0].getType()
+                );
+                worldManager.travelTo(idx);
+            }
+        });
+        uiManager.getUIStage().addActor(nextButton);
     }
 
     public void update() {
@@ -78,7 +109,6 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     @Override
     public void render(float delta) {
         update();
-
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -105,10 +135,7 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                 }
             }
             renderManager.renderSystemView();
-
-            if (!eventManager.isEventActive()) {
-                uiManager.render(delta);
-            }
+            uiManager.render(delta);
             if (eventManager.isEventActive()) {
                 eventManager.render();
             }
@@ -145,6 +172,7 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         renderManager.dispose();
         uiManager.dispose();
         eventManager.dispose();
+        skin.dispose();
     }
 
     @Override
@@ -154,11 +182,15 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         System.out.println("Event completed!");
     }
 
-    public GameWorldManager getWorldManager() { return worldManager; }
-    public PlayerManager getPlayerManager() { return playerManager; }
-    public UIManager getUiManager() { return uiManager; }
-    public EventManager getEventManager() { return eventManager; }
-    public boolean isPaused() { return paused; }
-    public void setPaused(boolean paused) { this.paused = paused; }
-    public void togglePause() { this.paused = !this.paused; }
+    public EventManager getEventManager() {
+        return eventManager;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
+    public void togglePause() {
+        this.paused = !this.paused;
+    }
 }
