@@ -108,7 +108,14 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
             }
             //draw the starsystem UI
             renderManager.renderSystemView();
+            if (!eventManager.isEventActive()) {
+                uiManager.render(delta);
+            }
+            if (eventManager.isEventActive()) {
+                eventManager.render();
+            }
             return;
+
         }
 
         //in-world renre
