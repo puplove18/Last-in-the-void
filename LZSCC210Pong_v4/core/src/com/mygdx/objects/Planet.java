@@ -3,7 +3,7 @@ package com.mygdx.objects;
 //import com.mygdx.assets.Texture;
 import java.util.Random;
 
-public class Planet extends InteractiveObject{
+public class Planet {
 
     private String name;
     private Type type;
