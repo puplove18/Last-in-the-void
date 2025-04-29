@@ -14,6 +14,7 @@ import com.mygdx.objects.Planet;
 import com.mygdx.objects.StarSystem;
 import com.mygdx.objects.Universe;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +27,16 @@ public class RenderManager {
     private GameWorldManager worldManager;
     private Universe universe;
 
-    private Texture backgroundPlanetTexture;
     private Texture systemBackground;
     private Texture heroTexture;
     private Texture alienTexture;
 
     private Map<Planet.Type, List<Texture>> planetTextureVariants;
+    private Map<Planet.Type, Texture> worldBackgrounds;
+    private Texture fallbackBackground;
+
     private List<Texture> currentSystemTextures;
+    private List<Planet> currentSystemPlanets;
 
     private List<Rectangle> planetBounds = new ArrayList<>();
     private StarSystem lastSystem;
@@ -40,6 +44,7 @@ public class RenderManager {
 
     private BitmapFont font;
     private static final Random rand = new Random();
+    private Planet.Type selectedBackgroundType;
 
     public RenderManager(OrthographicCamera camera,
                          PlayerManager playerManager,
@@ -54,10 +59,9 @@ public class RenderManager {
     }
 
     private void loadTextures() {
-        backgroundPlanetTexture = new Texture(Gdx.files.internal("planet1.png"));
-        systemBackground       = new Texture(Gdx.files.internal("bg5.jpg"));
-        heroTexture            = new Texture(Gdx.files.internal("entities/Astronaut.png"));
-        alienTexture           = new Texture(Gdx.files.internal("entities/alien.gif"));
+        systemBackground = new Texture(Gdx.files.internal("bg5.jpg"));
+        heroTexture      = new Texture(Gdx.files.internal("entities/Astronaut.png"));
+        alienTexture     = new Texture(Gdx.files.internal("entities/alien.gif"));
 
         planetTextureVariants = new EnumMap<>(Planet.Type.class);
         loadVariants(Planet.Type.Gas,     "planetTextures/gas/gas");
@@ -67,6 +71,15 @@ public class RenderManager {
         stars.add(new Texture(Gdx.files.internal("planetTextures/star/star0.png")));
         planetTextureVariants.put(Planet.Type.Star, stars);
 
+        worldBackgrounds = new HashMap<>();
+        worldBackgrounds.put(Planet.Type.Gas,
+                new Texture(Gdx.files.internal("planetTextures/gas_surface/gas_surface.png")));
+        worldBackgrounds.put(Planet.Type.Mineral,
+                new Texture(Gdx.files.internal("planetTextures/mineral_surface/mineral_surface.png")));
+        worldBackgrounds.put(Planet.Type.Organic,
+                new Texture(Gdx.files.internal("planetTextures/organic_surface/organic_surface.png")));
+
+        fallbackBackground = new Texture(Gdx.files.internal("planet1.png"));
     }
 
     private void loadVariants(Planet.Type type, String basePath) {
@@ -75,6 +88,14 @@ public class RenderManager {
             variants.add(new Texture(Gdx.files.internal(basePath + i + ".png")));
         }
         planetTextureVariants.put(type, variants);
+    }
+
+    public void setSelectedBackgroundType(Planet.Type type) {
+        this.selectedBackgroundType = type;
+    }
+
+    public List<Planet> getCurrentSystemPlanets() {
+        return currentSystemPlanets;
     }
 
     private void prepareSystemView() {
@@ -87,9 +108,14 @@ public class RenderManager {
         displayCount = 2 + rand.nextInt(Math.max(1, maxPlanets - 1));
 
         currentSystemTextures = new ArrayList<>();
+        currentSystemPlanets = new ArrayList<>();
+
+        currentSystemPlanets.add(planets[0]);
         currentSystemTextures.add(randomVariant(planets[0].getType()));
         for (int i = 1; i <= displayCount; i++) {
-            currentSystemTextures.add(randomVariant(planets[i].getType()));
+            Planet p = planets[i];
+            currentSystemPlanets.add(p);
+            currentSystemTextures.add(randomVariant(p.getType()));
         }
     }
 
@@ -116,13 +142,13 @@ public class RenderManager {
         planetBounds.clear();
         float sw = PongGame.getInstance().getWindowWidth();
         float sh = PongGame.getInstance().getWindowHeight();
-        float centerX = sw * 0.5f;
-        float centerY = sh * 0.5f;
+        float cx = sw * 0.5f;
+        float cy = sh * 0.5f;
 
         Texture starTex = currentSystemTextures.get(0);
-        float starSize = sh * 0.12f;
-        float sx = centerX - starSize * 0.5f;
-        float sy = centerY - starSize * 0.5f;
+        float starSize = sh * 0.3f;
+        float sx = cx - starSize * 0.5f;
+        float sy = cy - starSize * 0.5f;
         planetBounds.add(new Rectangle(sx, sy, starSize, starSize));
         batch.draw(starTex, sx, sy, starSize, starSize);
 
@@ -136,8 +162,8 @@ public class RenderManager {
         for (int i = 1; i < currentSystemTextures.size(); i++) {
             float angle = (float)(2 * Math.PI * (i - 1) / count);
             float radius = orbitStep * i;
-            float px = centerX + radius * (float)Math.cos(angle) - planetSize * 0.5f;
-            float py = centerY + radius * (float)Math.sin(angle) - planetSize * 0.5f;
+            float px = cx + radius * (float)Math.cos(angle) - planetSize * 0.5f;
+            float py = cy + radius * (float)Math.sin(angle) - planetSize * 0.5f;
             planetBounds.add(new Rectangle(px, py, planetSize, planetSize));
             batch.draw(currentSystemTextures.get(i), px, py, planetSize, planetSize);
         }
@@ -154,19 +180,19 @@ public class RenderManager {
                        boolean eventActive,
                        boolean inventoryOpen,
                        boolean upgradesOpen) {
+        float w = PongGame.getInstance().getWindowWidth();
+        float h = PongGame.getInstance().getWindowHeight();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(backgroundPlanetTexture,
-                0, 0,
-                PongGame.getInstance().getWindowWidth(),
-                PongGame.getInstance().getWindowHeight());
+        Texture bg = (selectedBackgroundType != null && worldBackgrounds.containsKey(selectedBackgroundType))
+                ? worldBackgrounds.get(selectedBackgroundType)
+                : fallbackBackground;
+        batch.draw(bg, 0, 0, w, h);
         renderEntities();
         playerManager.renderShip(batch);
         playerManager.renderPlayerStats(batch);
-        if (upgradesOpen && !eventActive)
-            playerManager.getInventory().showInventory();
-        if (paused && !eventActive)
-            renderPauseMessage();
+        if (inventoryOpen && !eventActive) playerManager.getInventory().showInventory();
+        if (paused && !eventActive) renderPauseMessage();
         batch.end();
     }
 
@@ -175,19 +201,16 @@ public class RenderManager {
         float h = PongGame.getInstance().getWindowHeight();
         float heroX = 200;
         float heroY = (h - heroTexture.getHeight()) / 2;
-        batch.draw(heroTexture,
-                heroX + heroTexture.getWidth(), heroY,
+        batch.draw(heroTexture, heroX + heroTexture.getWidth(), heroY,
                 heroTexture.getWidth(), heroTexture.getHeight());
         float alienX = w - alienTexture.getWidth();
         float alienY = (h - alienTexture.getHeight()) / 2 + 100;
-        batch.draw(alienTexture,
-                alienX + alienTexture.getWidth(), alienY,
+        batch.draw(alienTexture, alienX + alienTexture.getWidth(), alienY,
                 -alienTexture.getWidth(), alienTexture.getHeight());
     }
 
     private void renderPauseMessage() {
-        font.draw(batch,
-                "Paused",
+        font.draw(batch, "Paused",
                 PongGame.getInstance().getWindowWidth() / 2 - 40,
                 PongGame.getInstance().getWindowHeight() / 2);
     }
@@ -200,7 +223,6 @@ public class RenderManager {
 
     public void dispose() {
         batch.dispose();
-        backgroundPlanetTexture.dispose();
         systemBackground.dispose();
         heroTexture.dispose();
         alienTexture.dispose();
@@ -208,5 +230,9 @@ public class RenderManager {
         for (List<Texture> list : planetTextureVariants.values()) {
             for (Texture t : list) t.dispose();
         }
+        for (Texture bg : worldBackgrounds.values()) {
+            bg.dispose();
+        }
+        if (fallbackBackground != null) fallbackBackground.dispose();
     }
 }

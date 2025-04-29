@@ -14,6 +14,7 @@ import com.mygdx.managers.RenderManager;
 import com.mygdx.managers.UIManager;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
+import com.mygdx.objects.Planet;
 import com.mygdx.objects.Universe;
 import com.mygdx.pong.PongGame;
 import com.mygdx.ui.EventUI;
@@ -27,18 +28,15 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     private InputHandler inputHandler;
     private EventManager eventManager;
     public boolean paused = false;
-
-    //if true, show star-system view else show in-world play
     private boolean systemView = true;
 
     public GameScreen(OrthographicCamera camera) {
         this.camera = camera;
-        this.camera.position.set(new Vector3(
-                PongGame.getInstance().getWindowWidth() / 2,
-                PongGame.getInstance().getWindowHeight() / 2,
+        this.camera.position.set(
+                PongGame.getInstance().getWindowWidth() / 2f,
+                PongGame.getInstance().getWindowHeight() / 2f,
                 0
-        ));
-
+        );
         initializeManagers();
         Gdx.input.setInputProcessor(uiManager.getUIStage());
     }
@@ -55,7 +53,6 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         inputHandler = new InputHandler(this, uiManager, eventManager);
     }
 
-    /** Core update logic */
     public void update() {
         if (!eventManager.isEventActive()) {
             inputHandler.handleInput();
@@ -86,7 +83,6 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (systemView) {
-            //handle click to select a planet
             if (Gdx.input.justTouched()) {
                 Vector3 touch = new Vector3(
                         Gdx.input.getX(),
@@ -96,18 +92,20 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                 camera.unproject(touch);
                 int idx = renderManager.getPlanetIndexAt(touch.x, touch.y);
                 if (idx >= 0) {
+                    Planet clicked = renderManager.getCurrentSystemPlanets().get(idx);
+                    renderManager.setSelectedBackgroundType(clicked.getType());
                     worldManager.travelTo(idx);
                     systemView = false;
                     camera.position.set(
-                            PongGame.getInstance().getWindowWidth() / 2,
-                            PongGame.getInstance().getWindowHeight() / 2,
+                            PongGame.getInstance().getWindowWidth() / 2f,
+                            PongGame.getInstance().getWindowHeight() / 2f,
                             0
                     );
                     camera.update();
                 }
             }
-            //draw the starsystem UI
             renderManager.renderSystemView();
+
             if (!eventManager.isEventActive()) {
                 uiManager.render(delta);
             }
@@ -115,18 +113,14 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                 eventManager.render();
             }
             return;
-
         }
 
-        //in-world renre
         renderManager.render(
                 paused,
                 eventManager.isEventActive(),
                 uiManager.isInventoryOpen(),
                 uiManager.isUpgradesOpen()
         );
-
-
         if (!eventManager.isEventActive()) {
             uiManager.render(delta);
         }
@@ -139,7 +133,6 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     public void resize(int width, int height) {
         camera.setToOrtho(false, width, height);
         camera.update();
-
         worldManager.resize(width, height);
         renderManager.resize(width, height);
         uiManager.resize(width, height);
@@ -153,7 +146,6 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         uiManager.dispose();
         eventManager.dispose();
     }
-
 
     @Override
     public void onEventCompleted() {
