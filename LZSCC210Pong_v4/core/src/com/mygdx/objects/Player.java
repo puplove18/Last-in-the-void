@@ -4,24 +4,30 @@ package com.mygdx.objects;
 public class Player{
     private String name;
     private double health = 100;
+    private double healthLim = 100;
     private int healthUpgradeLevel = 0; 
 	private double fuel = 100;
+    private double fuelLim = 100;
     private int fuelUpgradeLevel = 0; 
     private double oxygen = 100;
+    private double oxygenLim = 100;
     private int oxygenUpgradeLevel = 0; 
     private Inventory inventory;
     private int addingFactor = 0;
     private int resourcePermissionLevel = 1; 
     public double getFuelCapacity() {
         fuel *= 2;
+        this.fuelLim *= 2;
         return fuel;
     }
     public double getHealthCapacity() {
         health *= 2;
+        this.healthLim *= 2;
         return health;
     }
     public double getOxygenCapacity() {
         oxygen *= 2;
+        this.oxygenLim *= 2;
         return oxygen;
     }
     public void upgradeFuel() {
@@ -65,8 +71,8 @@ public class Player{
     public void setHealth(double val) {
     if (val < 0) {
         this.health = 0;
-    } else if (val > 100) {
-        this.health = 100;
+    } else if (val > this.healthLim) {
+        this.health = this.healthLim;
     } else {
         this.health = val;
     }
@@ -79,8 +85,8 @@ public class Player{
 	public void setFuel(double val) {
     if (val < 0) {
         this.fuel = 0;
-    } else if (val > 100) {
-        this.fuel = 100;
+    } else if (val > this.fuelLim) {
+        this.fuel = this.fuelLim;
     } else {
         this.fuel = val;
     }
@@ -93,8 +99,8 @@ public class Player{
     public void setOxygen(double val) {
     if (val < 0) {
         this.oxygen = 0;
-    } else if (val > 100) {
-        this.oxygen = 100;
+    } else if (val > this.oxygenLim) {
+        this.oxygen = this.oxygenLim;
     } else {
         this.oxygen = val;
     }
