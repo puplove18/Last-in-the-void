@@ -87,7 +87,7 @@ public class InputHandler {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
             if (!eventManager.isEventActive()) { 
-                Planet testPlanet = new Planet("Test Gas Planet", Planet.Type.Mineral, 50, 4);
+                Planet testPlanet = new Planet("Test Gas Planet", Planet.Type.Mineral, 50, 1);
                 Event planetEvent = new PlanetLandingEvent(testPlanet);
                 eventManager.setCurrentEvent(planetEvent);
                 eventManager.showCurrentEvent();

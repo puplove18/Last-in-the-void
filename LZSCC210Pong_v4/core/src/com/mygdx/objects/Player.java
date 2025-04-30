@@ -63,9 +63,10 @@ public class Player{
         this.inventory = new Inventory(24);
 
         // test items in the beginning
-        this.inventory.addItem("Common Metal", 5);
-        this.inventory.addItem("Oxygen", 10);
-        this.inventory.addItem("Fuel", 8);
+        this.inventory.addItem("Common Building Materials", 500);
+        this.inventory.addItem("Uncommon Building Materials", 500);
+        this.inventory.addItem("Rare Building Materials", 500);
+        this.inventory.addItem("Legendary Building Materials", 500);
     }
 
     public void setHealth(double val) {
