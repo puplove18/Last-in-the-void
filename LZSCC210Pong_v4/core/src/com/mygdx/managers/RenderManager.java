@@ -163,19 +163,20 @@ public class RenderManager {
 
         float maxRadius = Math.min(sw, sh) * 0.45f;
         float orbitStep = maxRadius / count;
-        //float planetSize = sh * 0.08f;
-//        float renderCap = 30.00f;
-//        float renderMin = 30.00f;
+        float minSize    = sh * 0.05f;
+        float maxSize    = sh * 0.12f;
 
         for (int i = 1; i < currentSystemTextures.size(); i++) {
             float angle = planetAngles.get(i);
             float radius = orbitStep * i;
             Planet planet = this.currentSystemPlanets.get(i);
-            float planetSize = sh * (planet.getSize()*planet.renderSize);
+            float rawSize   = sh * (planet.getSize() * planet.renderSize);
+            float planetSize = Math.max(minSize, Math.min(rawSize, maxSize));
+
 //            if ((planetSize >= renderCap) || (planetSize < renderMin)) {
 //                planetSize = renderCap;
 //            }
-            planetSize = Math.max(30, Math.min(planetSize, 30));
+//            planetSize = Math.max(30, Math.min(planetSize, 30));
             //System.out.println(planetSize);
             float px = cx + radius * (float)Math.cos(angle) - planetSize * 0.5f;
             float py = cy + radius * (float)Math.sin(angle) - planetSize * 0.5f;
