@@ -67,7 +67,7 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         nextButton = new TextButton("Next System", skin);
         nextButton.setPosition(
-                PongGame.getInstance().getWindowWidth() - 500,
+                PongGame.getInstance().getWindowWidth() - 800,
                 PongGame.getInstance().getWindowHeight() - 50
         );
         nextButton.addListener(new ChangeListener() {
