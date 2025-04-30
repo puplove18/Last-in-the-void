@@ -64,7 +64,7 @@ public class Universe {
             String newName = generateName();
 
             int starSize = rand.nextInt(2000-200)+200;
-            int numPlanets = rand.nextInt(9)+3;
+            int numPlanets = rand.nextInt(4)+4;
 
             StarSystem dest = new StarSystem(newName, starSize, tier, numPlanets);
 

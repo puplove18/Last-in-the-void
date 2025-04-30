@@ -106,8 +106,9 @@ public class RenderManager {
         lastSystem = system;
 
         Planet[] planets = system.getPlanets();
-        int maxPlanets = Math.min(planets.length - 1, 4);
-        displayCount = 2 + rand.nextInt(Math.max(1, maxPlanets - 1));
+        int displayCount = Math.min(planets.length - 1, 6);
+        //displayCount = 2 + rand.nextInt(Math.max(1, maxPlanets - 1));
+        //displayCount = maxPlanets;
 
         currentSystemTextures = new ArrayList<>();
         currentSystemPlanets = new ArrayList<>();
