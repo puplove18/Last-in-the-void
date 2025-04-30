@@ -68,9 +68,9 @@ public class PlayerManager {
     public void renderPlayerStats(SpriteBatch batch) {
         float statsX = 10;
         float statsY = PongGame.getInstance().getWindowHeight() - 20;
-        double currentHealth = player.getHealth();
-        double currentFuel = player.getFuel();
-        double currentOxygen = player.getOxygen();
+        double currentHealth = (player.getHealth()/player.getHealthLim()) * 100;
+        double currentFuel = (player.getFuel()/player.getFuelLim()) * 100;
+        double currentOxygen = (player.getOxygen()/player.getOxygenLim()) * 100;
 
         // Use the pre-initialized white font
         statsFontWhite.draw(batch, "Name: Space Explorer", statsX, statsY);

@@ -15,6 +15,8 @@ public class Player{
     private Inventory inventory;
     private int addingFactor = 0;
     private int resourcePermissionLevel = 1; 
+
+
     public double getFuelCapacity() {
         fuel *= 2;
         this.fuelLim *= 2;
@@ -83,6 +85,10 @@ public class Player{
         return (double) this.health;
     }
 
+    public double getHealthLim() {
+        return (double) this.healthLim;
+    }
+
 	public void setFuel(double val) {
     if (val < 0) {
         this.fuel = 0;
@@ -97,6 +103,10 @@ public class Player{
         return (double) this.fuel;
     }
 
+    public double getFuelLim() {
+        return (double) this.fuelLim;
+    }
+
     public void setOxygen(double val) {
     if (val < 0) {
         this.oxygen = 0;
@@ -109,7 +119,11 @@ public class Player{
 
     public double getOxygen() {
         return (double) this.oxygen;
-    }    
+    }
+    
+    public double getOxygenLim() {
+        return (double) this.oxygenLim;
+    }
 
     public void setName(String playerName) {
     if (playerName != null && !playerName.isEmpty()) {
