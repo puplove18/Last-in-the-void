@@ -20,6 +20,7 @@ import com.mygdx.objects.Upgrades;
 import com.mygdx.pong.PongGame;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.ui.InventoryUI;
+import com.mygdx.ui.ScannerUI;
 import com.mygdx.ui.UpgradesUI;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,10 +36,13 @@ public class UIManager {
     private boolean inventoryOpen = false;
     private Upgrades upgrades;
     private boolean showUpgradesGUI = false;
+    private boolean scannerOpen = false;
     private Universe universe;
+
 
     private UpgradesUI upgradesUI;
     private InventoryUI inventoryUI;
+    private ScannerUI scannerUI;
     private Texture upgradesBackground;
     private NinePatchDrawable upgradesPanel;
     // UI components
@@ -46,6 +50,7 @@ public class UIManager {
     private Stage uiStage;
     private Stage inventoryStage;
     private Stage upgradesStage;
+    private Stage scannerStage;
     private Skin skin;
     private TextureAtlas backgroundAtlas;
     private TextureAtlas.AtlasRegion inventoryBackground;
@@ -64,6 +69,7 @@ public class UIManager {
         this.upgrades = new Upgrades(inventory, upgradeCost);
         this.inventoryUI = new InventoryUI(PongGame.getInstance(), player);
         this.upgradesUI = new UpgradesUI(player,player.getInventory(), universe, inventoryUI);
+        this.scannerUI = new ScannerUI(player, universe);
         
         
         inventoryUI.setCloseButtonListener(new InventoryUI.CloseButtonListener() {
@@ -82,6 +88,15 @@ public class UIManager {
         });
 
         initializeUI();
+
+        scannerUI.setCloseButtonListener(new ScannerUI.CloseButtonListener() {
+            @Override
+            public void onCloseButtonClicked() {
+                toggleScanner();
+            }
+        });
+
+        initializeUI();
     }
         
     
@@ -91,11 +106,13 @@ public class UIManager {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         this.upgradesStage = new Stage(new ScreenViewport());
         this.inventoryStage = inventoryUI.getStage();
+        this.scannerStage = scannerUI.getStage();
         
         
         createExitButton();
         createInventoryButton();
         createUpgradesButton();
+        createScannerButton();
     }
     
 
@@ -122,6 +139,7 @@ public class UIManager {
                 if (!gameScreen.getEventManager().isEventActive()) {
                     toggleInventory();
                     closeUpgrades();
+                    closeScanner();
                     
                     inventoryUI.setVisible(inventoryOpen);
                     Gdx.input.setInputProcessor(uiStage);
@@ -145,6 +163,7 @@ public class UIManager {
                 if (!gameScreen.getEventManager().isEventActive()) {
                     toggleUpgrades();
                     closeInventory();
+                    closeScanner();
     
                     upgradesUI.setVisible(showUpgradesGUI);
                     Gdx.input.setInputProcessor(showUpgradesGUI ? upgradesStage : uiStage);
@@ -153,12 +172,36 @@ public class UIManager {
             }
         });
     
+    
         Table upgradesTable = new Table();
         upgradesTable.setFillParent(true);
         upgradesTable.bottom().left().pad(10).padLeft(150); // Shift a bit right of inventory
         upgradesTable.add(upgradesButton).width(120).height(50);
     
         uiStage.addActor(upgradesTable);
+    }
+    private void createScannerButton() {
+        TextButton scannerButton = new TextButton(" Next System", skin);
+        scannerButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!gameScreen.getEventManager().isEventActive()) {
+                    toggleScanner();
+                    closeInventory();
+                    closeUpgrades();
+    
+                    upgradesUI.setVisible(scannerOpen);
+                    Gdx.input.setInputProcessor(scannerOpen ? upgradesStage : uiStage);
+
+                }
+            }
+        });
+        Table scannerTable = new Table();
+        scannerTable.setFillParent(true);
+        scannerTable.bottom().left().pad(10).padLeft(300);
+        scannerTable.add(scannerButton).width(120).height(50);
+        
+        uiStage.addActor(scannerTable);
     }
     
     
@@ -172,6 +215,10 @@ public class UIManager {
             else if (inventoryOpen) {
                 Gdx.input.setInputProcessor(inventoryUI.getStage());
                 inventoryUI.render(); 
+            }
+            else if (scannerOpen) {
+            Gdx.input.setInputProcessor(scannerUI.getStage());
+            scannerUI.render();
             }
             else {
                 Gdx.input.setInputProcessor(uiStage);
@@ -203,7 +250,9 @@ public class UIManager {
     public boolean isInventoryOpen() {
         return inventoryOpen;
     }
-    
+    public boolean isScannerOpen() {
+        return scannerOpen;
+    }
     public boolean isUpgradesOpen() {
         return showUpgradesGUI;
     }
@@ -213,6 +262,15 @@ public class UIManager {
         inventoryUI.setVisible(inventoryOpen);
         if (inventoryOpen) {
             Gdx.input.setInputProcessor(inventoryUI.getStage());
+        } else {
+            Gdx.input.setInputProcessor(uiStage);
+        }
+    }
+    public void toggleScanner() {
+        scannerOpen = !scannerOpen;
+        scannerUI.setVisible(scannerOpen);
+        if (scannerOpen) {
+            Gdx.input.setInputProcessor(scannerUI.getStage());
         } else {
             Gdx.input.setInputProcessor(uiStage);
         }
@@ -232,7 +290,9 @@ public class UIManager {
     public void closeInventory() {
         inventoryOpen = false;
     }
-    
+    public void closeScanner() {
+        scannerOpen = false;
+    }
     public void closeUpgrades() {
         showUpgradesGUI = false;
     }
@@ -244,7 +304,9 @@ public class UIManager {
     public Stage getInventoryStage() {
         return inventoryStage;
     }
-    
+    public Stage getScannerStage() {
+        return scannerStage;
+    }
     public Upgrades getUpgrades() {
         return upgrades;
     }

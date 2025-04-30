@@ -75,7 +75,7 @@ public class Universe {
     }
 
     // Method for selecting a destination universe and generating new choices for the player right away
-    private void chooseDestination(int destination) {
+    public void chooseDestination(int destination) {
         this.depth += 1;
 
         //Check if the player exceeded maximum universe size, might be removed
