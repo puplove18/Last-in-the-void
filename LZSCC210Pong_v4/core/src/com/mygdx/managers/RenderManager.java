@@ -38,6 +38,8 @@ public class RenderManager {
     private List<Texture> currentSystemTextures;
     private List<Planet> currentSystemPlanets;
 
+    private List<Float> planetAngles = new ArrayList<>();
+
     private List<Rectangle> planetBounds = new ArrayList<>();
     private StarSystem lastSystem;
     private int displayCount;
@@ -117,6 +119,10 @@ public class RenderManager {
             currentSystemPlanets.add(p);
             currentSystemTextures.add(randomVariant(p.getType()));
         }
+        planetAngles.clear();
+        for (int i = 0; i < currentSystemPlanets.size(); i++) {
+            planetAngles.add(rand.nextFloat() * (float)(2 * Math.PI));
+        }
     }
 
     private Texture randomVariant(Planet.Type type) {
@@ -158,23 +164,24 @@ public class RenderManager {
         float maxRadius = Math.min(sw, sh) * 0.45f;
         float orbitStep = maxRadius / count;
         //float planetSize = sh * 0.08f;
-        float renderCap = 30.00f;
-        float renderMin = 30.00f;
+//        float renderCap = 30.00f;
+//        float renderMin = 30.00f;
 
         for (int i = 1; i < currentSystemTextures.size(); i++) {
-            float angle = (float)(2 * Math.PI * (i - 1) / count);
+            float angle = planetAngles.get(i);
             float radius = orbitStep * i;
             Planet planet = this.currentSystemPlanets.get(i);
             float planetSize = sh * (planet.getSize()*planet.renderSize);
-            if ((planetSize >= renderCap) || (planetSize < renderMin)) {
-                planetSize = renderCap;
-            }
+//            if ((planetSize >= renderCap) || (planetSize < renderMin)) {
+//                planetSize = renderCap;
+//            }
+            planetSize = Math.max(30, Math.min(planetSize, 30));
             //System.out.println(planetSize);
             float px = cx + radius * (float)Math.cos(angle) - planetSize * 0.5f;
             float py = cy + radius * (float)Math.sin(angle) - planetSize * 0.5f;
             planetBounds.add(new Rectangle(px, py, planetSize, planetSize));
             batch.draw(currentSystemTextures.get(i), px, py, planetSize, planetSize);
-            renderCap += 10.0f;
+//            renderCap += 10.0f;
         }
     }
 
