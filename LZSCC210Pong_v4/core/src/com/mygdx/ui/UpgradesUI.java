@@ -145,11 +145,11 @@ public class UpgradesUI {
         Label effectsLabel = new Label(effects[levelToShow[0]], labelStyle);
         TextButton upgradeButton = new TextButton("Upgrade", buttonStyle);
         Label upgradeLabel = new Label("Fully Upgrade", labelStyle);
-        upgradesTable.add(nameLabel).padLeft(10);
+        upgradesTable.add(nameLabel).padLeft(10).width(120);
         upgradesTable.add(resourcesLabel);
         upgradesTable.add(effectsLabel);
         //upgradesTable.add(upgradeButton).width(120).height(40).padLeft(10);
-        Cell<TextButton> buttonCell = upgradesTable.add(upgradeButton).width(120).height(40).padLeft(10);
+        Cell<TextButton> buttonCell = upgradesTable.add(upgradeButton).width(100).height(40).padLeft(10);
 
         upgradesTable.row();
 
