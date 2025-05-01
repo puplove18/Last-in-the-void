@@ -154,8 +154,7 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                     if (!clicked.getHarvest()) {
                     float cost = 10f; //cost of travel planet
                     if (playerManager.getPlayer().getFuel() >= cost) {
-                        playerManager.getPlayer()
-                                .setFuel(playerManager.getPlayer().getFuel() - cost);
+                        playerManager.getPlayer().setFuel(playerManager.getPlayer().getFuel() - cost);
                         renderManager.setSelectedBackgroundType(clicked.getType());
                         // (Commented out in order to fix events) worldManager.travelTo(idx);
                         systemView = false;
