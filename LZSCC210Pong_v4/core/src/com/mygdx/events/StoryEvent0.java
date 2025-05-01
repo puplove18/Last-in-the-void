@@ -5,5 +5,8 @@ import com.mygdx.objects.Player;
 
 public class StoryEvent0 extends Event {
 
+    public StoryEvent0() {
+        super("Temp", "Temp");
+    }
 
 }

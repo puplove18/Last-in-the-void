@@ -23,6 +23,8 @@ import com.mygdx.objects.StarSystem;
 import com.mygdx.objects.Universe;
 import com.mygdx.pong.PongGame;
 import com.mygdx.ui.EventUI;
+import com.mygdx.objects.Event;
+import com.mygdx.events.PlanetLandingEvent;
 
 import java.util.Random;
 
@@ -159,6 +161,15 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                                 0
                         );
                         camera.update();
+
+                        if (!eventManager.isEventActive()) {
+                            Event planetEvent = new PlanetLandingEvent(clicked);
+                            eventManager.setCurrentEvent(planetEvent);
+                            eventManager.showCurrentEvent();
+                            setPaused(true);
+                            uiManager.closeInventory();
+                            uiManager.closeUpgrades();
+                        }
                     } else {
                         System.out.println("Not enough fuel!");
                     }
