@@ -181,7 +181,7 @@ public class PlanetLandingEvent extends Event {
 
     private int calculateResourceAmount() {
         // Base amount is planet size
-        int baseAmount = planet.getSize();
+        int baseAmount = planet.getSize()/2;
         // Add some randomness (±10%)
         int randomFactor = random.nextInt(Math.max(1, baseAmount / 5)) - (baseAmount / 10);
     
