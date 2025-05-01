@@ -57,7 +57,7 @@ public class Universe {
     // Method to generate three brand new star systems as destinations and add them to a list
     private void generateDestinations(int tier) {
 
-        int systemsNum = rand.nextInt(maxDest)+1;
+        int systemsNum = this.maxDest;
         StarSystem[] newDestinations = new StarSystem[systemsNum];
 
         for (int i = 0; i <= systemsNum-1; i++){
@@ -75,7 +75,7 @@ public class Universe {
     }
 
     // Method for selecting a destination universe and generating new choices for the player right away
-    public void chooseDestination(int destination) {
+    public void chooseDestination(int destID) {
         this.depth += 1;
 
         //Check if the player exceeded maximum universe size, might be removed
@@ -84,9 +84,8 @@ public class Universe {
             return;
         } 
         //Update current position
-        this.currentPosition = this.destinations[destination];
+        this.currentPosition = this.destinations[destID];
         this.generateDestinations((depth/(this.universeLength/4))+1);
-        return;
     }
 
     private void printDestinations() {

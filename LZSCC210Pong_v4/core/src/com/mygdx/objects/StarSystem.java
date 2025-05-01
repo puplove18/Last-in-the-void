@@ -67,7 +67,7 @@ public class StarSystem{
         this.name = name;  
         this.tier = tier;
         int sizeLim = this.maxPlanets;
-        this.size = rand.nextInt(this.size-200) + 200;
+        this.size = rand.nextInt(this.size) + 200;
         
         //Initialize the star of random size between set limit and 200, defualt limit is 2000
         this.planets[0] = new Planet(this.name + " 1", star, this.size, "Star",this.tier);

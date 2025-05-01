@@ -139,17 +139,24 @@ public class ScannerUI {
     
         for (int i = 0; i < destinations.length; i++) {
             StarSystem system = destinations[i];
+            System.out.println(destinations.length);
+            System.out.println(i);
     
             Label systemName = new Label(system.getName(), skin);
             Label location = new Label("Tier " + system.getTier(), skin);
-            Label details = new Label(system.getNumPlanets() + " planets", skin);
+            Label details = new Label(system.getNumPlanets()-1 + " planets", skin);
             TextButton chooseButton = new TextButton("Choose", skin);
     
             final int destinationIndex = i;
             chooseButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    universe.chooseDestination(destinationIndex);
+                    if (destinationIndex < destinations.length) {
+                        universe.chooseDestination(destinationIndex);
+                    }
+                    else {
+                        universe.chooseDestination(0);
+                    }
                     getAllDestinationsInTable(); 
                 }
             });
