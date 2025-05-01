@@ -12,6 +12,7 @@ public class Planet {
     public float renderSize;
     private String playerSize;
     private int maxPlanetSize = 100;
+    private boolean harvestSatus = false;
     //private Texture texture;
     Random rand = new Random();
 
@@ -29,6 +30,10 @@ public class Planet {
     Type min = Type.Mineral;
     Type org = Type.Organic;
     Type star = Type.Star;
+
+    public boolean getHarvest() {
+        return this.harvestSatus;
+    }
 
     public String getName() {
         return this.name;
