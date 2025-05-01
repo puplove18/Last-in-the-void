@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -15,10 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
 import com.mygdx.objects.Universe;
-import com.mygdx.objects.StarSystem;
 
 
 public class ScannerUI {
@@ -100,7 +97,7 @@ public class ScannerUI {
         scannerTable.defaults().pad(5).left();
 
         int fontSize = 13;
-        BitmapFont headerFont = new BitmapFont(); // Use your custom font here
+        BitmapFont headerFont = new BitmapFont(); 
         Label.LabelStyle headerStyle = new Label.LabelStyle(headerFont, TITLE_COLOR);
 
         float width = 400;
@@ -126,7 +123,7 @@ public class ScannerUI {
         scannerTable.clearChildren();
     
         float width = 400;
-        BitmapFont headerFont = new BitmapFont(); // Or your custom font
+        BitmapFont headerFont = new BitmapFont(); 
         Label.LabelStyle headerStyle = new Label.LabelStyle(headerFont, TITLE_COLOR);
         
         scannerTable.add(new Label("Scanner", headerStyle)).width(width * 0.25f).padBottom(10).padLeft(10);
@@ -135,21 +132,20 @@ public class ScannerUI {
         scannerTable.add(new Label("Action", headerStyle)).width(width * 0.25f).padBottom(10);
         scannerTable.row();
     
-        StarSystem[] destinations = universe.getDestinations();
-    
-        for (int i = 0; i < destinations.length; i++) {
-            StarSystem system = destinations[i];
-    
-            Label systemName = new Label(system.getName(), skin);
-            Label location = new Label("Tier " + system.getTier(), skin);
-            Label details = new Label(system.getNumPlanets()-1 + " planets", skin);
+        
+        
+        for (int i = 0; i < universe.getDestinations().length; i++) {
+            
+            Label systemName = new Label(universe.getDestinations()[i].getName(), skin);
+            Label location = new Label("Tier " + universe.getDestinations()[i].getTier(), skin);
+            Label details = new Label(universe.getDestinations()[i].getNumPlanets()-1 + " planets", skin);
             TextButton chooseButton = new TextButton("Choose", skin);
     
             final int destinationIndex = i;
             chooseButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (destinationIndex < destinations.length) {
+                    if (destinationIndex < universe.getDestinations().length) {
                         universe.chooseDestination(destinationIndex);
                     }
                     else {
