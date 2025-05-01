@@ -140,6 +140,10 @@ public class RenderManager {
                 PongGame.getInstance().getWindowWidth(),
                 PongGame.getInstance().getWindowHeight());
         drawOrbitsAndPlanets();
+
+        playerManager.renderShip(batch);
+        playerManager.renderPlayerStats(batch);
+
         batch.end();
     }
 

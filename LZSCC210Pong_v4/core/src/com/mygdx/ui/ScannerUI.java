@@ -1,12 +1,12 @@
 package com.mygdx.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -15,12 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
-import com.mygdx.objects.Universe;
 import com.mygdx.objects.StarSystem;
-
-import com.badlogic.gdx.InputProcessor;
+import com.mygdx.objects.Universe;
 
 public class ScannerUI {
 
@@ -31,6 +28,8 @@ public class ScannerUI {
     private ScrollPane scrollPane;
     private final Player player;
     private Universe universe;
+
+    private DestinationListener destListener;
 
     private InputProcessor previousProcessor;
     private Texture backgroundTexture;
@@ -73,15 +72,19 @@ public class ScannerUI {
         pixmap.dispose();
     }
 
+    public void setDestinationListener(DestinationListener l) {
+        this.destListener = l;
+    }
+
     private void createUI() {
-        // Main Table (similar structure to UpgradesUI)
+        
         mainTable = new Table();
         mainTable.setFillParent(true);
         mainTable.setBackground(panelBackground);
         mainTable.center();
         stage.addActor(mainTable);
 
-        // Close button (top-right position)
+        
         TextButton closeButton = new TextButton("X", skin);
         Table closeButtonTable = new Table();
         closeButtonTable.add(closeButton).top().right().padTop(5).padRight(5);
@@ -106,23 +109,19 @@ public class ScannerUI {
 
         stage.addActor(closeButtonTable);
 
-        // Scanner Table (similar structure to UpgradesUI's upgradesTable)
+        
         scannerTable = new Table(skin);
         scannerTable.top().left().pad(10);
         scannerTable.defaults().pad(5).left();
 
         int fontSize = 13;
-        BitmapFont headerFont = new BitmapFont(); // Use your custom font here
+        BitmapFont headerFont = new BitmapFont(); 
         Label.LabelStyle headerStyle = new Label.LabelStyle(headerFont, TITLE_COLOR);
 
         float width = 400;
-        scannerTable.add(new Label("Scanner", headerStyle)).width(width * 0.25f).padBottom(10).padLeft(10);
-        scannerTable.add(new Label("Location", headerStyle)).width(width * 0.25f).padBottom(10);
-        scannerTable.add(new Label("Details", headerStyle)).width(width * 0.25f).padBottom(10);
-        scannerTable.add(new Label("Action", headerStyle)).width(width * 0.25f).padBottom(10);
-        scannerTable.row();
+        
 
-        // Scrollable container
+        
         scrollPane = new ScrollPane(scannerTable, skin);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);
@@ -138,7 +137,7 @@ public class ScannerUI {
         scannerTable.clearChildren();
 
         float width = 400;
-        BitmapFont headerFont = new BitmapFont(); // Or your custom font
+        BitmapFont headerFont = new BitmapFont(); 
         Label.LabelStyle headerStyle = new Label.LabelStyle(headerFont, TITLE_COLOR);
 
         scannerTable.add(new Label("Scanner", headerStyle)).width(width * 0.25f).padBottom(10).padLeft(10);
@@ -162,17 +161,21 @@ public class ScannerUI {
             chooseButton.clearListeners();
             chooseButton.addListener(new ClickListener() {
                 @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    boolean pressed = super.touchDown(event, x, y, pointer, button);
-                    event.stop();
+                public boolean touchDown(InputEvent e, float x, float y, int p, int b) {
+                    boolean pressed = super.touchDown(e,x,y,p,b);
+                    e.stop();
                     return pressed;
                 }
                 @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    universe.chooseDestination(destinationIndex);
+                public void clicked(InputEvent e, float x, float y) {
+                    if (destListener != null) {
+                        destListener.onDestinationChosen(destinationIndex);
+                    }
                     getAllDestinationsInTable();
                 }
             });
+
+
 
 
 
@@ -236,4 +239,9 @@ public class ScannerUI {
             }
         }
     }
+
+    public interface DestinationListener {
+        void onDestinationChosen(int index);
+    }
+
 }
