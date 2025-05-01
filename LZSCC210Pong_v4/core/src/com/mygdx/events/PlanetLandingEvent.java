@@ -80,6 +80,52 @@ public class PlanetLandingEvent extends Event {
     
         // Calculate base resource amount based *only* on planet size (and randomness)
         int baseAmount = calculateResourceAmount();
+        int baseCost = 10;
+        int additionalCost = 0;
+
+        // Determines how much additional cost the player should face for harvesting based on planet tier
+        switch (planet.getTier()) {
+            case 1:
+                additionalCost = 0;
+                break;
+            case 2:
+                additionalCost = 2;
+                break;
+            case 3:
+                additionalCost =4;
+                break;
+            case 4:
+                additionalCost = 8;
+                break;
+            default:
+                System.out.println("Invalid Tier");; // Won't be called
+                break;
+
+        }
+
+        int totalCost = baseCost + additionalCost;
+
+        StringBuilder costMessage = new StringBuilder("\n\nHarvesting cost:\n"); // Displays the cost of harvesting to the player
+        switch (planet.getType()) {
+            case Gas:
+                player.updateStat(Player.Stats.HEALTH, -totalCost);
+                costMessage.append("Hull Integrity: -").append(totalCost).append("%");
+                break;
+            case Mineral:
+                player.updateStat(Player.Stats.OXYGEN, -totalCost);
+                costMessage.append("Life Support: -").append(totalCost).append("%");
+                break;
+            case Organic:
+                int halfCost = totalCost / 2;
+                int remainingCost = totalCost - halfCost;
+                player.updateStat(Player.Stats.HEALTH, -halfCost);
+                player.updateStat(Player.Stats.FUEL, -remainingCost);
+                costMessage.append("Hull Integrity: -").append(halfCost).append("%\n");
+                costMessage.append("Ship Fuel: -").append(remainingCost).append("%");
+                break;
+            default:
+                System.out.println("Invalid planet type");
+        }
     
         // Create result message for the player
         StringBuilder resultMessage = new StringBuilder("Resources harvested:\n");
@@ -125,7 +171,9 @@ public class PlanetLandingEvent extends Event {
         if (!resourcesFound) { 
              resultMessage = new StringBuilder("No significant resources found."); 
         }
-    
+        
+        resultMessage.append(costMessage);
+
         harvestResultMessage = resultMessage.toString().trim(); // Trim newline at end
         System.out.println(harvestResultMessage);
         setReturnToSolarSystem(true);
