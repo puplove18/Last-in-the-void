@@ -149,7 +149,12 @@ public class Planet {
         //To be implimented later when some way of tracking player progression exists, potentially inherited from Star System
         int planet_tier = 1;
         if (systemTier != 1){
-            planet_tier = rand.nextInt(systemTier-1) + 1;
+            if (systemTier <= 3){
+                planet_tier = rand.nextInt(systemTier) + 1;
+            }
+            else {
+                planet_tier = rand.nextInt(systemTier-1) + 2;
+            }
         }
 
         Planet new_planet = new Planet(new_name, planet_type, new_size, playerSize, planet_tier);
