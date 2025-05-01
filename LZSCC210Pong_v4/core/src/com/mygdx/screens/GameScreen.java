@@ -28,6 +28,8 @@ import com.mygdx.events.PlanetLandingEvent;
 
 import java.util.Random;
 
+import javax.swing.event.ChangeEvent;
+
 public class GameScreen extends ScreenAdapter implements EventUI.EventCompletionListener {
     private OrthographicCamera camera;
     private GameWorldManager worldManager;
@@ -147,13 +149,15 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                 camera.unproject(touch);
                 int idx = renderManager.getPlanetIndexAt(touch.x, touch.y);
                 if (idx >= 0) {
+                    Planet clicked = renderManager.getCurrentSystemPlanets().get(idx);
+
+                    if (!clicked.getHarvest()) {
                     float cost = 10f; //cost of travel planet
                     if (playerManager.getPlayer().getFuel() >= cost) {
                         playerManager.getPlayer()
                                 .setFuel(playerManager.getPlayer().getFuel() - cost);
-                        Planet clicked = renderManager.getCurrentSystemPlanets().get(idx);
                         renderManager.setSelectedBackgroundType(clicked.getType());
-                        worldManager.travelTo(idx);
+                        // (Commented out in order to fix events) worldManager.travelTo(idx);
                         systemView = false;
                         camera.position.set(
                                 PongGame.getInstance().getWindowWidth()/2f,
@@ -161,7 +165,8 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                                 0
                         );
                         camera.update();
-
+                        
+                        // Calls the planet landing event when a planet is clicked on
                         if (!eventManager.isEventActive()) {
                             Event planetEvent = new PlanetLandingEvent(clicked);
                             eventManager.setCurrentEvent(planetEvent);
@@ -173,8 +178,11 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                     } else {
                         System.out.println("Not enough fuel!");
                     }
+                } else {
+                    System.out.println("This planet has already been visited and harvested!");
                 }
             }
+        }
 
             renderManager.renderSystemView();
             uiManager.render(delta);
@@ -221,7 +229,21 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     public void onEventCompleted() {
         paused = false;
         Gdx.input.setInputProcessor(uiManager.getUIStage());
+
+        if (eventManager.hasEvent() && eventManager.getCurrentEvent().shouldReturnToSolarSystem()) {
+            returnToSystemView();
+        }
         System.out.println("Event completed!");
+    }
+
+    private void returnToSystemView() {
+        systemView = true;
+        camera.position.set(
+            PongGame.getInstance().getWindowWidth()/2f,
+            PongGame.getInstance().getWindowHeight()/2f,
+            0
+        );
+        camera.update();
     }
 
     public EventManager getEventManager() {

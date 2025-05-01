@@ -49,6 +49,7 @@ public class PlanetLandingEvent extends Event {
         // Leave the planet without any effect
         addChoice("Leave the planet", 100, player -> {
             setSuccessMessage("You left the planet without harvesting any resources.");
+            setReturnToSolarSystem(true); 
         }, player -> {
         });
     }
@@ -56,6 +57,8 @@ public class PlanetLandingEvent extends Event {
     private void harvestResources(Player player) {
         // Clear previous harvest
         harvestedResources.clear();
+
+        planet.setHarvested(true);
     
         // Determine resource type based on planet type
         String resourceType;
@@ -89,7 +92,7 @@ public class PlanetLandingEvent extends Event {
             String rarity = RARITIES[i];
             String resourceName = rarity + " " + resourceType;
     
-            // --- Probability Check ---
+            // Probability Check 
             double probabilityThreshold;
             switch (i) {
                 case 0: probabilityThreshold = 1.0; break;  // Common 
@@ -102,7 +105,7 @@ public class PlanetLandingEvent extends Event {
             // Only proceed if the random check passes
             if (random.nextDouble() < probabilityThreshold) {
     
-                // --- Quantity Calculation 
+                // Quantity Calculation 
                 int baseRarityAmount = Math.max(1, baseAmount / (i + 1));
                 int randomVariation = random.nextInt(Math.max(1, baseRarityAmount / 2)) - (baseRarityAmount / 4);
                 int rarityAmount = Math.max(1, baseRarityAmount + randomVariation);
@@ -125,6 +128,7 @@ public class PlanetLandingEvent extends Event {
     
         harvestResultMessage = resultMessage.toString().trim(); // Trim newline at end
         System.out.println(harvestResultMessage);
+        setReturnToSolarSystem(true);
     }
 
     private int calculateResourceAmount() {

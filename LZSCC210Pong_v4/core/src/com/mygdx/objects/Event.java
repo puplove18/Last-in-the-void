@@ -15,6 +15,7 @@ public abstract class Event {
     protected List<Choice> choices;
     protected String successMessage = "";
     protected String failureMessage = "";
+    protected boolean resturnToSolarSystem = false;
 
     
     // Represents a single choice in an event with its description and consequences.
@@ -99,5 +100,13 @@ public abstract class Event {
     
     public String getFailureMessage() {
         return failureMessage;
+    }
+
+    public boolean shouldReturnToSolarSystem() {
+        return resturnToSolarSystem;
+    }
+
+    public void setReturnToSolarSystem(boolean resturnToSolarSystem){
+        this.resturnToSolarSystem = resturnToSolarSystem;
     }
 }

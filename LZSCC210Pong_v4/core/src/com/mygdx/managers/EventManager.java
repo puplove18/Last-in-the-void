@@ -53,4 +53,8 @@ public class EventManager {
     public void hideEvent() {
         eventUI.hideEvent();
     }
+
+    public Event getCurrentEvent() {
+        return currentEvent;
+    }
 }
