@@ -20,6 +20,7 @@ import com.mygdx.objects.Player;
 import com.mygdx.objects.Universe;
 import com.mygdx.objects.StarSystem;
 
+import com.badlogic.gdx.InputProcessor;
 
 public class ScannerUI {
 
@@ -31,7 +32,7 @@ public class ScannerUI {
     private final Player player;
     private Universe universe;
 
-
+    private InputProcessor previousProcessor;
     private Texture backgroundTexture;
     private NinePatchDrawable panelBackground;
     private ObjectMap<TextButton, Drawable> originalButtonBackgrounds = new ObjectMap<>();
@@ -46,7 +47,7 @@ public class ScannerUI {
     public ScannerUI(Player player, Universe universe) {
         this.player = player;
         this.universe = universe;
-        
+
         this.stage = new Stage(new ScreenViewport());
         this.skin = new Skin(Gdx.files.internal("uiskin.json"));
         initializePanelBackground();
@@ -84,7 +85,14 @@ public class ScannerUI {
         closeButtonTable.add(closeButton).top().right().padTop(5).padRight(5);
         closeButtonTable.top().right();
         closeButtonTable.setFillParent(true);
+        closeButton.clearListeners();
         closeButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                boolean pressed = super.touchDown(event, x, y, pointer, button);
+                event.stop();
+                return pressed;
+            }
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (closeButtonListener != null) {
@@ -92,8 +100,10 @@ public class ScannerUI {
                 }
             }
         });
+
+
         stage.addActor(closeButtonTable);
-        
+
         // Scanner Table (similar structure to UpgradesUI's upgradesTable)
         scannerTable = new Table(skin);
         scannerTable.top().left().pad(10);
@@ -124,36 +134,47 @@ public class ScannerUI {
     }
     public void getAllDestinationsInTable() {
         scannerTable.clearChildren();
-    
+
         float width = 400;
         BitmapFont headerFont = new BitmapFont(); // Or your custom font
         Label.LabelStyle headerStyle = new Label.LabelStyle(headerFont, TITLE_COLOR);
-        
+
         scannerTable.add(new Label("Scanner", headerStyle)).width(width * 0.25f).padBottom(10).padLeft(10);
         scannerTable.add(new Label("Location", headerStyle)).width(width * 0.25f).padBottom(10);
         scannerTable.add(new Label("Details", headerStyle)).width(width * 0.25f).padBottom(10);
         scannerTable.add(new Label("Action", headerStyle)).width(width * 0.25f).padBottom(10);
         scannerTable.row();
-    
+
         StarSystem[] destinations = universe.getDestinations();
-    
+
         for (int i = 0; i < destinations.length; i++) {
             StarSystem system = destinations[i];
-    
+
             Label systemName = new Label(system.getName(), skin);
             Label location = new Label("Tier " + system.getTier(), skin);
             Label details = new Label(system.getNumPlanets()-1 + " planets", skin);
             TextButton chooseButton = new TextButton("Choose", skin);
-    
+
             final int destinationIndex = i;
+
+            chooseButton.clearListeners();
             chooseButton.addListener(new ClickListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    boolean pressed = super.touchDown(event, x, y, pointer, button);
+                    event.stop();
+                    return pressed;
+                }
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     universe.chooseDestination(destinationIndex);
-                    getAllDestinationsInTable(); 
+                    getAllDestinationsInTable();
                 }
             });
-    
+
+
+
+
             scannerTable.add(systemName).width(width * 0.25f);
             scannerTable.add(location).width(width * 0.25f);
             scannerTable.add(details).width(width * 0.25f);
@@ -161,7 +182,7 @@ public class ScannerUI {
             scannerTable.row();
         }
     }
-    
+
     public void render() {
         if (isVisible) {
             stage.getBatch().begin();
@@ -192,7 +213,13 @@ public class ScannerUI {
         mainTable.setVisible(visible);
 
         if (visible) {
+            previousProcessor = Gdx.input.getInputProcessor();
             Gdx.input.setInputProcessor(stage);
+        }
+        else {
+            if (previousProcessor != null) {
+                Gdx.input.setInputProcessor(previousProcessor);
+            }//ensure no access
         }
     }
 
