@@ -214,7 +214,7 @@ public class UIManager {
         });
         Table scannerTable = new Table();
         scannerTable.setFillParent(true);
-        scannerTable.bottom().left().pad(10).padLeft(300);
+        scannerTable.bottom().left().pad(10).padLeft(290);
         scannerTable.add(scannerButton).width(120).height(50);
         
         uiStage.addActor(scannerTable);

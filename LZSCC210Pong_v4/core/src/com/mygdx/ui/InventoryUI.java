@@ -14,10 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.objects.Player;
 import com.mygdx.pong.PongGame;
@@ -45,6 +48,7 @@ public class InventoryUI {
     private NinePatchDrawable panelBackground;
     
     private boolean isVisible = false;
+    private String selectedItemName = null;
 
     private static final Color TITLE_COLOR = Color.WHITE;
     private static final Color TEXT_COLOR = Color.LIGHT_GRAY;
@@ -112,6 +116,9 @@ public class InventoryUI {
         closeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Gdx.input.setInputProcessor(null);
+                isVisible = false;
+                mainTable.setVisible(false);
                 if (closeButtonListener != null) {
                     closeButtonListener.onCloseButtonClicked();
                 }
@@ -156,11 +163,22 @@ public class InventoryUI {
                 Table itemContainer = new Table();
                 Table slotContainer = new Table();
                 slotContainer.setBackground(slotBg);
-                
+                slotContainer.setTouchable(Touchable.enabled);            
+
                 // Add item if this slot has one
                 if (items != null && index < items.keySet().size()) {
                     String itemName = (String) items.keySet().toArray()[index];
                     int quantity = items.get(itemName);
+
+                    final String currentItemName = itemName;
+                    final int currentQuantity = quantity;
+                    slotContainer.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            selectedItemName = currentItemName;
+                            showRemoveDialog(currentItemName, currentQuantity);
+                        }
+                    });
                     
                     // Item name (top)
                     String displayString = itemName.length() > 10 ? itemName.substring(0, 6) + "..." : itemName;
@@ -174,7 +192,7 @@ public class InventoryUI {
                     
                     index++;
                 } else {
-                    // Empty slot
+                    // Empty slots
                     itemContainer.add().height(20).row();
                     itemContainer.add(slotContainer).size(65, 65).row();
                     itemContainer.add().height(20); 
@@ -186,6 +204,89 @@ public class InventoryUI {
             inventoryTable.row();
         }
     }
+
+    private void showRemoveDialog(String itemName, int maxQuantity) {
+        final Dialog dialog = new Dialog("", skin);
+        Table content = new Table();
+        content.pad(20);
+        
+        // Item name for removal
+        Label titleLabel = new Label("Remove how many [" + itemName + "]?", 
+            new Label.LabelStyle(FancyFontHelper.getInstance().getFont(TITLE_COLOR, 16), TITLE_COLOR));
+        content.add(titleLabel).colspan(3).padBottom(20).row();
+        
+        // Quantity selection
+        final int[] quantity = {1};
+        final Label quantityLabel = new Label("1", skin);
+        quantityLabel.setAlignment(Align.center);
+        
+        // +/- button
+        TextButton minusBtn = new TextButton("-", skin);
+        minusBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                quantity[0] = Math.max(1, quantity[0] - 1);
+                quantityLabel.setText(String.valueOf(quantity[0]));
+            }
+        });
+        
+        TextButton plusBtn = new TextButton("+", skin);
+        plusBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                quantity[0] = Math.min(maxQuantity, quantity[0] + 1);
+                quantityLabel.setText(String.valueOf(quantity[0]));
+            }
+        });
+        
+        content.add(minusBtn).width(40).height(40);
+        content.add(quantityLabel).width(60).height(40).pad(0, 10, 0, 10);
+        content.add(plusBtn).width(40).height(40).row();
+        
+        Label helpLabel = new Label("to adjust amount", skin);
+        content.add(helpLabel).colspan(3).padTop(5).padBottom(20).row();
+        
+        // confirm/cancel buttons
+        TextButton cancelButton = new TextButton("Cancel", skin);
+        cancelButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dialog.hide();
+                selectedItemName = null;
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        Gdx.input.setInputProcessor(stage);
+                    }
+                });
+            }
+        });
+        
+        TextButton confirmButton = new TextButton("Confirm", skin);
+        confirmButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                player.getInventory().removeItem(itemName, quantity[0]);
+                dialog.hide();
+                selectedItemName = null;
+                refreshInventoryGrid();
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        Gdx.input.setInputProcessor(stage);
+                    }
+                });
+            }
+        });
+        
+        Table buttonTable = new Table();
+        buttonTable.add(confirmButton).width(120).height(40).padRight(20);
+        buttonTable.add(cancelButton).width(120).height(40);
+        content.add(buttonTable).colspan(3).padTop(20);
+        
+        dialog.getContentTable().add(content);
+        dialog.show(stage);
+    }
     
     public boolean isVisible() {
         return isVisible;
@@ -194,11 +295,14 @@ public class InventoryUI {
     public void setVisible(boolean visible) {
         this.isVisible = visible;
         mainTable.setVisible(visible);
-        
-        // Set input processor when visible
+
         if (visible) {
             refreshInventoryGrid();
             Gdx.input.setInputProcessor(stage);
+        } else {
+            if (Gdx.input.getInputProcessor() == stage) {
+            Gdx.input.setInputProcessor(null);
+            }
         }
     }
     

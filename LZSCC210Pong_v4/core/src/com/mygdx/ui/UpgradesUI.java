@@ -101,7 +101,7 @@ public class UpgradesUI {
                 }
             }
         });
-        stage.addActor(closeButtonTable); // Add it as a separate actor for guaranteed top-right positioning
+        stage.addActor(closeButtonTable);
     
         // Upgrades Table
         upgradesTable = new Table(skin);
@@ -138,28 +138,24 @@ public class UpgradesUI {
         TextButton.TextButtonStyle buttonStyle = createButtonStyle(font);
 
         final int[] levelToShow = {0};
-        final int maxLevels = 4;
+        final int maxLevels = names.length;
 
         Label nameLabel = new Label(names[levelToShow[0]], labelStyle);
         Label resourcesLabel = new Label(resources[levelToShow[0]], labelStyle);
         Label effectsLabel = new Label(effects[levelToShow[0]], labelStyle);
         TextButton upgradeButton = new TextButton("Upgrade", buttonStyle);
-        Label upgradeLabel = new Label("Fully Upgrade", labelStyle);
-        upgradesTable.add(nameLabel).padLeft(10).width(120);
+
+        upgradesTable.add(nameLabel).padLeft(10);
         upgradesTable.add(resourcesLabel);
         upgradesTable.add(effectsLabel);
-        //upgradesTable.add(upgradeButton).width(120).height(40).padLeft(10);
-        Cell<TextButton> buttonCell = upgradesTable.add(upgradeButton).width(100).height(40).padLeft(10);
-
+        upgradesTable.add(upgradeButton).width(120).height(40).padLeft(10);
         upgradesTable.row();
 
         upgradeButton.addListener(new ClickListener() {
-           
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 String requiredResources = resources[levelToShow[0]];
                 boolean canUpgrade = checkResources(requiredResources);
-                if (upgradeButton.isDisabled() || levelToShow[0] >= maxLevels ) return;
 
                 if (canUpgrade && levelToShow[0] < maxLevels) {
                     deductResources(requiredResources);
@@ -175,13 +171,10 @@ public class UpgradesUI {
                         effectsLabel.setText(effects[levelToShow[0]]);
                     }
 
-                    if (levelToShow[0] >= maxLevels) {
-                        upgradeButton.remove();
-                        Label upgradedLabel = new Label("Fully Upgraded", labelStyle);
-                        buttonCell.setActor(upgradedLabel);
-
+                    if (levelToShow[0] == maxLevels) {
+                        upgradeButton.setText("Fully Upgraded");
+                        upgradeButton.setDisabled(true);
                     }
-                    
                 } else if (!canUpgrade) {
                     System.out.println("Not enough resources to upgrade!");
                 }
@@ -244,7 +237,7 @@ public class UpgradesUI {
             "10 Common Building Materials",
             "30 Uncommon Building Materials",
             "50 Rare Building Materials",
-            "70 Legendary Building Materials"
+            "70 Epic Building Materials"
             },
             new String[]{
             "Double Fuel Capacity",
@@ -270,7 +263,7 @@ public class UpgradesUI {
                 "10 Common Building Materials", //need to be verify/changed to the correct resources, with the correct String
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Legendary Building Materials"
+                "70 Epic Building Materials"
                 },
                 new String[]{
                 "Double Health",
@@ -297,7 +290,7 @@ public class UpgradesUI {
                 "10 Common Building Materials",//need to be verify/changed to the correct resources, with the correct String
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Legendary Building Materials"
+                "70 Epic Building Materials"
                 },
                 new String[]{
                 "Double Oxygen",
@@ -328,7 +321,7 @@ public class UpgradesUI {
                 "10 Common Building Materials",
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Legendary Building Materials"
+                "70 Epic Building Materials"
             },
             new String[]{
                 "Choose between 1 locations",
@@ -359,7 +352,7 @@ public class UpgradesUI {
                 "10 Common Building Materials",
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Legendary Building Materials"
+                "70 Epic Building Materials"
             },
             new String[]{
                 "More Inventory Space",
@@ -391,7 +384,7 @@ public class UpgradesUI {
                 "10 Common Building Materials",
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Legendary Building Materials"
+                "70 Epic Building Materials"
             },
             new String[]{
                 "+1 resource level",
