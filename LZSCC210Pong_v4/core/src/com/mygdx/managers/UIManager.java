@@ -70,7 +70,23 @@ public class UIManager {
         this.inventoryUI = new InventoryUI(PongGame.getInstance(), player);
         this.upgradesUI = new UpgradesUI(player,player.getInventory(), universe, inventoryUI);
         this.scannerUI = new ScannerUI(player, universe);
-        
+        scannerUI.setDestinationListener(idx -> {
+            //fuel cost logic for system
+            float cost = 25f;
+            if (player.getFuel() < cost) {
+                System.out.println("Not enough fuel!");
+                return;
+            }
+            player.setFuel(player.getFuel() - cost);
+
+            //actually change
+            gameScreen.getWorldManager().travelTo(idx);
+
+            //close scanner
+            scannerUI.setVisible(false);
+            scannerOpen = false;
+            Gdx.input.setInputProcessor(uiStage);
+        });
         
         inventoryUI.setCloseButtonListener(new InventoryUI.CloseButtonListener() {
             @Override

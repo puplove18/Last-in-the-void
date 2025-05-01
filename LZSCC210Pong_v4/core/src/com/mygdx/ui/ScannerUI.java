@@ -29,6 +29,8 @@ public class ScannerUI {
     private final Player player;
     private Universe universe;
 
+    private DestinationListener destListener;
+
     private InputProcessor previousProcessor;
     private Texture backgroundTexture;
     private NinePatchDrawable panelBackground;
@@ -68,6 +70,10 @@ public class ScannerUI {
         backgroundTexture = new Texture(pixmap);
         panelBackground = new NinePatchDrawable(new NinePatch(backgroundTexture, 0, 0, 0, 0));
         pixmap.dispose();
+    }
+
+    public void setDestinationListener(DestinationListener l) {
+        this.destListener = l;
     }
 
     private void createUI() {
@@ -155,17 +161,21 @@ public class ScannerUI {
             chooseButton.clearListeners();
             chooseButton.addListener(new ClickListener() {
                 @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    boolean pressed = super.touchDown(event, x, y, pointer, button);
-                    event.stop();
+                public boolean touchDown(InputEvent e, float x, float y, int p, int b) {
+                    boolean pressed = super.touchDown(e,x,y,p,b);
+                    e.stop();
                     return pressed;
                 }
                 @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    universe.chooseDestination(destinationIndex);
+                public void clicked(InputEvent e, float x, float y) {
+                    if (destListener != null) {
+                        destListener.onDestinationChosen(destinationIndex);
+                    }
                     getAllDestinationsInTable();
                 }
             });
+
+
 
 
 
@@ -229,4 +239,9 @@ public class ScannerUI {
             }
         }
     }
+
+    public interface DestinationListener {
+        void onDestinationChosen(int index);
+    }
+
 }

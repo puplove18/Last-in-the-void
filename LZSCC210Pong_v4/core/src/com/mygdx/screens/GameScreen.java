@@ -73,14 +73,41 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         nextButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                // Choose a random next system:
                 StarSystem[] dests = worldManager.getUniverse().getDestinations();
                 int idx = rand.nextInt(dests.length);
-                renderManager.setSelectedBackgroundType(
-                        dests[idx].getPlanets()[0].getType()
-                );
-                worldManager.travelTo(idx);
+
+                // Compute your fuel cost (for example, 10 units per jump)
+                float cost = 10f;
+                Player ship = playerManager.getPlayer();
+
+                // Only jump if you have enough fuel
+                if (ship.getFuel() >= cost) {
+                    // Deduct fuel
+                    ship.setFuel(ship.getFuel() - cost);
+
+                    // Now actually travel
+                    renderManager.setSelectedBackgroundType(
+                            dests[idx].getPlanets()[0].getType()
+                    );
+                    worldManager.travelTo(idx);
+
+                    // Reset to planet‐view camera
+                    systemView = false;
+                    camera.position.set(
+                            PongGame.getInstance().getWindowWidth()/2f,
+                            PongGame.getInstance().getWindowHeight()/2f,
+                            0
+                    );
+                    camera.update();
+                } else {
+                    // Optional: feedback to player
+                    System.out.println("Not enough fuel to jump!");
+                }
             }
         });
+
+
         uiManager.getUIStage().addActor(nextButton);
     }
 
@@ -114,26 +141,30 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
 
         if (systemView) {
             if (!uiManager.isScannerOpen() && Gdx.input.justTouched()) {
-                Vector3 touch = new Vector3(
-                        Gdx.input.getX(),
-                        Gdx.input.getY(),
-                        0
-                );
+                Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                 camera.unproject(touch);
                 int idx = renderManager.getPlanetIndexAt(touch.x, touch.y);
                 if (idx >= 0) {
-                    Planet clicked = renderManager.getCurrentSystemPlanets().get(idx);
-                    renderManager.setSelectedBackgroundType(clicked.getType());
-                    worldManager.travelTo(idx);
-                    systemView = false;
-                    camera.position.set(
-                            PongGame.getInstance().getWindowWidth() / 2f,
-                            PongGame.getInstance().getWindowHeight() / 2f,
-                            0
-                    );
-                    camera.update();
+                    float cost = 10f; //cost of travel planet
+                    if (playerManager.getPlayer().getFuel() >= cost) {
+                        playerManager.getPlayer()
+                                .setFuel(playerManager.getPlayer().getFuel() - cost);
+                        Planet clicked = renderManager.getCurrentSystemPlanets().get(idx);
+                        renderManager.setSelectedBackgroundType(clicked.getType());
+                        worldManager.travelTo(idx);
+                        systemView = false;
+                        camera.position.set(
+                                PongGame.getInstance().getWindowWidth()/2f,
+                                PongGame.getInstance().getWindowHeight()/2f,
+                                0
+                        );
+                        camera.update();
+                    } else {
+                        System.out.println("Not enough fuel!");
+                    }
                 }
             }
+
             renderManager.renderSystemView();
             uiManager.render(delta);
             if (eventManager.isEventActive()) {
@@ -192,5 +223,9 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
 
     public void togglePause() {
         this.paused = !this.paused;
+    }
+
+    public GameWorldManager getWorldManager() {
+        return worldManager;
     }
 }
