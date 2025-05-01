@@ -99,11 +99,11 @@ public class RenderManager {
         currentSystemTextures = new ArrayList<>();
         currentSystemPlanets = new ArrayList<>();
         currentSystemPlanets.add(planets[0]);
-        currentSystemTextures.add(randomVariant(planets[0].getType()));
+        currentSystemTextures.add(randomVariant(planets[0].getType(), currentSystemTextures));
         for (int i = 1; i <= displayCount; i++) {
             Planet p = planets[i];
             currentSystemPlanets.add(p);
-            currentSystemTextures.add(randomVariant(p.getType()));
+            currentSystemTextures.add(randomVariant(p.getType(), currentSystemTextures));
         }
         planetAngles.clear();
         for (int i = 0; i < currentSystemPlanets.size(); i++) {
@@ -111,9 +111,22 @@ public class RenderManager {
         }
     }
 
-    private Texture randomVariant(Planet.Type type) {
+    private Texture randomVariant(Planet.Type type, List<Texture> currentSystemTextures) {
         List<Texture> list = planetTextureVariants.get(type);
-        return list.get(rand.nextInt(list.size()));
+        Texture planetTexture = null;
+        System.out.println(currentSystemTextures.size());
+        if (currentSystemTextures.size() != 0) {
+            // Check to ensure there is no duplicate textures in the star system
+            while (planetTexture == null) {
+                Texture tempTexture = list.get(rand.nextInt(list.size()));
+                if (!currentSystemTextures.contains(tempTexture)) {
+                    planetTexture = tempTexture;
+                }
+            }
+        } else {
+            planetTexture = list.get(rand.nextInt(list.size()));
+        }
+        return planetTexture;
     }
 
     public void renderSystemView() {
