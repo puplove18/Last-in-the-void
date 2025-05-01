@@ -114,7 +114,6 @@ public class RenderManager {
     private Texture randomVariant(Planet.Type type, List<Texture> currentSystemTextures) {
         List<Texture> list = planetTextureVariants.get(type);
         Texture planetTexture = null;
-        System.out.println(currentSystemTextures.size());
         if (currentSystemTextures.size() != 0) {
             // Check to ensure there is no duplicate textures in the star system
             while (planetTexture == null) {
