@@ -148,7 +148,9 @@ public class UpgradesUI {
         upgradesTable.add(nameLabel).padLeft(10);
         upgradesTable.add(resourcesLabel);
         upgradesTable.add(effectsLabel);
-        upgradesTable.add(upgradeButton).width(120).height(40).padLeft(10);
+        //upgradesTable.add(upgradeButton).width(120).height(40).padLeft(10);
+        Cell<TextButton> buttonCell = upgradesTable.add(upgradeButton).width(120).height(40).padLeft(10);
+
         upgradesTable.row();
 
         upgradeButton.addListener(new ClickListener() {
@@ -174,9 +176,10 @@ public class UpgradesUI {
                     }
 
                     if (levelToShow[0] >= maxLevels) {
-                        upgradeButton.setText("Fully Upgraded");
-                        upgradeButton.setDisabled(true);
                         upgradeButton.remove();
+                        Label upgradedLabel = new Label("Fully Upgraded", labelStyle);
+                        buttonCell.setActor(upgradedLabel);
+
                     }
                     
                 } else if (!canUpgrade) {
