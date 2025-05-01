@@ -85,7 +85,7 @@ public class PlayerManager {
         } else {
             healthFont = statsFontRed;
         }
-        healthFont.draw(batch, "Health: " + (int) currentHealth + "%", statsX, statsY - 20);
+        healthFont.draw(batch, "Hull Integrity: " + (int) currentHealth + "%", statsX, statsY - 20);
 
         // Select the correct pre-initialized font based on fuel color
         Color fuelColor = getResourceColor(currentFuel);
@@ -97,7 +97,7 @@ public class PlayerManager {
         } else {
             fuelFont = statsFontRed;
         }
-        fuelFont.draw(batch, "Fuel: " + (int) currentFuel + "%", statsX, statsY - 40);
+        fuelFont.draw(batch, "Ship Fuel: " + (int) currentFuel + "%", statsX, statsY - 40);
 
         // Select the correct pre-initialized font based on oxygen color
         Color oxygenColor = getResourceColor(currentOxygen);
@@ -109,7 +109,7 @@ public class PlayerManager {
         } else {
             oxygenFont = statsFontRed;
         }
-        oxygenFont.draw(batch, "Oxygen: " + (int) currentOxygen + "%", statsX, statsY - 60);
+        oxygenFont.draw(batch, "Life Support: " + (int) currentOxygen + "%", statsX, statsY - 60);
     }
     
     private Color getResourceColor(double value) {
