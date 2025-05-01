@@ -36,7 +36,7 @@ public class Universe {
 
     //Main constructor to build an empty universe with the starting universe as current destination and generate the first set of choices for travel
     public Universe(){
-        this.maxDest = 3;
+        this.maxDest = 2;
         this.depth = 0;
         this.currentPosition = new StarSystem();
         this.generateDestinations(1);

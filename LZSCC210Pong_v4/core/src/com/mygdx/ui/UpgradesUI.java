@@ -29,7 +29,7 @@ public class UpgradesUI {
     private ScrollPane scrollPane;
     private final Player player;
     private Universe universe;
-    private int dis = 1;
+    private int dis = 2;
     private int inventoryCapacity = 1;
     private int resourcesLevel = 1; 
 

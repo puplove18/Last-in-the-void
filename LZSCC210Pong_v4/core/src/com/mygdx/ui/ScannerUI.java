@@ -142,7 +142,7 @@ public class ScannerUI {
     
             Label systemName = new Label(system.getName(), skin);
             Label location = new Label("Tier " + system.getTier(), skin);
-            Label details = new Label(system.getNumPlanets() + " planets", skin);
+            Label details = new Label(system.getNumPlanets()-1 + " planets", skin);
             TextButton chooseButton = new TextButton("Choose", skin);
     
             final int destinationIndex = i;
