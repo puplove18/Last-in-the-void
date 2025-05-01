@@ -139,8 +139,6 @@ public class ScannerUI {
     
         for (int i = 0; i < destinations.length; i++) {
             StarSystem system = destinations[i];
-            System.out.println(destinations.length);
-            System.out.println(i);
     
             Label systemName = new Label(system.getName(), skin);
             Label location = new Label("Tier " + system.getTier(), skin);
