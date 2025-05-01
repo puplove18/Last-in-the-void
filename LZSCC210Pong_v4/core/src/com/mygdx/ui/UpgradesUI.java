@@ -138,13 +138,13 @@ public class UpgradesUI {
         TextButton.TextButtonStyle buttonStyle = createButtonStyle(font);
 
         final int[] levelToShow = {0};
-        final int maxLevels = names.length;
+        final int maxLevels = 4;
 
         Label nameLabel = new Label(names[levelToShow[0]], labelStyle);
         Label resourcesLabel = new Label(resources[levelToShow[0]], labelStyle);
         Label effectsLabel = new Label(effects[levelToShow[0]], labelStyle);
         TextButton upgradeButton = new TextButton("Upgrade", buttonStyle);
-
+        Label upgradeLabel = new Label("Fully Upgrade", labelStyle);
         upgradesTable.add(nameLabel).padLeft(10);
         upgradesTable.add(resourcesLabel);
         upgradesTable.add(effectsLabel);
@@ -152,10 +152,12 @@ public class UpgradesUI {
         upgradesTable.row();
 
         upgradeButton.addListener(new ClickListener() {
+           
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 String requiredResources = resources[levelToShow[0]];
                 boolean canUpgrade = checkResources(requiredResources);
+                if (upgradeButton.isDisabled() || levelToShow[0] >= maxLevels ) return;
 
                 if (canUpgrade && levelToShow[0] < maxLevels) {
                     deductResources(requiredResources);
@@ -171,10 +173,12 @@ public class UpgradesUI {
                         effectsLabel.setText(effects[levelToShow[0]]);
                     }
 
-                    if (levelToShow[0] == maxLevels) {
+                    if (levelToShow[0] >= maxLevels) {
                         upgradeButton.setText("Fully Upgraded");
                         upgradeButton.setDisabled(true);
+                        upgradeButton.remove();
                     }
+                    
                 } else if (!canUpgrade) {
                     System.out.println("Not enough resources to upgrade!");
                 }
