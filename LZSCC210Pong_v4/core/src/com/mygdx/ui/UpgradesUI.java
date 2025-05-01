@@ -237,7 +237,7 @@ public class UpgradesUI {
             "10 Common Building Materials",
             "30 Uncommon Building Materials",
             "50 Rare Building Materials",
-            "70 Epic Building Materials"
+            "70 Legendary Building Materials"
             },
             new String[]{
             "Double Fuel Capacity",
@@ -263,7 +263,7 @@ public class UpgradesUI {
                 "10 Common Building Materials", //need to be verify/changed to the correct resources, with the correct String
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Epic Building Materials"
+                "70 Legendary Building Materials"
                 },
                 new String[]{
                 "Double Health",
@@ -290,7 +290,7 @@ public class UpgradesUI {
                 "10 Common Building Materials",//need to be verify/changed to the correct resources, with the correct String
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Epic Building Materials"
+                "70 Legendary Building Materials"
                 },
                 new String[]{
                 "Double Oxygen",
@@ -321,7 +321,7 @@ public class UpgradesUI {
                 "10 Common Building Materials",
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Epic Building Materials"
+                "70 Legendary Building Materials"
             },
             new String[]{
                 "Choose between 1 locations",
@@ -352,7 +352,7 @@ public class UpgradesUI {
                 "10 Common Building Materials",
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Epic Building Materials"
+                "70 Legendary Building Materials"
             },
             new String[]{
                 "More Inventory Space",
@@ -384,7 +384,7 @@ public class UpgradesUI {
                 "10 Common Building Materials",
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Epic Building Materials"
+                "70 Legendary Building Materials"
             },
             new String[]{
                 "+1 resource level",
