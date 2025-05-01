@@ -153,10 +153,20 @@ public class RenderManager {
         float cx = sw * 0.5f;
         float cy = sh * 0.5f;
         Texture starTex = currentSystemTextures.get(0);
-        float starSize = sh * 0.3f;
-        float sx = cx - starSize * 0.5f;
-        float sy = cy - starSize * 0.5f;
-        planetBounds.add(new Rectangle(sx, sy, starSize, starSize));
+        float starSize    = sh * 0.3f;
+        float sx          = cx - starSize * 0.5f;
+        float sy          = cy - starSize * 0.5f;
+        //draw full size
+        batch.draw(starTex, sx, sy, starSize, starSize);
+
+        //hitbox centered
+        float coef    = 0.5f;     //clickable size as coef of the texture
+        float hit     = starSize * coef;
+        float hitX        = cx - hit * 0.5f;
+        float hitY        = cy - hit * 0.5f;
+        planetBounds.add(new Rectangle(hitX, hitY, hit, hit));
+
+
         batch.draw(starTex, sx, sy, starSize, starSize);
         int count = currentSystemTextures.size() - 1;
         if (count <= 0) return;
