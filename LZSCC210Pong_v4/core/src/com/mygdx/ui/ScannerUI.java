@@ -57,6 +57,8 @@ public class ScannerUI {
         void onCloseButtonClicked();
     }
 
+
+
     private CloseButtonListener closeButtonListener;
 
     public void setCloseButtonListener(CloseButtonListener listener) {

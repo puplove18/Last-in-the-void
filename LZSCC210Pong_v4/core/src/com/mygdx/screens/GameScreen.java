@@ -113,7 +113,7 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (systemView) {
-            if (Gdx.input.justTouched()) {
+            if (!uiManager.isScannerOpen() && Gdx.input.justTouched()) {
                 Vector3 touch = new Vector3(
                         Gdx.input.getX(),
                         Gdx.input.getY(),
