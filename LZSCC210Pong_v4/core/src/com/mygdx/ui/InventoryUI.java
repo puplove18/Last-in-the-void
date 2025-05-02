@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -24,6 +25,8 @@ import com.badlogic.gdx.utils.Align;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.objects.Player;
 import com.mygdx.pong.PongGame;
+
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -38,6 +41,7 @@ public class InventoryUI {
     private Table rootTable;
     
     private TextureAtlas atlas;
+    private TextureAtlas itemAtlas;
     private TextureRegionDrawable innerBg;
     private TextureRegionDrawable slotBg;
     
@@ -52,6 +56,7 @@ public class InventoryUI {
 
     private static final Color TITLE_COLOR = Color.WHITE;
     private static final Color TEXT_COLOR = Color.LIGHT_GRAY;
+    private Map<String, TextureRegionDrawable> itemIcons = new HashMap<>();
     private int inventoryCapacity = 1;
 
 
@@ -68,6 +73,7 @@ public class InventoryUI {
         
         initializePanelBackground();
         createUI();
+        loadItemIcons();
     }
     // Getter for inventoryCapacity
     public int getInventoryCapacity() {
@@ -98,6 +104,31 @@ public class InventoryUI {
         panelBackground = new NinePatchDrawable(new NinePatch(bgTex, 0, 0, 0, 0));
         backgroundTexture = bgTex;
         pixmap.dispose();
+    }
+
+    private void loadItemIcons() {
+        itemAtlas = new TextureAtlas(Gdx.files.internal("resources.atlas"));
+        
+        // Biomass resources  !! "epic" in atlas = "Legendary" in game !!
+        itemIcons.put("Common Biomass", new TextureRegionDrawable(itemAtlas.findRegion("common_biomass")));
+        itemIcons.put("Uncommon Biomass", new TextureRegionDrawable(itemAtlas.findRegion("uncommon_biomass")));
+        itemIcons.put("Rare Biomass", new TextureRegionDrawable(itemAtlas.findRegion("rare_biomass")));
+        itemIcons.put("Legendary Biomass", new TextureRegionDrawable(itemAtlas.findRegion("epic_biomass")));
+        
+        // Fuel resources
+        itemIcons.put("Common Fuel", new TextureRegionDrawable(itemAtlas.findRegion("common_fuel")));
+        itemIcons.put("Uncommon Fuel", new TextureRegionDrawable(itemAtlas.findRegion("uncommon_fuel")));
+        itemIcons.put("Rare Fuel", new TextureRegionDrawable(itemAtlas.findRegion("rare_fuel")));
+        itemIcons.put("Legendary Fuel", new TextureRegionDrawable(itemAtlas.findRegion("epic_fuel")));
+        
+        // Building Materials resources - note typo in atlas: "buidling" vs "building"
+        itemIcons.put("Common Building Materials", new TextureRegionDrawable(itemAtlas.findRegion("common_building_material")));
+        itemIcons.put("Uncommon Building Materials", new TextureRegionDrawable(itemAtlas.findRegion("uncommon_buidling_material"))); // Note typo in atlas
+        itemIcons.put("Rare Building Materials", new TextureRegionDrawable(itemAtlas.findRegion("rare_buidling_material"))); // Note typo in atlas
+        itemIcons.put("Legendary Building Materials", new TextureRegionDrawable(itemAtlas.findRegion("epic_building_material")));
+        
+        TextureRegionDrawable defaultIcon = new TextureRegionDrawable(itemAtlas.findRegion("defaultIcon"));
+        itemIcons.put("default", defaultIcon);
     }
     
     private void createUI() {
@@ -151,7 +182,6 @@ public class InventoryUI {
     
     private void refreshInventoryGrid() {
         inventoryTable.clear();
-        
         Map<String, Integer> items = player.getInventory().getItems();
         System.out.println("DEBUG: Inventory items: " + items);
        
@@ -169,7 +199,10 @@ public class InventoryUI {
                 if (items != null && index < items.keySet().size()) {
                     String itemName = (String) items.keySet().toArray()[index];
                     int quantity = items.get(itemName);
-
+                    
+                    TextureRegionDrawable icon = itemIcons.getOrDefault(itemName, itemIcons.get("missing"));
+                    Image iconImage = new Image(icon);
+                    slotContainer.add(iconImage).size(48, 48).pad(5);
                     final String currentItemName = itemName;
                     final int currentQuantity = quantity;
                     slotContainer.addListener(new ClickListener() {
