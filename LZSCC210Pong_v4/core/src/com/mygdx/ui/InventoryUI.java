@@ -108,23 +108,29 @@ public class InventoryUI {
 
     private void loadItemIcons() {
         itemAtlas = new TextureAtlas(Gdx.files.internal("resources.atlas"));
-        
+        // For the biomass images, i used the resources from;
+        // Free Game Assets. (2023, June 23). Free 40 Loot Icons 32x32 Pixel Art. Itch.io. Retrieved [2025/4/30],
+        // from https://free-game-assets.itch.io/free-40-loot-icons-pixel-art
         // Biomass resources  !! "epic" in atlas = "Legendary" in game !!
         itemIcons.put("Common Biomass", new TextureRegionDrawable(itemAtlas.findRegion("common_biomass")));
         itemIcons.put("Uncommon Biomass", new TextureRegionDrawable(itemAtlas.findRegion("uncommon_biomass")));
         itemIcons.put("Rare Biomass", new TextureRegionDrawable(itemAtlas.findRegion("rare_biomass")));
         itemIcons.put("Legendary Biomass", new TextureRegionDrawable(itemAtlas.findRegion("epic_biomass")));
         
+        // For the fuel images, i used the resources from;
+        // Free Game Assets. (2021, May 4). Free Paint Pixel Art Icons. Itch.io. Retrieved [2025/4/30],
+        // from https://free-game-assets.itch.io/free-paint-pixel-art-icon-pack
         // Fuel resources
         itemIcons.put("Common Fuel", new TextureRegionDrawable(itemAtlas.findRegion("common_fuel")));
         itemIcons.put("Uncommon Fuel", new TextureRegionDrawable(itemAtlas.findRegion("uncommon_fuel")));
         itemIcons.put("Rare Fuel", new TextureRegionDrawable(itemAtlas.findRegion("rare_fuel")));
         itemIcons.put("Legendary Fuel", new TextureRegionDrawable(itemAtlas.findRegion("epic_fuel")));
         
-        // Building Materials resources - note typo in atlas: "buidling" vs "building"
+        // For the building material images, i drew them myself using the piskelapp.com
+        // Building Materials resources
         itemIcons.put("Common Building Materials", new TextureRegionDrawable(itemAtlas.findRegion("common_building_material")));
-        itemIcons.put("Uncommon Building Materials", new TextureRegionDrawable(itemAtlas.findRegion("uncommon_buidling_material"))); // Note typo in atlas
-        itemIcons.put("Rare Building Materials", new TextureRegionDrawable(itemAtlas.findRegion("rare_buidling_material"))); // Note typo in atlas
+        itemIcons.put("Uncommon Building Materials", new TextureRegionDrawable(itemAtlas.findRegion("uncommon_buidling_material")));
+        itemIcons.put("Rare Building Materials", new TextureRegionDrawable(itemAtlas.findRegion("rare_buidling_material"))); 
         itemIcons.put("Legendary Building Materials", new TextureRegionDrawable(itemAtlas.findRegion("epic_building_material")));
         
         TextureRegionDrawable defaultIcon = new TextureRegionDrawable(itemAtlas.findRegion("defaultIcon"));
