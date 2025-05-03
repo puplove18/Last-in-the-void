@@ -25,6 +25,7 @@ import com.mygdx.pong.PongGame;
 import com.mygdx.ui.EventUI;
 import com.mygdx.objects.Event;
 import com.mygdx.events.PlanetLandingEvent;
+import com.mygdx.helpers.ScreenType;
 
 import java.util.Random;
 
@@ -176,6 +177,10 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                         }
                     } else {
                         System.out.println("Not enough fuel!");
+                        System.out.println("You were lost in space");
+
+                        PongGame.getInstance().changeScreen(this, ScreenType.MENU_UI);
+                        return;
                     }
                 } else {
                     System.out.println("This planet has already been visited and harvested!");
