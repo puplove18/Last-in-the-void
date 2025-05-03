@@ -145,17 +145,17 @@ public class UpgradesUI {
         Label effectsLabel = new Label(effects[levelToShow[0]], labelStyle);
         TextButton upgradeButton = new TextButton("Upgrade", buttonStyle);
 
-        upgradesTable.add(nameLabel).padLeft(10);
+        upgradesTable.add(nameLabel);
         upgradesTable.add(resourcesLabel);
         upgradesTable.add(effectsLabel);
-        upgradesTable.add(upgradeButton).width(120).height(40).padLeft(10);
+        Cell<TextButton> buttonCell = upgradesTable.add(upgradeButton).width(100).height(40); //make the button place a cell to hold for the "end" String
         upgradesTable.row();
 
         upgradeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 String requiredResources = resources[levelToShow[0]];
-                boolean canUpgrade = checkResources(requiredResources);
+                boolean canUpgrade = checkResources(requiredResources); 
 
                 if (canUpgrade && levelToShow[0] < maxLevels) {
                     deductResources(requiredResources);
@@ -172,8 +172,9 @@ public class UpgradesUI {
                     }
 
                     if (levelToShow[0] == maxLevels) {
-                        upgradeButton.setText("Fully Upgraded");
-                        upgradeButton.setDisabled(true);
+                        upgradeButton.remove();
+                        Label upgradedLabel = new Label("Fully Upgraded", labelStyle);
+                        buttonCell.setActor(upgradedLabel);
                     }
                 } else if (!canUpgrade) {
                     System.out.println("Not enough resources to upgrade!");
@@ -237,7 +238,7 @@ public class UpgradesUI {
             "10 Common Building Materials",
             "30 Uncommon Building Materials",
             "50 Rare Building Materials",
-            "70 Epic Building Materials"
+            "70 Legendary Building Materials"
             },
             new String[]{
             "Double Fuel Capacity",
@@ -263,7 +264,7 @@ public class UpgradesUI {
                 "10 Common Building Materials", //need to be verify/changed to the correct resources, with the correct String
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Epic Building Materials"
+                "70 Legendary Building Materials"
                 },
                 new String[]{
                 "Double Health",
@@ -290,7 +291,7 @@ public class UpgradesUI {
                 "10 Common Building Materials",//need to be verify/changed to the correct resources, with the correct String
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Epic Building Materials"
+                "70 Legendary Building Materials"
                 },
                 new String[]{
                 "Double Oxygen",
@@ -321,7 +322,7 @@ public class UpgradesUI {
                 "10 Common Building Materials",
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Epic Building Materials"
+                "70 Legendary Building Materials"
             },
             new String[]{
                 "Choose between 1 locations",
@@ -352,7 +353,7 @@ public class UpgradesUI {
                 "10 Common Building Materials",
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Epic Building Materials"
+                "70 Legendary Building Materials"
             },
             new String[]{
                 "More Inventory Space",
@@ -384,7 +385,7 @@ public class UpgradesUI {
                 "10 Common Building Materials",
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Epic Building Materials"
+                "70 Legendary Building Materials"
             },
             new String[]{
                 "+1 resource level",
