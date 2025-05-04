@@ -10,26 +10,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.audio.AudioManager;
+import com.mygdx.events.PlanetLandingEvent;
+import com.mygdx.helpers.ScreenType;
 import com.mygdx.managers.EventManager;
 import com.mygdx.managers.GameWorldManager;
 import com.mygdx.managers.InputHandler;
 import com.mygdx.managers.PlayerManager;
 import com.mygdx.managers.RenderManager;
 import com.mygdx.managers.UIManager;
+import com.mygdx.objects.Event;
 import com.mygdx.objects.Inventory;
-import com.mygdx.objects.Player;
 import com.mygdx.objects.Planet;
+import com.mygdx.objects.Player;
 import com.mygdx.objects.StarSystem;
 import com.mygdx.objects.Universe;
 import com.mygdx.pong.PongGame;
 import com.mygdx.ui.EventUI;
-import com.mygdx.objects.Event;
-import com.mygdx.events.PlanetLandingEvent;
-import com.mygdx.helpers.ScreenType;
-
 import java.util.Random;
-
-import javax.swing.event.ChangeEvent;
 
 public class GameScreen extends ScreenAdapter implements EventUI.EventCompletionListener {
     private OrthographicCamera camera;
@@ -145,7 +142,7 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (systemView) {
-            if (!uiManager.isScannerOpen() && Gdx.input.justTouched()) {
+            if (!uiManager.isSomethingOpen() && Gdx.input.justTouched()) {
                 Vector3 touch = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                 camera.unproject(touch);
                 int idx = renderManager.getPlanetIndexAt(touch.x, touch.y);

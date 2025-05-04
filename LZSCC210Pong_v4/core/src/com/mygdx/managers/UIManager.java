@@ -272,6 +272,9 @@ public class UIManager {
     public boolean isUpgradesOpen() {
         return showUpgradesGUI;
     }
+    public boolean isSomethingOpen() {
+        return inventoryOpen || showUpgradesGUI || scannerOpen;
+    }
     
     public void toggleInventory() {
         inventoryOpen = !inventoryOpen;
