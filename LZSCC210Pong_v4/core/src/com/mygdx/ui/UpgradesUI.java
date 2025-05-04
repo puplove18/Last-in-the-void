@@ -113,10 +113,10 @@ public class UpgradesUI {
         Label.LabelStyle headerStyle = new Label.LabelStyle(headerFont, TITLE_COLOR);
     
         float width = 400;
-        upgradesTable.add(new Label("Upgrade", headerStyle)).width(width * 0.25f).padBottom(10).padLeft(10);
-        upgradesTable.add(new Label("Resources Needed", headerStyle)).width(width * 0.25f).padBottom(10);
-        upgradesTable.add(new Label("Effects", headerStyle)).width(width * 0.25f).padBottom(10);
-        upgradesTable.add(new Label("Action", headerStyle)).width(width * 0.25f).padBottom(10);
+        upgradesTable.add(new Label("Upgrade", headerStyle)).width(width * 0.20f).padBottom(10).padLeft(10);
+        upgradesTable.add(new Label("Resources Needed", headerStyle)).width(width * 0.20f).padBottom(10);
+        upgradesTable.add(new Label("Effects", headerStyle)).width(width * 0.20f).padBottom(10);
+        upgradesTable.add(new Label("Action", headerStyle)).width(width * 0.20f).padBottom(10);
         upgradesTable.row();
     
         scrollPane = new ScrollPane(upgradesTable, skin);
@@ -132,7 +132,7 @@ public class UpgradesUI {
     
     
     private void createUpgradeChain(String[] names, String[] resources, String[] effects, Runnable upgradeAction) {
-        int fontSize = 10;
+        int fontSize = 8;
         BitmapFont font = FancyFontHelper.getInstance().getFont(TEXT_COLOR, fontSize);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, TEXT_COLOR);
         TextButton.TextButtonStyle buttonStyle = createButtonStyle(font);
