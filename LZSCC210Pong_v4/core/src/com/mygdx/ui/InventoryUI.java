@@ -212,7 +212,7 @@ public class InventoryUI {
         // tier^2 is the recovery amount
         // Common = 1, Uncommon = 4, Rare = 8, Legendary = 16
         if (itemName.contains("Common")) {
-            return 1;
+            return 2;
         } else if (itemName.contains("Uncommon")) {
             return 4;
         } else if (itemName.contains("Rare")) {
