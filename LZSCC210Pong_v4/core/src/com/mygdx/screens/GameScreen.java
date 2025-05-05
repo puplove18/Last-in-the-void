@@ -175,8 +175,14 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                 int idx = renderManager.getPlanetIndexAt(touch.x, touch.y);
                 if (idx >= 0) {
                     Planet clicked = renderManager.getCurrentSystemPlanets().get(idx);
+                if (clicked.getType() == Planet.Type.Star) {
+                    System.out.println("This is a star planet!");
+                    System.out.println("Not enough fuel!");
+                    System.out.println("You were lost in space");
 
-                    if (!clicked.getHarvest()) {
+                    PongGame.getInstance().changeScreen(this, ScreenType.MENU_UI);
+                    return;
+                }else if (!clicked.getHarvest()) {
                     float cost = 10f; //cost of travel planet
                     if (playerManager.getPlayer().getFuel() >= cost) {
                         playerManager.getPlayer().setFuel(playerManager.getPlayer().getFuel() - cost);
