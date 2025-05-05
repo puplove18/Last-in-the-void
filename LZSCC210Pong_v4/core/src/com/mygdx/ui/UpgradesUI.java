@@ -35,7 +35,6 @@ public class UpgradesUI {
     private int inventoryLevel = 1;
     private int resourcesLevel = 1; 
     private int oxygenLevel = 1;
-    private int levelToShow = 0;
 
     private Texture backgroundTexture;
     private NinePatchDrawable panelBackground;
@@ -140,13 +139,13 @@ public class UpgradesUI {
         BitmapFont font = FancyFontHelper.getInstance().getFont(TEXT_COLOR, fontSize);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, TEXT_COLOR);
         TextButton.TextButtonStyle buttonStyle = createButtonStyle(font);
-        
+        final int[] levelToShow = {0};
         
         final int maxLevels = names.length;
 
-        Label nameLabel = new Label(names[levelToShow], labelStyle);
-        Label resourcesLabel = new Label(resources[levelToShow], labelStyle);
-        Label effectsLabel = new Label(effects[levelToShow], labelStyle);
+        Label nameLabel = new Label(names[levelToShow[0]], labelStyle);
+        Label resourcesLabel = new Label(resources[levelToShow[0]], labelStyle);
+        Label effectsLabel = new Label(effects[levelToShow[0]], labelStyle);
         TextButton upgradeButton = new TextButton("Upgrade", buttonStyle);
 
         upgradesTable.add(nameLabel);
@@ -158,24 +157,24 @@ public class UpgradesUI {
         upgradeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String requiredResources = resources[levelToShow];
+                String requiredResources = resources[levelToShow[0]];
                 boolean canUpgrade = checkResources(requiredResources); 
 
-                if (canUpgrade && levelToShow < maxLevels) {
+                if (canUpgrade && levelToShow[0] < maxLevels) {
                     deductResources(requiredResources);
 
                     if (upgradeAction != null) {
                         upgradeAction.run();
                     }
 
-                    levelToShow++;
-                    if (levelToShow < maxLevels) {
-                        nameLabel.setText(names[levelToShow]);
-                        resourcesLabel.setText(resources[levelToShow]);
-                        effectsLabel.setText(effects[levelToShow]);
+                    levelToShow[0]++;
+                    if (levelToShow[0] < maxLevels) {
+                        nameLabel.setText(names[levelToShow[0]]);
+                        resourcesLabel.setText(resources[levelToShow[0]]);
+                        effectsLabel.setText(effects[levelToShow[0]]);
                     }
 
-                    if (levelToShow == maxLevels) {
+                    if (levelToShow[0] == maxLevels) {
                         upgradeButton.remove();
                         Label upgradedLabel = new Label("Fully Upgraded", labelStyle);
                         buttonCell.setActor(upgradedLabel);
