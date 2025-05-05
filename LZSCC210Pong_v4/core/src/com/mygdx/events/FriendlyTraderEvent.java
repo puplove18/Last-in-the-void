@@ -3,11 +3,12 @@ package com.mygdx.events;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Player;
 import java.util.Random;
+import com.mygdx.ui.UpgradesUI;
 
 public class FriendlyTraderEvent extends Event {
     private final Random random = new Random();
 
-    public FriendlyTraderEvent() {
+    public FriendlyTraderEvent(UpgradesUI upgrades) {
         super("Friendly Traders",
                 "A convoy of robotraders hails you and offers assistance.");
 

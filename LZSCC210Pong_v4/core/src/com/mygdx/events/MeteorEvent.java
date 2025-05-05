@@ -4,11 +4,12 @@ import java.util.Map;
 import java.util.Random;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Player;
+import com.mygdx.ui.UpgradesUI;
 
 public class MeteorEvent extends Event {
     private final Random random = new Random();
 
-    public MeteorEvent() {
+    public MeteorEvent(UpgradesUI upgrades) {
         super("Meteor Storm",
                 "A rogue meteor shower is barreling toward your ship! What will you do?");
 

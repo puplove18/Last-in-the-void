@@ -3,11 +3,12 @@ package com.mygdx.events;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Player;
 import java.util.Random;
+import com.mygdx.ui.UpgradesUI;
 
 public class RadiantNebulaEvent extends Event {
     private final Random random = new Random();
 
-    public RadiantNebulaEvent() {
+    public RadiantNebulaEvent(UpgradesUI upgrades) {
         super("Radiant Nebula",
                 "You drift through a glowing nebula that suffuses your ship with energy.");
 

@@ -3,11 +3,12 @@ package com.mygdx.events;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Player;
 import java.util.Random;
+import com.mygdx.ui.UpgradesUI;
 
 public class SpaceParasitesEvent extends Event {
     private final Random random = new Random();
 
-    public SpaceParasitesEvent() {
+    public SpaceParasitesEvent(UpgradesUI upgrades) {
         super("Parasite Infestation",
                 "Microscopic space parasites breach your hull plating!");
 

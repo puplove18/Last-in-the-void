@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.events.RadiantNebulaEvent;
 import com.mygdx.events.AggressiveRobotsEvent;
+import com.mygdx.events.*;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
@@ -26,6 +27,11 @@ import com.mygdx.ui.ScannerUI;
 import com.mygdx.ui.UpgradesUI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.function.Supplier;
+import java.util.Arrays;
+import java.util.List;
+import com.mygdx.objects.Event;
 
 public class UIManager {
     private GameScreen gameScreen;
@@ -52,7 +58,22 @@ public class UIManager {
     private Skin skin;
     private TextureAtlas backgroundAtlas;
     private TextureAtlas.AtlasRegion inventoryBackground;
-    
+
+
+    //events stuff
+    private final Random rand = new Random();
+    private final List<Supplier<Event>> negativeEvents = Arrays.asList(
+            () -> new AggressiveRobotsEvent(upgradesUI),
+            () -> new MeteorEvent(upgradesUI),
+            () -> new CosmicStormEvent(upgradesUI),
+            () -> new DerelictShipEvent(upgradesUI),
+            () -> new EngineFailureEvent(upgradesUI),
+            () -> new FriendlyTraderEvent(upgradesUI),
+            () -> new RadiantNebulaEvent(upgradesUI),
+            () -> new SpaceParasitesEvent(upgradesUI)
+
+    );
+
     public UIManager(Inventory inventory, Player player, GameScreen gameScreen, Universe universe) {
         this.inventory = inventory;
         this.player = player;
@@ -81,8 +102,8 @@ public class UIManager {
             systemJumpCount++;
             if (systemJumpCount % 2 == 0) {
                 //every 2nd  jump
-                AggressiveRobotsEvent botEvent = new AggressiveRobotsEvent(upgradesUI);
-                gameScreen.getEventManager().setCurrentEvent(botEvent);
+                Event e = negativeEvents.get(rand.nextInt(negativeEvents.size())).get();
+                gameScreen.getEventManager().setCurrentEvent(e);
                 gameScreen.getEventManager().showCurrentEvent();
                 gameScreen.setPaused(true);
                 return;

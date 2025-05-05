@@ -2,10 +2,11 @@ package com.mygdx.events;
 
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Player;
+import com.mygdx.ui.UpgradesUI;
 
 public class CosmicStormEvent extends Event {
 
-    public CosmicStormEvent() {
+    public CosmicStormEvent(UpgradesUI upgrades) {
         super("Cosmic Storm",
                 "A sudden cosmic storm batters your ship with radiation.");
 

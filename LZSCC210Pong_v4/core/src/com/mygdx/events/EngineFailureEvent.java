@@ -3,11 +3,12 @@ package com.mygdx.events;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Player;
 import java.util.Random;
+import com.mygdx.ui.UpgradesUI;
 
 public class EngineFailureEvent extends Event {
     private final Random random = new Random();
 
-    public EngineFailureEvent() {
+    public EngineFailureEvent(UpgradesUI upgrades) {
         super("Engine Failure",
                 "Your ship’s engines sputter and falter mid-jump!");
 
