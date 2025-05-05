@@ -165,9 +165,9 @@ public class Player{
         inventory.addItem(item);
     }
 
-    // Additional method in cases where we need to add multiple items, you can delete the old method if you want
+    
     public void addItemToInventory(String item, int quantity) { // Added quantity parameter
-        if (inventory != null) { // Good practice to check if inventory exists
+        if (inventory != null) { 
             int upgradedResourceGathering =quantity + addingFactor; // Add the adding factor to the quantity
            inventory.addItem(item, upgradedResourceGathering); // Call inventory's method with quantity
         } else {
