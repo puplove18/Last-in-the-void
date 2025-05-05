@@ -140,12 +140,18 @@ public class PlanetLandingEvent extends Event {
     
             // Probability Check 
             double probabilityThreshold;
-            switch (i) {
-                case 0: probabilityThreshold = 1.0; break;  // Common 
-                case 1: probabilityThreshold = 0.8; break;  // Uncommon
-                case 2: probabilityThreshold = 0.4; break;  // Rare
-                case 3: probabilityThreshold = 0.2; break;  // Legendary
-                default: probabilityThreshold = 0.0; break; // Won't ever be called, just necessary to stop compile error
+
+            if (i+1 == planet.getTier()) {
+                probabilityThreshold = 1.0;
+            }
+            else {
+                switch (i) {
+                    case 0: probabilityThreshold = 1.0; break;  // Common 
+                    case 1: probabilityThreshold = 0.8; break;  // Uncommon
+                    case 2: probabilityThreshold = 0.4; break;  // Rare
+                    case 3: probabilityThreshold = 0.2; break;  // Legendary
+                    default: probabilityThreshold = 0.0; break; // Won't ever be called, just necessary to stop compile error
+                }
             }
     
             // Only proceed if the random check passes
