@@ -262,11 +262,24 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     @Override
     public void onEventCompleted() {
         paused = false;
+        systemView = true;
+
+        // close any open panels (especially the scanner)
+        uiManager.closeScanner();
+        uiManager.closeInventory();
+        uiManager.closeUpgrades();
+
+        // reset camera back to center of your system view
+        camera.position.set(
+                PongGame.getInstance().getWindowWidth()/2f,
+                PongGame.getInstance().getWindowHeight()/2f,
+                0
+        );
+        camera.update();
+
+        // restore input to the main UI stage
         Gdx.input.setInputProcessor(uiManager.getUIStage());
 
-        if (eventManager.hasEvent() && eventManager.getCurrentEvent().shouldReturnToSolarSystem()) {
-            returnToSystemView();
-        }
         System.out.println("Event completed!");
     }
 
