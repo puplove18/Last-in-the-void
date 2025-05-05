@@ -51,7 +51,7 @@ public class UpgradesUI {
         this.player = player;
         this.inventory = inventory;
         this.universe = universe;
-        this.inventoryUI = inventoryUI; // Store the reference to InventoryUI
+        this.inventoryUI = inventoryUI; 
         this.stage = new Stage(new ScreenViewport());
         this.skin = new Skin(Gdx.files.internal("uiskin.json"));
         initializePanelBackground();
@@ -249,7 +249,6 @@ public class UpgradesUI {
             new Runnable() {
             @Override
             public void run() {
-                // Ensure the player object is initialized before calling upgradeFuel
                 if (player != null) {
                 player.upgradeFuel(); // Action when upgrading fuel
                 } else {
@@ -275,7 +274,6 @@ public class UpgradesUI {
                 new Runnable() {
                 @Override
                 public void run() {
-                    // Ensure the player object is initialized before calling upgradeFuel
                     if (player != null) {
                     player.upgradeHealth(); // Action when upgrading fuel
                     } else {
@@ -302,7 +300,6 @@ public class UpgradesUI {
                 new Runnable() {
                 @Override
                 public void run() {
-                    // Ensure the player object is initialized before calling upgradeFuel
                     if (player != null) {
                     player.upgradeOxygen(); // Action when upgrading fuel
                     } else {
