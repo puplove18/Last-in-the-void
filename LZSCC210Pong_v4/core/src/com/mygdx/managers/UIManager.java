@@ -81,7 +81,7 @@ public class UIManager {
             systemJumpCount++;
             if (systemJumpCount % 2 == 0) {
                 //every 2nd  jump
-                AggressiveRobotsEvent botEvent = new AggressiveRobotsEvent();
+                AggressiveRobotsEvent botEvent = new AggressiveRobotsEvent(upgradesUI);
                 gameScreen.getEventManager().setCurrentEvent(botEvent);
                 gameScreen.getEventManager().showCurrentEvent();
                 gameScreen.setPaused(true);

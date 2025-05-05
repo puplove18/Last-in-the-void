@@ -2,9 +2,10 @@ package com.mygdx.events;
 
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Player;
+import com.mygdx.ui.UpgradesUI;
 
 public class AggressiveRobotsEvent extends Event {
-    public AggressiveRobotsEvent() {
+    public AggressiveRobotsEvent(UpgradesUI upgrades) {
         super(
                 "Aggressive Robots",
                 "Your sensors detect a squadron of hostile repair drones homing in on your hull. What do you do?"
@@ -20,10 +21,17 @@ public class AggressiveRobotsEvent extends Event {
                 },
                 player -> {
                     int dmg = 25;
+                    if (upgrades.getHealthLevel() > 2){
+                        player.updateStat(Player.Stats.HEALTH, -dmg / 2);
+                        setFailureMessage(
+                                "Due to high defense you only got " + dmg / 2  + "%."
+                        );
+                    }
+                    else{
                     player.updateStat(Player.Stats.HEALTH, -dmg);
                     setFailureMessage(
                             "The drones swarm and damage your hull by " + dmg + "%."
-                    );
+                    );}
                 }
         );
 
@@ -45,7 +53,7 @@ public class AggressiveRobotsEvent extends Event {
                 }
         );
 
-        addChoice("Jettison cargo as decoy", 80,
+        addChoice("let cargo as decoy", 80,
                 player -> {
                     int thrown = 5;
                     player.getInventory().removeItem("Common Building Materials", thrown);
