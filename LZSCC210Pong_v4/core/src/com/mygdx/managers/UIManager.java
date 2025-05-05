@@ -24,7 +24,7 @@ import com.mygdx.ui.ScannerUI;
 import com.mygdx.ui.UpgradesUI;
 import java.util.HashMap;
 import java.util.Map;
-
+import com.mygdx.events.AggressiveRobotsEvent;
 
 /**
  * Manages all UI elements including inventory, upgrades, and buttons
@@ -39,7 +39,7 @@ public class UIManager {
     private boolean scannerOpen = false;
     private Universe universe;
 
-
+    private int systemJumpCount = 0;
     private UpgradesUI upgradesUI;
     private InventoryUI inventoryUI;
     private ScannerUI scannerUI;
@@ -81,6 +81,16 @@ public class UIManager {
 
             //actually change
             gameScreen.getWorldManager().travelTo(idx);
+
+            systemJumpCount++;
+            if (systemJumpCount % 2 == 0) {
+                //every 2nd  robots
+                AggressiveRobotsEvent botEvent = new AggressiveRobotsEvent();
+                gameScreen.getEventManager().setCurrentEvent(botEvent);
+                gameScreen.getEventManager().showCurrentEvent();
+                gameScreen.setPaused(true);
+                return;
+            }
 
             //close scanner
             scannerUI.setVisible(false);

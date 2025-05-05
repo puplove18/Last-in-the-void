@@ -28,6 +28,7 @@ import com.mygdx.pong.PongGame;
 import com.mygdx.ui.EventUI;
 import java.util.Random;
 
+
 public class GameScreen extends ScreenAdapter implements EventUI.EventCompletionListener {
     private OrthographicCamera camera;
     private GameWorldManager worldManager;
@@ -39,6 +40,8 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     private boolean paused = false;
     private boolean systemView = true;
 
+
+    private int starJumpCount = 0;
     private Skin skin;
     private TextButton nextButton;
     private static final Random rand = new Random();
@@ -67,11 +70,16 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         inputHandler = new InputHandler(this, uiManager, eventManager);
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
-        nextButton = new TextButton("Next System", skin);
+        nextButton = new TextButton("Next System1", skin);
         nextButton.setPosition(
                 PongGame.getInstance().getWindowWidth() - 800,
                 PongGame.getInstance().getWindowHeight() - 50
         );
+
+
+        //this button is not used!!!
+
+
         nextButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -94,7 +102,26 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                     );
                     worldManager.travelTo(idx);
 
-                    // Reset to planet‐view camera
+                    //starJumpCount++;
+
+//                    if (starJumpCount % 5 == 0) {
+//                        //Event e = eventManager.nextPlotEvent();
+//                        //eventManager.setCurrentEvent(e);
+//                        //eventManager.showCurrentEvent();
+//                        //setPaused(true);
+//                    } else if (starJumpCount % 2 == 0) {
+//                        Event e = eventManager.randomEventForCurrentSystem();
+//                        eventManager.setCurrentEvent(e);
+//                        eventManager.showCurrentEvent();
+//                        setPaused(true);
+//                    }
+                    starJumpCount++;
+
+                    if (starJumpCount % 2 == 0) {
+                        //event
+                        System.out.println("2 jump!");
+                    }
+
                     systemView = false;
                     camera.position.set(
                             PongGame.getInstance().getWindowWidth()/2f,
