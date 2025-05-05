@@ -29,9 +29,12 @@ public class UpgradesUI {
     private ScrollPane scrollPane;
     private final Player player;
     private Universe universe;
-    private int dis = 2;
-    private int inventoryCapacity = 1;
+    private int destinationLevel = 2;
+    private int fuelLevel = 1;
+    private int healthLevel = 1;
+    private int inventoryLevel = 1;
     private int resourcesLevel = 1; 
+    private int oxygenLevel = 1;
 
     private Texture backgroundTexture;
     private NinePatchDrawable panelBackground;
@@ -136,8 +139,8 @@ public class UpgradesUI {
         BitmapFont font = FancyFontHelper.getInstance().getFont(TEXT_COLOR, fontSize);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, TEXT_COLOR);
         TextButton.TextButtonStyle buttonStyle = createButtonStyle(font);
-
         final int[] levelToShow = {0};
+        
         final int maxLevels = names.length;
 
         Label nameLabel = new Label(names[levelToShow[0]], labelStyle);
@@ -250,7 +253,8 @@ public class UpgradesUI {
             @Override
             public void run() {
                 if (player != null) {
-                player.upgradeFuel(); // Action when upgrading fuel
+                player.upgradeFuel(); 
+                fuelLevel++;
                 } else {
                 System.out.println("Player object is not initialized!");
                 }
@@ -275,7 +279,8 @@ public class UpgradesUI {
                 @Override
                 public void run() {
                     if (player != null) {
-                    player.upgradeHealth(); // Action when upgrading fuel
+                    player.upgradeHealth(); 
+                    healthLevel++;
                     } else {
                     System.out.println("Player object is not initialized!");
                     }
@@ -301,7 +306,8 @@ public class UpgradesUI {
                 @Override
                 public void run() {
                     if (player != null) {
-                    player.upgradeOxygen(); // Action when upgrading fuel
+                    player.upgradeOxygen(); 
+                    oxygenLevel++;
                     } else {
                     System.out.println("Player object is not initialized!");
                     }
@@ -331,8 +337,8 @@ public class UpgradesUI {
                 @Override
                 public void run() {
                     if (universe != null) {
-                    dis++;
-                    universe.setMaxDest(dis);
+                        destinationLevel++;
+                    universe.setMaxDest(destinationLevel);
                     } else {
                         System.out.println("Player object is not initialized!");
                     }
@@ -341,34 +347,34 @@ public class UpgradesUI {
 );          
         createUpgradeChain(
             new String[]{
-                "Inventory Capacity I",
-                "Inventory Capacity II",
-                "Inventory Capacity III",
-                "Inventory Capacity IV"
+            "Inventory Capacity I",
+            "Inventory Capacity II",
+            "Inventory Capacity III",
+            "Inventory Capacity IV"
             },
             new String[]{
-                "10 Common Building Materials",
-                "30 Uncommon Building Materials",
-                "50 Rare Building Materials",
-                "70 Legendary Building Materials"
+            "10 Common Building Materials",
+            "30 Uncommon Building Materials",
+            "50 Rare Building Materials",
+            "70 Legendary Building Materials"
             },
             new String[]{
-                "More Inventory Space",
-                "More Inventory Space", 
-                "More Inventory Space",
-                "More Inventory Space"
+            "More Inventory Space",
+            "More Inventory Space", 
+            "More Inventory Space",
+            "More Inventory Space"
             },
             new Runnable() {
-                @Override
-                public void run() {
-                    if (universe != null) {
-                        inventoryCapacity++; 
-                        inventoryUI.setInventoryCapacity(inventoryCapacity);
+            @Override
+            public void run() {
+                if (universe != null) {
+                inventoryLevel++; 
+                inventoryUI.setInventoryCapacity(inventoryLevel);
 
-                    } else {
-                        System.out.println("Player object is not initialized!");
-                    }
+                } else {
+                System.out.println("Player object is not initialized!");
                 }
+            }
             }
         );
         createUpgradeChain(
@@ -458,6 +464,30 @@ public class UpgradesUI {
         }
     }
 
+    public int getDestinationLevel() {
+        return destinationLevel;
+    }
+
+    public int getFuelLevel() {
+        return fuelLevel;
+    }
+
+    public int getHealthLevel() {
+        return healthLevel;
+    }
+
+    public int getInventoryLevel() {
+        return inventoryLevel;
+    }
+
+    public int getResourcesLevel() {
+        return resourcesLevel;
+    }
+
+    public int getOxygenLevel() {
+        return oxygenLevel;
+    }
+    
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
