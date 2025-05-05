@@ -160,16 +160,16 @@ public class Player{
         this.addingFactor = addingFactor;
     }
 
-    // Interaction with Inventory
+    //add items
     public void addItemToInventory(String item) {
         inventory.addItem(item);
     }
 
     
-    public void addItemToInventory(String item, int quantity) { // Added quantity parameter
+    public void addItemToInventory(String item, int quantity) {
         if (inventory != null) { 
-            int upgradedResourceGathering =quantity + addingFactor; // Add the adding factor to the quantity
-           inventory.addItem(item, upgradedResourceGathering); // Call inventory's method with quantity
+            int upgradedResourceGathering =quantity + addingFactor;
+           inventory.addItem(item, upgradedResourceGathering);
         } else {
             System.err.println("Player inventory not initialized, cannot add item: " + item);
         }

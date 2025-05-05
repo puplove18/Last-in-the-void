@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Upgrades extends ScreenAdapter {
-    private Map<String, Integer> upgradeCost = new HashMap<>(); // Item name -> quantity needed
+    private Map<String, Integer> upgradeCost = new HashMap<>();
     private Inventory inventory;
     private String upgradeName;
 

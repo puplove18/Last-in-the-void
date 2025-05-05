@@ -27,8 +27,7 @@ public class EndGameScreen extends ScreenAdapter {
 		this.initTime = 0;
 		
 	}
-	
-	// Pressing any key transitions to the menu screen
+
 	public void update() {
 		if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY))
 			PongGame.getInstance().changeScreen(this, ScreenType.MENU);

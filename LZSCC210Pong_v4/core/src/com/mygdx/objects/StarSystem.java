@@ -28,7 +28,7 @@ public class StarSystem{
         return this.name;
     }
 
-    // Constructor of the star system for custom system creation
+
     public StarSystem(String name,int starSize, int tier, int maxPlanets){
         this.name = name;
         this.tier = tier;
@@ -38,7 +38,7 @@ public class StarSystem{
     }
 
 
-    //Default constructor
+
     public StarSystem(String name, int tier){
         this.name = name;
         this.tier = tier;
@@ -47,7 +47,6 @@ public class StarSystem{
         this.planets = new Planet[6];
     }
 
-    //Default constructor with basic limits used for debugging
     public StarSystem(){
         this.name = "Deep Space";
         this.tier = 1;
@@ -62,14 +61,12 @@ public class StarSystem{
 
     }
 
-    // Method to to populate the star system with planets
     public void genrateStarPlanets(String name, int tier){
         this.name = name;  
         this.tier = tier;
         int sizeLim = this.maxPlanets;
         this.size = rand.nextInt(this.size-200) + 200;
         
-        //Initialize the star of random size between set limit and 200, defualt limit is 2000
         this.planets[0] = new Planet(this.name + " 1", star, this.size, "Star",this.tier);
 
         for(int i = 1; i <= sizeLim-1; i++)

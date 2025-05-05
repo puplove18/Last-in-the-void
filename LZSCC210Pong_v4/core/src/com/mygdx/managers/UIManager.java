@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.events.RadiantNebulaEvent;
+import com.mygdx.events.AggressiveRobotsEvent;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
@@ -25,9 +26,7 @@ import com.mygdx.ui.ScannerUI;
 import com.mygdx.ui.UpgradesUI;
 import java.util.HashMap;
 import java.util.Map;
-/**
- * Manages all UI elements including inventory, upgrades, and buttons
- */
+
 public class UIManager {
     private GameScreen gameScreen;
     private Inventory inventory;
@@ -60,11 +59,9 @@ public class UIManager {
         this.gameScreen = gameScreen;
         this.universe = universe;
 
-        // Create a Map for upgrade costs, here it's just an example with "Iron" needing 50
         Map<String, Integer> upgradeCost = new HashMap<>();
         
 
-        // Pass the map into the Upgrades constructor
         this.upgrades = new Upgrades(inventory, upgradeCost);
         this.inventoryUI = new InventoryUI(PongGame.getInstance(), player);
         this.upgradesUI = new UpgradesUI(player,player.getInventory(), universe, inventoryUI);
@@ -84,7 +81,7 @@ public class UIManager {
             systemJumpCount++;
             if (systemJumpCount % 2 == 0) {
                 //every 2nd  jump
-                RadiantNebulaEvent botEvent = new RadiantNebulaEvent();
+                AggressiveRobotsEvent botEvent = new AggressiveRobotsEvent();
                 gameScreen.getEventManager().setCurrentEvent(botEvent);
                 gameScreen.getEventManager().showCurrentEvent();
                 gameScreen.setPaused(true);
