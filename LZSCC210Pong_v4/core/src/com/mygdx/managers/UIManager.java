@@ -25,7 +25,9 @@ import com.mygdx.ui.UpgradesUI;
 import java.util.HashMap;
 import java.util.Map;
 import com.mygdx.events.AggressiveRobotsEvent;
-
+import com.mygdx.events.MeteorEvent;
+import com.mygdx.events.FriendlyTraderEvent;
+import com.mygdx.events.RadiantNebulaEvent;
 /**
  * Manages all UI elements including inventory, upgrades, and buttons
  */
@@ -84,8 +86,8 @@ public class UIManager {
 
             systemJumpCount++;
             if (systemJumpCount % 2 == 0) {
-                //every 2nd  robots
-                AggressiveRobotsEvent botEvent = new AggressiveRobotsEvent();
+                //every 2nd  jump
+                RadiantNebulaEvent botEvent = new RadiantNebulaEvent();
                 gameScreen.getEventManager().setCurrentEvent(botEvent);
                 gameScreen.getEventManager().showCurrentEvent();
                 gameScreen.setPaused(true);
