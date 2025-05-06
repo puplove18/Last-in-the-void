@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.ScreenType;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 
 /**
  *  Simple menu screen to:
@@ -37,13 +37,13 @@ public class MenuScreen extends ScreenAdapter{
 	// Takes care of user input and screen transitions
 	public void update() {
 		if(Gdx.input.isKeyPressed(Input.Keys.Q))
-			PongGame.getInstance().exit(this);
+			SpaceGame.getInstance().exit(this);
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.P))
-			PongGame.getInstance().changeScreen(this, ScreenType.GAME);
+			SpaceGame.getInstance().changeScreen(this, ScreenType.GAME);
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.I))
-			PongGame.getInstance().changeScreen(this, ScreenType.INFO);
+			SpaceGame.getInstance().changeScreen(this, ScreenType.INFO);
 	}
 	
 	@Override
@@ -55,9 +55,9 @@ public class MenuScreen extends ScreenAdapter{
 		
 		this.batch.begin();
 		
-		this.title.draw(batch, "LZSCC.210 - PONG!", 30, PongGame.getInstance().getWindowHeight() - 50);
+		this.title.draw(batch, "LZSCC.210 - game!", 30, SpaceGame.getInstance().getWindowHeight() - 50);
 		
-		this.menu.draw(batch, getMenuText(), 10, PongGame.getInstance().getWindowHeight() / 2);
+		this.menu.draw(batch, getMenuText(), 10, SpaceGame.getInstance().getWindowHeight() / 2);
 		
 		this.batch.end();
 		

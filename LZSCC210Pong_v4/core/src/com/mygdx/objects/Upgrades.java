@@ -2,7 +2,7 @@ package com.mygdx.objects;
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +12,7 @@ public class Upgrades extends ScreenAdapter {
     private String upgradeName;
 
  
-    private PongGame game;
+    private SpaceGame game;
     private Player player;
 
     private Stage stage;

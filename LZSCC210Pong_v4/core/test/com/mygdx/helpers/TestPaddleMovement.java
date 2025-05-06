@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.objects.Player;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 
 /**
  *  Tests whether the paddle movement works as expected
@@ -30,7 +30,7 @@ public class TestPaddleMovement {
 		
 		Gdx.gl = Mockito.mock(GL20.class);
 		
-		PongGame.getInstance().createForTest(200, 200);
+		SpaceGame.getInstance().createForTest(200, 200);
 	}
 
 	@Test

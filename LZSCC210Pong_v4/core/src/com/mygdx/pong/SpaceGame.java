@@ -1,4 +1,4 @@
-package com.mygdx.pong;
+package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -19,23 +19,23 @@ import com.mygdx.screens.DeadGameScreen;
  * A singleton class representing the game. It takes care of
  * - initialising the game
  * - moving among different screens
- * Other classes can call the instance of this class via PongGame.getInstance()
+ * Other classes can call the instance of this class via SpaceGame.getInstance()
  */
-public class PongGame extends Game {
+public class SpaceGame extends Game {
 
-	private static PongGame INSTANCE = null;
+	private static SpaceGame INSTANCE = null;
 
 	private int windowWidth, windowHeight;
 
 	private OrthographicCamera ortographicCamera;
 
-	private PongGame() {
+	private SpaceGame() {
 		INSTANCE = this;
 	}
 
-	public static PongGame getInstance() {
+	public static SpaceGame getInstance() {
 		if(INSTANCE == null)
-			INSTANCE = new PongGame();
+			INSTANCE = new SpaceGame();
 
 		return INSTANCE;
 	}

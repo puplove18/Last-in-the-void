@@ -20,7 +20,7 @@ import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
 import com.mygdx.objects.Universe;
 import com.mygdx.objects.Upgrades;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.ui.InventoryUI;
 import com.mygdx.ui.ScannerUI;
@@ -84,7 +84,7 @@ public class UIManager {
         
 
 
-        this.inventoryUI = new InventoryUI(PongGame.getInstance(), player);
+        this.inventoryUI = new InventoryUI(SpaceGame.getInstance(), player);
         this.upgradesUI = new UpgradesUI(player,player.getInventory(), universe, inventoryUI);
         this.scannerUI = new ScannerUI(player, universe);
         scannerUI.setDestinationListener(idx -> {
@@ -164,7 +164,7 @@ public class UIManager {
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                PongGame.getInstance().changeScreen(gameScreen, ScreenType.MENU_UI);
+                SpaceGame.getInstance().changeScreen(gameScreen, ScreenType.MENU_UI);
             }
         });
         Table table = new Table();

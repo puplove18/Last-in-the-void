@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 import com.mygdx.helpers.ScreenType;
 
 public class CreditsScreen extends ScreenAdapter {
@@ -38,7 +38,7 @@ public class CreditsScreen extends ScreenAdapter {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                PongGame.getInstance().changeScreen(CreditsScreen.this, ScreenType.MENU_UI);
+                SpaceGame.getInstance().changeScreen(CreditsScreen.this, ScreenType.MENU_UI);
             }
         });
 

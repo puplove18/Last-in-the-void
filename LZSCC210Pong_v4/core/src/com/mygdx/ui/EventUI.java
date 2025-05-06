@@ -24,7 +24,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Player;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 
 
 /**
@@ -97,7 +97,7 @@ public class EventUI {
         mainTable.clearActions();
         mainTable.getColor().a = 1f;
 
-        int windowWidth = PongGame.getInstance().getWindowWidth();
+        int windowWidth = SpaceGame.getInstance().getWindowWidth();
 
         Table dialogBox = new Table();
         dialogBox.setBackground(panelBackground);
@@ -266,7 +266,7 @@ public class EventUI {
          messageLabel.setAlignment(Align.center);
 
          Table scrollTable = new Table();
-         scrollTable.add(messageLabel).width(PongGame.getInstance().getWindowWidth() * 0.6f).pad(10);
+         scrollTable.add(messageLabel).width(SpaceGame.getInstance().getWindowWidth() * 0.6f).pad(10);
 
          ScrollPane scrollPane = new ScrollPane(scrollTable); // Pass the table, not the label directly
          scrollPane.setFadeScrollBars(false);

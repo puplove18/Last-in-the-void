@@ -13,7 +13,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = "LZSCC.210 - Pong!"
+        appName = "LZSCC.210 - game!"
         gdxVersion = '1.13.0'
         roboVMVersion = '2.3.16'
         box2DLightsVersion = '1.5'

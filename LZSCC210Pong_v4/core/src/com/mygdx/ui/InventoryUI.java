@@ -24,14 +24,14 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.objects.Player;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class InventoryUI {
-    private PongGame game;
+    private SpaceGame game;
     private Player player;
     private SpriteBatch batch;
     private BitmapFont title;
@@ -60,7 +60,7 @@ public class InventoryUI {
     private int inventoryCapacity = 1;
 
 
-    public InventoryUI(PongGame game, Player player) {
+    public InventoryUI(SpaceGame game, Player player) {
         this.game = game;
         this.player = player;
         

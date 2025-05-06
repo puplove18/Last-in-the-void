@@ -24,7 +24,7 @@ import com.mygdx.objects.Planet;
 import com.mygdx.objects.Player;
 import com.mygdx.objects.StarSystem;
 import com.mygdx.objects.Universe;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 import com.mygdx.ui.EventUI;
 import java.util.Random;
 
@@ -49,8 +49,8 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     public GameScreen(OrthographicCamera camera) {
         this.camera = camera;
         this.camera.position.set(
-                PongGame.getInstance().getWindowWidth() / 2f,
-                PongGame.getInstance().getWindowHeight() / 2f,
+                SpaceGame.getInstance().getWindowWidth() / 2f,
+                SpaceGame.getInstance().getWindowHeight() / 2f,
                 0
         );
         initializeManagers();
@@ -72,8 +72,8 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         nextButton = new TextButton("Next System1", skin);
         nextButton.setPosition(
-                PongGame.getInstance().getWindowWidth() - 800,
-                PongGame.getInstance().getWindowHeight() - 50
+                SpaceGame.getInstance().getWindowWidth() - 800,
+                SpaceGame.getInstance().getWindowHeight() - 50
         );
 
 
@@ -124,8 +124,8 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
 
                     systemView = false;
                     camera.position.set(
-                            PongGame.getInstance().getWindowWidth()/2f,
-                            PongGame.getInstance().getWindowHeight()/2f,
+                            SpaceGame.getInstance().getWindowWidth()/2f,
+                            SpaceGame.getInstance().getWindowHeight()/2f,
                             0
                     );
                     camera.update();
@@ -180,7 +180,7 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                     System.out.println("Not enough fuel!");
                     System.out.println("You were lost in space");
 
-                    PongGame.getInstance().changeScreen(this, ScreenType.MENU_UI);
+                    SpaceGame.getInstance().changeScreen(this, ScreenType.MENU_UI);
                     return;
                 }else if (!clicked.getHarvest()) {
                     float cost = 10f; //cost of travel planet
@@ -190,8 +190,8 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                         // (Commented out in order to fix events) worldManager.travelTo(idx);
                         systemView = false;
                         camera.position.set(
-                                PongGame.getInstance().getWindowWidth()/2f,
-                                PongGame.getInstance().getWindowHeight()/2f,
+                                SpaceGame.getInstance().getWindowWidth()/2f,
+                                SpaceGame.getInstance().getWindowHeight()/2f,
                                 0
                         );
                         camera.update();
@@ -209,7 +209,7 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                         System.out.println("Not enough fuel!");
                         System.out.println("You were lost in space");
 
-                        PongGame.getInstance().changeScreen(this, ScreenType.DEAD_GAME);
+                        SpaceGame.getInstance().changeScreen(this, ScreenType.DEAD_GAME);
                         return;
                     }
                 } else {
@@ -271,8 +271,8 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
 
         // reset camera back to center of your system view
         camera.position.set(
-                PongGame.getInstance().getWindowWidth()/2f,
-                PongGame.getInstance().getWindowHeight()/2f,
+                SpaceGame.getInstance().getWindowWidth()/2f,
+                SpaceGame.getInstance().getWindowHeight()/2f,
                 0
         );
         camera.update();
@@ -286,8 +286,8 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
     private void returnToSystemView() {
         systemView = true;
         camera.position.set(
-            PongGame.getInstance().getWindowWidth()/2f,
-            PongGame.getInstance().getWindowHeight()/2f,
+            SpaceGame.getInstance().getWindowWidth()/2f,
+            SpaceGame.getInstance().getWindowHeight()/2f,
             0
         );
         camera.update();

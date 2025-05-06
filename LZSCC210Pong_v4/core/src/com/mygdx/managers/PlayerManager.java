@@ -13,7 +13,7 @@ import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
 import com.mygdx.objects.SpaceShip;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 
 /**
  * Manages the player state, ship, stats, and inventory
@@ -35,15 +35,15 @@ public class PlayerManager {
         
         // Initialize space ship
         Body shipBody = BodyHelper.createRectangularBody(
-                PongGame.getInstance().getWindowWidth() / 2,
-                PongGame.getInstance().getWindowHeight() / 2,
+                SpaceGame.getInstance().getWindowWidth() / 2,
+                SpaceGame.getInstance().getWindowHeight() / 2,
                 Constants.PLAYER_PADDLE_WIDTH,
                 Constants.PLAYER_PADDLE_HEIGHT,
                 BodyType.KinematicBody, 1f, world, ContactType.PLAYER);
         
         this.playerShip = new SpaceShip(
-                PongGame.getInstance().getWindowWidth() / 2,
-                PongGame.getInstance().getWindowHeight() / 2,
+                SpaceGame.getInstance().getWindowWidth() / 2,
+                SpaceGame.getInstance().getWindowHeight() / 2,
                 shipBody);
         
         initializeFonts();
@@ -67,7 +67,7 @@ public class PlayerManager {
     
     public void renderPlayerStats(SpriteBatch batch) {
         float statsX = 10;
-        float statsY = PongGame.getInstance().getWindowHeight() - 20;
+        float statsY = SpaceGame.getInstance().getWindowHeight() - 20;
         double currentHealth = (player.getHealth()/player.getHealthLim()) * 100;
         double currentFuel = (player.getFuel()/player.getFuelLim()) * 100;
         double currentOxygen = (player.getOxygen()/player.getOxygenLim()) * 100;

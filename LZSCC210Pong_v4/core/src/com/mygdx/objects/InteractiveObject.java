@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.helpers.BodyHelper;
 import com.mygdx.helpers.Constants;
 import com.mygdx.helpers.ContactType;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 import com.mygdx.screens.GameScreen;
 
 

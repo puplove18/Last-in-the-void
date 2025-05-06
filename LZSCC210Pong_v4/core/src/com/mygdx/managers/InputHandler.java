@@ -8,7 +8,7 @@ import com.mygdx.helpers.ScreenType;
 import com.mygdx.objects.Alien;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Planet;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 import com.mygdx.screens.GameScreen;
 
 /**
@@ -36,7 +36,7 @@ public class InputHandler {
     private void handleExitInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.postRunnable(() -> {
-                PongGame.getInstance().changeScreen(gameScreen, ScreenType.MENU_UI);
+                SpaceGame.getInstance().changeScreen(gameScreen, ScreenType.MENU_UI);
             });
         }
     }

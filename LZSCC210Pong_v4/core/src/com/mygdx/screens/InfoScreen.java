@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.ScreenType;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 
 /**
  * Simple screen explaining allowed inputs and winning condition
@@ -32,7 +32,7 @@ public class InfoScreen extends ScreenAdapter {
 	// The user needs to press M to go back to the menu screen
 	public void update() {
 		if(Gdx.input.isKeyPressed(Input.Keys.M))
-			PongGame.getInstance().changeScreen(this, ScreenType.MENU);
+			SpaceGame.getInstance().changeScreen(this, ScreenType.MENU);
 	}
 	
 	@Override
@@ -44,9 +44,9 @@ public class InfoScreen extends ScreenAdapter {
 		
 		this.batch.begin();
 		
-		this.title.draw(batch, "Game Info", 150, PongGame.getInstance().getWindowHeight() - 50);
+		this.title.draw(batch, "Game Info", 150, SpaceGame.getInstance().getWindowHeight() - 50);
 		
-		this.menu.draw(batch, getMenuText(), 10, PongGame.getInstance().getWindowHeight() / 2 + 50);
+		this.menu.draw(batch, getMenuText(), 10, SpaceGame.getInstance().getWindowHeight() / 2 + 50);
 		
 		this.batch.end();	
 	}

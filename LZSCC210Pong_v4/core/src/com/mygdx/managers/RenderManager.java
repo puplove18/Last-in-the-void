@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.helpers.FancyFontHelper;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 import com.mygdx.objects.Planet;
 import com.mygdx.objects.StarSystem;
 import com.mygdx.objects.Universe;
@@ -136,8 +136,8 @@ public class RenderManager {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.draw(systemBackground,
                 0, 0,
-                PongGame.getInstance().getWindowWidth(),
-                PongGame.getInstance().getWindowHeight());
+                SpaceGame.getInstance().getWindowWidth(),
+                SpaceGame.getInstance().getWindowHeight());
         drawOrbitsAndPlanets();
 
         playerManager.renderShip(batch);
@@ -148,8 +148,8 @@ public class RenderManager {
 
     private void drawOrbitsAndPlanets() {
         planetBounds.clear();
-        float sw = PongGame.getInstance().getWindowWidth();
-        float sh = PongGame.getInstance().getWindowHeight();
+        float sw = SpaceGame.getInstance().getWindowWidth();
+        float sh = SpaceGame.getInstance().getWindowHeight();
         float cx = sw * 0.5f;
         float cy = sh * 0.5f;
         Texture starTex = currentSystemTextures.get(0);
@@ -198,8 +198,8 @@ public class RenderManager {
                        boolean eventActive,
                        boolean inventoryOpen,
                        boolean upgradesOpen) {
-        float w = PongGame.getInstance().getWindowWidth();
-        float h = PongGame.getInstance().getWindowHeight();
+        float w = SpaceGame.getInstance().getWindowWidth();
+        float h = SpaceGame.getInstance().getWindowHeight();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         Texture bg = (selectedBackgroundType != null && worldBackgrounds.containsKey(selectedBackgroundType))
@@ -215,8 +215,8 @@ public class RenderManager {
     }
 
     private void renderEntities() {
-        float w = PongGame.getInstance().getWindowWidth();
-        float h = PongGame.getInstance().getWindowHeight();
+        float w = SpaceGame.getInstance().getWindowWidth();
+        float h = SpaceGame.getInstance().getWindowHeight();
         float heroX = 200;
         float heroY = (h - heroTexture.getHeight()) / 2;
         batch.draw(heroTexture,
@@ -236,8 +236,8 @@ public class RenderManager {
     private void renderPauseMessage() {
         font.draw(batch,
                 "Paused",
-                PongGame.getInstance().getWindowWidth() / 2 - 40,
-                PongGame.getInstance().getWindowHeight() / 2);
+                SpaceGame.getInstance().getWindowWidth() / 2 - 40,
+                SpaceGame.getInstance().getWindowHeight() / 2);
     }
 
     public void resize(int width, int height) {

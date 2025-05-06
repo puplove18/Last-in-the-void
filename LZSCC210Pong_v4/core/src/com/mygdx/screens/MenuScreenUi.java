@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.audio.AudioManager;
 
@@ -44,19 +44,19 @@ public class MenuScreenUi extends ScreenAdapter {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                PongGame.getInstance().changeScreen(MenuScreenUi.this, ScreenType.GAME);
+                SpaceGame.getInstance().changeScreen(MenuScreenUi.this, ScreenType.GAME);
             }
         });
         creditsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                PongGame.getInstance().changeScreen(MenuScreenUi.this, ScreenType.CREDITS);
+                SpaceGame.getInstance().changeScreen(MenuScreenUi.this, ScreenType.CREDITS);
             }
         });
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                PongGame.getInstance().exit(MenuScreenUi.this);
+                SpaceGame.getInstance().exit(MenuScreenUi.this);
             }
         });
         Button musicButton = new Button(skin, "music");

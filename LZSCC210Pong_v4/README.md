@@ -1,6 +1,6 @@
-# LZSCC 210 Pong
+# LZSCC 210 game
 
-This is an example implementation of the pong game. To start the game directly, you can run `./gradlew run`.
+This is an example implementation of the game game. To start the game directly, you can run `./gradlew run`.
 
 ## Building
 

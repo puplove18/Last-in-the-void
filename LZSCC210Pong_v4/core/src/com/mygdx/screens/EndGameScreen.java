@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.helpers.ScreenType;
-import com.mygdx.pong.PongGame;
+import com.mygdx.game.SpaceGame;
 
 // Screen shown when either the player or the AI has won
 public class EndGameScreen extends ScreenAdapter {
@@ -30,7 +30,7 @@ public class EndGameScreen extends ScreenAdapter {
 
 	public void update() {
 		if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY))
-			PongGame.getInstance().changeScreen(this, ScreenType.MENU);
+			SpaceGame.getInstance().changeScreen(this, ScreenType.MENU);
 	}
 	
 	@Override
@@ -43,13 +43,13 @@ public class EndGameScreen extends ScreenAdapter {
 		
 		this.batch.begin();
 		
-		this.font.draw(batch, message, (PongGame.getInstance().getWindowWidth() / 2) - 200, PongGame.getInstance().getWindowHeight() / 2 + 100);
+		this.font.draw(batch, message, (SpaceGame.getInstance().getWindowWidth() / 2) - 200, SpaceGame.getInstance().getWindowHeight() / 2 + 100);
 		
 		this.batch.end();
 		
 		// it goes back to the menu screen after one second, even if no key was pressed
 		if(this.initTime >= 1)
-			PongGame.getInstance().changeScreen(this, ScreenType.MENU);
+			SpaceGame.getInstance().changeScreen(this, ScreenType.MENU);
 		
 	}
 }
