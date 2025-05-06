@@ -10,7 +10,7 @@ public class CosmicStormEvent extends Event {
         super("Cosmic Storm",
                 "A sudden cosmic storm batters your ship with radiation.");
 
-        addChoice("Reinforce shields", 50,
+        addChoice("Reinforce shields | 50", 50,
                 player -> {
                     player.updateStat(Player.Stats.FUEL, -15);
                     setSuccessMessage("Shields held! Fuel drained (-15%).");
@@ -21,7 +21,7 @@ public class CosmicStormEvent extends Event {
                 }
         );
 
-        addChoice("Divert power to engines and outrun it", 40,
+        addChoice("Divert power to engines and outrun it | 40", 40,
                 player -> {
                     player.updateStat(Player.Stats.FUEL, -25);
                     setSuccessMessage("You outran the storm! Fuel -25%.");
@@ -33,7 +33,7 @@ public class CosmicStormEvent extends Event {
                 }
         );
 
-        addChoice("Ride it out in safe mode", 80,
+        addChoice("Ride it out in safe mode | 80", 80,
                 player -> {
                     player.updateStat(Player.Stats.HEALTH, -5);
                     setSuccessMessage("Minimal damage (-5% health). Storm subsides.");

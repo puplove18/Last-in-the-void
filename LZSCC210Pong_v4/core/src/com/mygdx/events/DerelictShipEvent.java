@@ -12,7 +12,7 @@ public class DerelictShipEvent extends Event {
         super("Derelict Ship",
                 "You discover a derelict freighter drifting in space.");
 
-        addChoice("Board carefully", 70,
+        addChoice("Board carefully | 40", 70,
                 player -> {
                     if (rand.nextBoolean()) {
                         player.updateStat(Player.Stats.HEALTH, 80);

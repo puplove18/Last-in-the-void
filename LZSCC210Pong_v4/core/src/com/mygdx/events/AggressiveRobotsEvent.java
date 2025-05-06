@@ -11,7 +11,7 @@ public class AggressiveRobotsEvent extends Event {
                 "Your sensors detect a squadron of hostile repair drones homing in on your hull. What do you do?"
         );
 
-        addChoice("Fight the robots", 40,
+        addChoice("Fight the robots | 40", 40,
                 player -> {
                     int amount = 10;
                     player.addItemToInventory("Common Building Materials", amount);
@@ -35,7 +35,7 @@ public class AggressiveRobotsEvent extends Event {
                 }
         );
 
-        addChoice("Try to flee", 30,
+        addChoice("Try to flee | 30", 30,
                 player -> {
                     int burn = 15;
                     player.updateStat(Player.Stats.FUEL, -burn);
@@ -53,7 +53,7 @@ public class AggressiveRobotsEvent extends Event {
                 }
         );
 
-        addChoice("let cargo as decoy", 80,
+        addChoice("let cargo as decoy | 80", 80,
                 player -> {
                     int thrown = 5;
                     player.getInventory().removeItem("Common Building Materials", thrown);

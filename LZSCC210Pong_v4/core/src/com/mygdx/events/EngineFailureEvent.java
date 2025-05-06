@@ -12,7 +12,7 @@ public class EngineFailureEvent extends Event {
         super("Engine Failure",
                 "Your ship’s engines sputter and falter mid-jump!");
 
-        addChoice("Attempt emergency restart", 50,
+        addChoice("Attempt emergency restart | 50", 50,
                 player -> {
                     player.updateStat(Player.Stats.FUEL, -15);
                     setSuccessMessage("Engines rebooted! Fuel drained (-15%).");
@@ -23,7 +23,7 @@ public class EngineFailureEvent extends Event {
                 }
         );
 
-        addChoice("Coast inertially", 30,
+        addChoice("Coast inertially | 30", 30,
                 player -> {
                     setSuccessMessage("You drift safely until backup power kicks in.");
                 },
@@ -33,7 +33,7 @@ public class EngineFailureEvent extends Event {
                 }
         );
 
-        addChoice("Jettison weight to conserve power", 70,
+        addChoice("Jettison weight to conserve power | 70", 70,
                 player -> {
                     player.updateStat(Player.Stats.FUEL, +10);
                     setSuccessMessage("Weight shed; power returns. Fuel efficiency +10%.");
