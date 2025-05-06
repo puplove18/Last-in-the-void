@@ -209,7 +209,7 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                         System.out.println("Not enough fuel!");
                         System.out.println("You were lost in space");
 
-                        PongGame.getInstance().changeScreen(this, ScreenType.MENU_UI);
+                        PongGame.getInstance().changeScreen(this, ScreenType.DEAD_GAME);
                         return;
                     }
                 } else {

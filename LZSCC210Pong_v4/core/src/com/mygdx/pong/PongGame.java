@@ -12,7 +12,7 @@ import com.mygdx.screens.InfoScreen;
 import com.mygdx.screens.MenuScreen;
 import com.mygdx.screens.MenuScreenUi;
 import com.mygdx.screens.CreditsScreen;
-
+import com.mygdx.screens.DeadGameScreen;
 
 
 /**
@@ -91,6 +91,8 @@ public class PongGame extends Game {
 			setScreen(new InfoScreen());
 		if(newScreenType == ScreenType.CREDITS)
 			setScreen(new CreditsScreen());
+		if(newScreenType == ScreenType.DEAD_GAME)
+			setScreen(new DeadGameScreen());
 	}
 
 	public void changeScreen(Screen currentScreen, ScreenType newScreenType, String message) {
