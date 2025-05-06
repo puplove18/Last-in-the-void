@@ -281,6 +281,7 @@ public class InventoryUI {
         }
     }
 
+    // Show item action dialog for using or removing items
     private void showItemActionDialog(String itemName, int maxQuantity) {
         final Dialog dialog = new Dialog("", skin);
         Table content = new Table();
@@ -291,179 +292,215 @@ public class InventoryUI {
             new Label.LabelStyle(FancyFontHelper.getInstance().getFont(TITLE_COLOR, 16), TITLE_COLOR));
         content.add(titleLabel).colspan(3).padBottom(20).row();
 
-        // quantity slection
+        // quantity selection
         final int[] quantity = {1};
         final Label quantityLabel = new Label("1", skin);
         quantityLabel.setAlignment(Align.center);
 
-        // + / - buttons
-        TextButton plusButton = new TextButton("+", skin);
-        plusButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                quantity[0] = Math.min(maxQuantity, quantity[0] + 1);
-                quantityLabel.setText(String.valueOf(quantity[0]));
-            }
-        });
-        TextButton minusButton = new TextButton("-", skin);
-        minusButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                quantity[0] = Math.max(1, quantity[0] - 1);
-                quantityLabel.setText(String.valueOf(quantity[0]));
-            }
-        });
-        
-        content.add(minusButton).width(40).height(40);
-        content.add(quantityLabel).width(60).height(40).pad(0, 10, 0, 10);
-        content.add(plusButton).width(40).height(40).row();
-        
-        Label helpLabel = new Label("Amount to use", skin);
-        content.add(helpLabel).colspan(3).padTop(5).padBottom(20).row();
-        
+        Table quantityButtonsTable = new Table();
+        quantityButtonsTable.defaults().space(15);  // Default spacing between cells
 
+        // + / - 10 buttons 
+        TextButton plusTenButton = new TextButton("+10", skin);
+        TextButton minusTenButton = new TextButton("-10", skin);
+
+        // + / - buttons
+        TextButton plusButton = new TextButton("+1", skin);
+        TextButton minusButton = new TextButton("-1", skin);
+        
         // gets the status of the item based on its name from the player class
         Player.Stats stat = getStats(itemName);
         int recoveryAmount = getRecoveryAmount(itemName);
         final String systemType = stat == Player.Stats.HEALTH ? "Hull Integrity" :
                                   stat == Player.Stats.FUEL ? "Ship Fuel" :
                                   stat == Player.Stats.OXYGEN ? "Life Support" : "";
+                                  
+        // Create a recovery label that will update when quantity changes
+        final Label recoveryLabel = new Label("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType,
+            new Label.LabelStyle(FancyFontHelper.getInstance().getFont(TEXT_COLOR, 15), TEXT_COLOR));
+            
+        // Add click listeners with the recovery label update functionality
+        plusButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                quantity[0] = Math.min(maxQuantity, quantity[0] + 1);
+                quantityLabel.setText(String.valueOf(quantity[0]));
+                recoveryLabel.setText("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType);
+            }
+        });
+        
+        minusButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                quantity[0] = Math.max(1, quantity[0] - 1);
+                quantityLabel.setText(String.valueOf(quantity[0]));
+                recoveryLabel.setText("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType);
+            }
+        });
+        
+        plusTenButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                quantity[0] = Math.min(maxQuantity, quantity[0] + 10);
+                quantityLabel.setText(String.valueOf(quantity[0]));
+                recoveryLabel.setText("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType);
+            }
+        });
+        
+        minusTenButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                quantity[0] = Math.max(1, quantity[0] - 10);
+                quantityLabel.setText(String.valueOf(quantity[0]));
+                recoveryLabel.setText("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType);
+            }
+        });
+        
+        // Add buttons to table - make the entire row wider with expanded widths
+        quantityButtonsTable.add(minusTenButton).width(50).height(40);
+        quantityButtonsTable.add(minusButton).width(50).height(40);
+        quantityButtonsTable.add(quantityLabel).width(80).height(40).padLeft(15).padRight(15);
+        quantityButtonsTable.add(plusButton).width(50).height(40);
+        quantityButtonsTable.add(plusTenButton).width(50).height(40);
+        
+        // Add more space around the entire button row
+        Label helpLabel = new Label("Amount to use", skin);
+        content.add(quantityButtonsTable).colspan(3).padBottom(20).expandX().padLeft(20).padRight(20).row();
+        content.add(helpLabel).colspan(3).padTop(5).padBottom(20).row();
 
         // recover/remove/cancel buttons
         if (stat != null) {
-        Label recoveryLabel = new Label("Use to recover " + recoveryAmount + " " + systemType + " per unit",
-            new Label.LabelStyle(FancyFontHelper.getInstance().getFont(TEXT_COLOR, 12), TEXT_COLOR));
-        content.add(recoveryLabel).colspan(3).padBottom(20).row();
-        
-        TextButton recoverButton = new TextButton("Recover", skin);
+            content.add(recoveryLabel).colspan(3).padBottom(20).row();
+            
+            TextButton recoverButton = new TextButton("Recover", skin);
             recoverButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                double currentStat = 0;
-                double maxCapacity = 0;
-                if (stat == Player.Stats.FUEL) {
-                    currentStat = (double) player.getFuel();
-                    maxCapacity = (double) player.getFuelLim();
-                    System.out.println("DEBUG: Current fuel: " + currentStat + " / " + maxCapacity);
-                } else if (stat == Player.Stats.OXYGEN) {
-                    currentStat = (double) player.getOxygen();
-                    maxCapacity = (double) player.getOxygenLim();
-                    System.out.println("DEBUG: Current life support: " + currentStat + " / " + maxCapacity);
-                } else if (stat == Player.Stats.HEALTH) {
-                    currentStat = (double) player.getHealth();
-                    maxCapacity = (double) player.getHealthLim();
-                    System.out.println("DEBUG: Current hull: " + currentStat + " / " + maxCapacity);
-                }
+                    double currentStat = 0;
+                    double maxCapacity = 0;
+                    if (stat == Player.Stats.FUEL) {
+                        currentStat = (double) player.getFuel();
+                        maxCapacity = (double) player.getFuelLim();
+                        System.out.println("DEBUG: Current fuel: " + currentStat + " / " + maxCapacity);
+                    } else if (stat == Player.Stats.OXYGEN) {
+                        currentStat = (double) player.getOxygen();
+                        maxCapacity = (double) player.getOxygenLim();
+                        System.out.println("DEBUG: Current life support: " + currentStat + " / " + maxCapacity);
+                    } else if (stat == Player.Stats.HEALTH) {
+                        currentStat = (double) player.getHealth();
+                        maxCapacity = (double) player.getHealthLim();
+                        System.out.println("DEBUG: Current hull: " + currentStat + " / " + maxCapacity);
+                    }
 
-                // Check if the stats is already 100%
-                if (currentStat >= maxCapacity) {
-                    Dialog warningDialog = new Dialog("Warning", skin);
-                    warningDialog.text("Your " + systemType + " is already full.");
-                    warningDialog.setModal(false);
-                    TextButton okButton = new TextButton("OK", skin);
-                    okButton.addListener(new ClickListener() {
+                    // Check if the stats is already 100%
+                    if (currentStat >= maxCapacity) {
+                        Dialog warningDialog = new Dialog("Warning", skin);
+                        warningDialog.text("Your " + systemType + " is already full.");
+                        warningDialog.setModal(false);
+                        TextButton okButton = new TextButton("OK", skin);
+                        okButton.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                warningDialog.hide();
+                                Gdx.input.setInputProcessor(stage);
+                            }
+                        });
+                        Table buttonTable = new Table();
+                        buttonTable.add(okButton).width(120).height(40);
+                        warningDialog.getContentTable().add(buttonTable).padTop(20);
+                        warningDialog.getContentTable().pad(20);
+
+                        warningDialog.show(stage);
+                        return;
+                    }
+
+                    int totalPossibleRecovery = getRecoveryAmount(itemName) * quantity[0];
+                    double actualRecovery = Math.min(totalPossibleRecovery, maxCapacity - currentStat);
+
+                    if (actualRecovery > 0) {
+                        player.updateStat(stat, actualRecovery);
+                        System.out.println("Used " + quantity[0] + " " + itemName + " to recover " + actualRecovery + " of " + stat);
+                        System.out.println("DEBUG: Afterrecovery " + systemType + ": " + currentStat + " / " + maxCapacity + "=" + (currentStat / maxCapacity) * 100 + "%");
+                        try {
+                            if (player != null) {
+                                double newValue = 0;
+                                double maxValue = 0;
+                                // the variable differ from the one above because it is just to check the value after recovery
+                                if (stat == Player.Stats.FUEL) {
+                                    newValue = player.getFuel();
+                                    maxValue = player.getFuelLim();
+                                } else if (stat == Player.Stats.OXYGEN) {
+                                    newValue = player.getOxygen();
+                                    maxValue = player.getOxygenLim();
+                                } else if (stat == Player.Stats.HEALTH) {
+                                    newValue = player.getHealth();
+                                    maxValue = player.getHealthLim();
+                                }
+                                
+                                System.out.println("DEBUG: After recovery - " + systemType + ": " + newValue + " / " + maxValue + "=" + (newValue / maxValue) * 100 + "%");
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Error in debug output: " + e.getMessage());
+                        }
+                        player.getInventory().removeItem(itemName, quantity[0]);
+                    }
+
+                    dialog.hide();
+                    selectedItemName = null;
+                    refreshInventoryGrid();
+                    Gdx.app.postRunnable(new Runnable() {
                         @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            warningDialog.hide();
+                        public void run() {
                             Gdx.input.setInputProcessor(stage);
                         }
                     });
-                Table buttonTable = new Table();
-                buttonTable.add(okButton).width(120).height(40);
-                warningDialog.getContentTable().add(buttonTable).padTop(20);
-                warningDialog.getContentTable().pad(20);
-
-                warningDialog.show(stage);
-                return;
-            }
-
-            int totalPossibleRecovery = getRecoveryAmount(itemName) * quantity[0];
-            double actualRecovery = Math.min(totalPossibleRecovery, maxCapacity - currentStat);
-
-            if (actualRecovery > 0) {
-                player.updateStat(stat, actualRecovery);
-                System.out.println("Used " + quantity[0] + " " + itemName + " to recover " + actualRecovery + " of " + stat);
-                System.out.println("DEBUG: Afterrecovery " + systemType + ": " + currentStat + " / " + maxCapacity + "=" + (currentStat / maxCapacity) * 100 + "%");
-                try {
-                    if (player != null) {
-                        double newValue = 0;
-                        double maxValue = 0;
-                        // the variable differ from the one above because it is just to check the value after recovery
-                        if (stat == Player.Stats.FUEL) {
-                            newValue = player.getFuel();
-                            maxValue = player.getFuelLim();
-                        } else if (stat == Player.Stats.OXYGEN) {
-                            newValue = player.getOxygen();
-                            maxValue = player.getOxygenLim();
-                        } else if (stat == Player.Stats.HEALTH) {
-                            newValue = player.getHealth();
-                            maxValue = player.getHealthLim();
-                        }
-                        
-                        System.out.println("DEBUG: After recovery - " + systemType + ": " + newValue + " / " + maxValue + "=" + (newValue / maxValue) * 100 + "%");
-                    }
-                } catch (Exception e) {
-                    System.out.println("Error in debug output: " + e.getMessage());
-                }
-                player.getInventory().removeItem(itemName, quantity[0]);
-            }
-
-            dialog.hide();
-            selectedItemName = null;
-            refreshInventoryGrid();
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    Gdx.input.setInputProcessor(stage);
                 }
             });
-        }
-    });
 
-        TextButton cancelButton = new TextButton("Cancel", skin);
-        cancelButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                dialog.hide();
-                selectedItemName = null;
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        Gdx.input.setInputProcessor(stage);
-                    }
-                });
-            }
-        });
-        
-        TextButton removeButton = new TextButton("Remove", skin);
-        removeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                player.getInventory().removeItem(itemName, quantity[0]);
-                dialog.hide();
-                selectedItemName = null;
-                refreshInventoryGrid();
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        Gdx.input.setInputProcessor(stage);
-                    }
-                });
-            }
-        });
+            TextButton cancelButton = new TextButton("Cancel", skin);
+            cancelButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    dialog.hide();
+                    selectedItemName = null;
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            Gdx.input.setInputProcessor(stage);
+                        }
+                    });
+                }
+            });
+            
+            TextButton removeButton = new TextButton("Remove", skin);
+            removeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    player.getInventory().removeItem(itemName, quantity[0]);
+                    dialog.hide();
+                    selectedItemName = null;
+                    refreshInventoryGrid();
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            Gdx.input.setInputProcessor(stage);
+                        }
+                    });
+                }
+            });
 
-        // Show buttons
-        Table buttonTable = new Table();
-        buttonTable.add(recoverButton).width(120).height(40).padRight(20);
-        buttonTable.add(removeButton).width(120).height(40).padRight(20);
-        buttonTable.add(cancelButton).width(120).height(40);
-        content.add(buttonTable).colspan(3).padTop(20);
-        
-        dialog.getContentTable().add(content);
-        dialog.show(stage);
+            // Show buttons
+            Table buttonTable = new Table();
+            buttonTable.add(recoverButton).width(120).height(40).padRight(20);
+            buttonTable.add(removeButton).width(120).height(40).padRight(20);
+            buttonTable.add(cancelButton).width(120).height(40);
+            content.add(buttonTable).colspan(3).padTop(20);
+            
+            dialog.getContentTable().add(content);
+            dialog.show(stage);
         }
     }
-    
+
     public boolean isVisible() {
         return isVisible;
     }
