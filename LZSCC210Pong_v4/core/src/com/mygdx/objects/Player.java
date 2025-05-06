@@ -75,6 +75,12 @@ public class Player{
         this.inventory.addItem("over-limit object", 500); // create later
         this.inventory.addItem("Legendary Biomass", -100); // -100 cannot be added
         this.inventory.addItem("Rare Biomass", 0); // 0 cannot be added
+        //test 2materials requirement
+        this.inventory.addItem("Common Biomass", 500); 
+        this.inventory.addItem("Uncommon Biomass", 500); 
+        this.inventory.addItem("Rare Biomass", 500); 
+        this.inventory.addItem("Legendary Biomass", 500); 
+
     }
 
     public void setHealth(double val) {
