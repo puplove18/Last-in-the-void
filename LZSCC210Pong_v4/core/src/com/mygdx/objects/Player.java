@@ -69,6 +69,12 @@ public class Player{
         this.inventory.addItem("Uncommon Building Materials", 500);
         this.inventory.addItem("Rare Building Materials", 500);
         this.inventory.addItem("Legendary Building Materials", 500);
+        //test to see the inventory validation functionality
+        this.inventory.addItem("non-existing object", 500); // validation test
+        this.inventory.addItem("over-limit object", 500); // create later
+        this.inventory.addItem("over-limit object", 500); // create later
+        this.inventory.addItem("Legendary Biomass", -100); // -100 cannot be added
+        this.inventory.addItem("Rare Biomass", 0); // 0 cannot be added
     }
 
     public void setHealth(double val) {

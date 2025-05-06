@@ -2,13 +2,14 @@ package com.mygdx.objects;
 
 import java.util.HashMap;
 import java.util.Map;
+import com.mygdx.helpers.ResourceType;
 
 public class Inventory {
     private Map<String, Integer> items;
     private int maxSize;
     private boolean avoidInfiniteInventoryEmpty = false;
-    private boolean hasPrintedInventory = false; // Added flag to track if inventory has been printed
-
+    private boolean hasPrintedInventory = false;
+    
     public Inventory(int maxSize) {
         this.items = new HashMap<>();
         this.maxSize = maxSize;
@@ -16,6 +17,12 @@ public class Inventory {
 
     // Add items
     public boolean addItem(String item) {
+        // Validate the resource type first
+        if (!ResourceType.isValidResource(item)) {
+            System.out.println("Invalid resource : " + item);
+            return false;
+        }
+
         if (items.size() >= maxSize) {
             System.out.println("Inventory is full. Cannot add " + item);
             return false;
@@ -24,12 +31,18 @@ public class Inventory {
         // Increment the quantity if the item is already in the inventory
         items.put(item, items.getOrDefault(item, 0) + 1);
         System.out.println(item + " added to inventory.");
-        hasPrintedInventory = false; // Reset flag when inventory changes
+        hasPrintedInventory = false; 
         return true;
     }
 
     // Additional add item method so we can add multiple of an item, you can delete the old method if necessary
-    public boolean addItem(String item, int quantity) { // Added quantity parameter
+    public boolean addItem(String item, int quantity) { 
+        // Validate the resource type first
+        if (!ResourceType.isValidResource(item)) {
+            System.out.println("Invalid resource : " + item);
+            return false;
+        }
+        
         if (quantity <= 0) {
             System.out.println("Cannot add zero or negative quantity of " + item);
             return false; 
@@ -43,7 +56,7 @@ public class Inventory {
         // Increment the quantity if the item is already in the inventory, or add it.
         items.put(item, items.getOrDefault(item, 0) + quantity); 
         System.out.println(quantity + "x " + item + " added to inventory.");
-        hasPrintedInventory = false; // Reset flag when inventory changes
+        hasPrintedInventory = false;
         return true;
     }
 
@@ -57,7 +70,7 @@ public class Inventory {
                 items.put(item, quantity - quant);  
             }
             System.out.println(item + " removed from inventory.");
-            hasPrintedInventory = false; // Reset flag when inventory changes
+            hasPrintedInventory = false;
             return true;
         } else {
             System.out.println(item + " not found in inventory.");
@@ -70,7 +83,7 @@ public class Inventory {
         if (items.isEmpty()) {
             if (!avoidInfiniteInventoryEmpty) {
                 System.out.println("Inventory is empty.");
-                avoidInfiniteInventoryEmpty = true; // Mark it as already reported
+                avoidInfiniteInventoryEmpty = true;
             }
         } else {
             // Only print the inventory once until it's modified
@@ -79,7 +92,7 @@ public class Inventory {
                 for (Map.Entry<String, Integer> entry : items.entrySet()) {
                     System.out.println(entry.getKey() + " x" + entry.getValue());
                 }
-                hasPrintedInventory = true; // Mark that the inventory has been printed
+                hasPrintedInventory = true; 
             }
         }
     }

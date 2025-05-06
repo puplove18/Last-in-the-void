@@ -1,22 +1,44 @@
 package com.mygdx.helpers;
 
-public class ResourceType {
-    // Planet 1
-    public static final String COMMON_METAL = "Common Metal";
-    public static final String UNCOMMON_METAL = "Uncommon Metal";
-    public static final String RARE_METAL = "Rare Metal";
-    public static final String SUPERIOR_METAL = "Superior Metal";
+public enum ResourceType {
+    COMMON_BIOMASS("Common Biomass"),
+    UNCOMMON_BIOMASS("Uncommon Biomass"),
+    RARE_BIOMASS("Rare Biomass"),
+    LEGENDARY_BIOMASS("Legendary Biomass"),
+    
+    COMMON_FUEL("Common Fuel"),
+    UNCOMMON_FUEL("Uncommon Fuel"),
+    RARE_FUEL("Rare Fuel"),
+    LEGENDARY_FUEL("Legendary Fuel"),
+    
+    COMMON_BUILDING_MATERIALS("Common Building Materials"),
+    UNCOMMON_BUILDING_MATERIALS("Uncommon Building Materials"),
+    RARE_BUILDING_MATERIALS("Rare Building Materials"),
+    LEGENDARY_BUILDING_MATERIALS("Legendary Building Materials");
+    
+    private final String displayName;
+    
+    ResourceType(String displayName) {
+        this.displayName = displayName;
+    }
+    
+    public String getDisplayName() {
+        return displayName;
+    }
+    
+    public static ResourceType fromDisplayName(String displayName) {
+        for (ResourceType type : ResourceType.values()) {
+            if (type.displayName.equals(displayName)) {
+                return type;
+            }
+        }
+        System.out.println("Invalid resource type: " + displayName);
+        return null;
+    }
 
-    // Planet 2
-    public static final String COMMON_FUEL = "Oxygen";
-    public static final String UNCOMMON_FUEL = "Hydrogen";
-    public static final String RARE_FUEL = "Helium";
-    public static final String EXOTIC_FUEL = "Exotic Gas";
-
-    // Planet 3
-    public static final String COMMON_ORGANIC = "Oxygen";
-    public static final String UNCOMMON_ORGANIC = "Water";
-    public static final String RARE_ORGANIC = "Alien Plant";
-    public static final String SUPERIOR_ORGANIC = "Alien Flesh";
+    public static boolean isValidResource(String displayName) {
+        boolean isValid = fromDisplayName(displayName) != null;
+        System.out.println("Resource Validation: " + displayName + " - " + (isValid ? "Valid" : "Invalid"));
+        return isValid;
+    }
 }
-
