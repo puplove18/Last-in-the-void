@@ -83,7 +83,7 @@ public class UIManager {
         Map<String, Integer> upgradeCost = new HashMap<>();
         
 
-        this.upgrades = new Upgrades(inventory, upgradeCost);
+
         this.inventoryUI = new InventoryUI(PongGame.getInstance(), player);
         this.upgradesUI = new UpgradesUI(player,player.getInventory(), universe, inventoryUI);
         this.scannerUI = new ScannerUI(player, universe);

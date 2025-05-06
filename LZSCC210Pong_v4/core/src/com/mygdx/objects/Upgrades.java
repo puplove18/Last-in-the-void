@@ -17,7 +17,7 @@ public class Upgrades extends ScreenAdapter {
 
     private Stage stage;
 
-    public Upgrades(Inventory inventory, Map<String, Integer> upgradeCost) {
+    public Upgrades(Inventory inventory, Map<String, Integer> upgradeCost, String upgradeName) {
         this.inventory = inventory;
         this.upgradeCost = upgradeCost;
         this.upgradeName = upgradeName;

@@ -19,6 +19,9 @@ import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
 import com.mygdx.objects.Universe;
+import com.mygdx.objects.Upgrades;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UpgradesUI {
 
@@ -36,12 +39,14 @@ public class UpgradesUI {
     private int resourcesLevel = 1; 
     private int oxygenLevel = 1;
 
+    public float width = Gdx.graphics.getWidth() / 2;
     private Texture backgroundTexture;
     private NinePatchDrawable panelBackground;
     private ObjectMap<TextButton, Drawable> originalButtonBackgrounds = new ObjectMap<>();
 
     private final Inventory inventory;
     private boolean isVisible = false;
+    private Upgrades upgrades;
 
     private static final Color TITLE_COLOR = Color.WHITE;
     private static final Color TEXT_COLOR = Color.LIGHT_GRAY;
@@ -57,6 +62,8 @@ public class UpgradesUI {
         this.inventoryUI = inventoryUI; 
         this.stage = new Stage(new ScreenViewport());
         this.skin = new Skin(Gdx.files.internal("uiskin.json"));
+
+        Gdx.input.setInputProcessor(stage);
         initializePanelBackground();
         createUI();
         possibleUpgrades();
@@ -115,7 +122,7 @@ public class UpgradesUI {
         BitmapFont headerFont = FancyFontHelper.getInstance().getFont(TITLE_COLOR, fontSize);
         Label.LabelStyle headerStyle = new Label.LabelStyle(headerFont, TITLE_COLOR);
     
-        float width = 400;
+        
         upgradesTable.add(new Label("Upgrade", headerStyle)).width(width * 0.20f).padBottom(10).padLeft(10);
         upgradesTable.add(new Label("Resources Needed", headerStyle)).width(width * 0.20f).padBottom(10);
         upgradesTable.add(new Label("Effects", headerStyle)).width(width * 0.20f).padBottom(10);
@@ -151,38 +158,39 @@ public class UpgradesUI {
         upgradesTable.add(nameLabel);
         upgradesTable.add(resourcesLabel);
         upgradesTable.add(effectsLabel);
-        Cell<TextButton> buttonCell = upgradesTable.add(upgradeButton).width(100).height(40); //make the button place a cell to hold for the "end" String
+        Cell<TextButton> buttonCell = upgradesTable.add(upgradeButton).width(width*0.2f).height(width*0.05f); //make the button place a cell to hold for the "end" String
         upgradesTable.row();
 
         upgradeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                String currentUpgradeName = names[levelToShow[0]];
                 String requiredResources = resources[levelToShow[0]];
-                boolean canUpgrade = checkResources(requiredResources); 
-
-                if (canUpgrade && levelToShow[0] < maxLevels) {
-                    deductResources(requiredResources);
-
+                Map<String, Integer> resourceMap = parseResourceString(requiredResources);
+                
+                
+                Upgrades upgrade = new Upgrades(inventory, resourceMap, currentUpgradeName); 
+                if (upgrade.canAffordUpgrade()) {
+                    upgrade.applyUpgrade();
                     if (upgradeAction != null) {
                         upgradeAction.run();
                     }
-
                     levelToShow[0]++;
                     if (levelToShow[0] < maxLevels) {
                         nameLabel.setText(names[levelToShow[0]]);
                         resourcesLabel.setText(resources[levelToShow[0]]);
                         effectsLabel.setText(effects[levelToShow[0]]);
                     }
-
                     if (levelToShow[0] == maxLevels) {
                         upgradeButton.remove();
                         Label upgradedLabel = new Label("Fully Upgraded", labelStyle);
                         buttonCell.setActor(upgradedLabel);
                     }
-                } else if (!canUpgrade) {
+                } else {
                     System.out.println("Not enough resources to upgrade!");
                 }
             }
+        
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -239,9 +247,9 @@ public class UpgradesUI {
             new String[]{"Fuel Capacity I", "Fuel Capacity II", "Fuel Capacity III", "Fuel Capacity IV"},
             new String[]{
             "10 Common Building Materials",
-            "30 Uncommon Building Materials",
-            "50 Rare Building Materials",
-            "70 Legendary Building Materials"
+            "10 Uncommon Building Materials",
+            "10 Rare Building Materials",
+            "10 Legendary Building Materials"
             },
             new String[]{
             "Double Fuel Capacity",
@@ -264,9 +272,9 @@ public class UpgradesUI {
             createUpgradeChain(
                 new String[]{"Health I", "Health II", "Health III", "Health IV"},
                 new String[]{
-                "10 Common Building Materials", //need to be verify/changed to the correct resources, with the correct String
-                "30 Uncommon Building Materials",
-                "50 Rare Building Materials",
+                "20 Common Building Materials", //need to be verify/changed to the correct resources, with the correct String
+                "20 Uncommon Building Materials",
+                "20 Rare Building Materials",
                 "70 Legendary Building Materials"
                 },
                 new String[]{
@@ -291,10 +299,10 @@ public class UpgradesUI {
         createUpgradeChain(
                 new String[]{"Oxygen I", "Oxygen II", "Oxygen III", "Oxygen IV"},
                 new String[]{
-                "10 Common Building Materials",//need to be verify/changed to the correct resources, with the correct String
-                "30 Uncommon Building Materials",
-                "50 Rare Building Materials",
-                "70 Legendary Building Materials"
+                "10 Common Building Materials, 10 Common Biomass",//need to be verify/changed to the correct resources, with the correct String
+                "30 Uncommon Building Materials, 10 Uncommon Biomass",
+                "50 Rare Building Materials, 10 Rare Biomass",
+                "70 Legendary Building Materials, 10 Legendary Biomass"
                 },
                 new String[]{
                 "Double Oxygen",
@@ -353,7 +361,7 @@ public class UpgradesUI {
             "Inventory Capacity IV"
             },
             new String[]{
-            "10 Common Building Materials",
+            "10 Common Building Materials, ",
             "30 Uncommon Building Materials",
             "50 Rare Building Materials",
             "70 Legendary Building Materials"
@@ -382,19 +390,19 @@ public class UpgradesUI {
                 "Resources Level I",
                 "Resources Level II",
                 "Resources Level III",
-                "Resources Level IV"
+                
             },
             new String[]{
                 "10 Common Building Materials",
                 "30 Uncommon Building Materials",
                 "50 Rare Building Materials",
-                "70 Legendary Building Materials"
+                
             },
             new String[]{
                 "+1 resource level",
                 "+1 resource level", 
-                "+1 resource level",
                 "+1 resource level"
+                
             },
             new Runnable() {
                 @Override
@@ -413,43 +421,25 @@ public class UpgradesUI {
         
     }
     
-    private boolean checkResources(String requiredResources) {
-        String[] resourceParts = requiredResources.split(" ", 2);
-        if (resourceParts.length != 2) {
-            System.out.println("Error parsing resources: " + requiredResources);
-            return false;
+    private Map<String, Integer> parseResourceString(String resourceString) {
+    Map<String, Integer> resources = new HashMap<>();
+    String[] parts = resourceString.split(", ");
+    for (String part : parts) {
+        String[] requirementFormat = part.split(" ", 2);
+        if (requirementFormat.length != 2) {
+            System.out.println("Invalid resource format: " + part);
+            continue;
         }
-        int requiredQuantity;
         try {
-            requiredQuantity = Integer.parseInt(resourceParts[0]);
+            int quantity = Integer.parseInt(requirementFormat[0]);
+            String itemName = requirementFormat[1];
+            resources.put(itemName, quantity);
         } catch (NumberFormatException e) {
-            System.out.println("Invalid resource quantity: " + resourceParts[0]);
-            return false;
-        }
-        String resourceName = resourceParts[1];
-        int availableQuantity = inventory.checkItemQuantity(resourceName);
-        return availableQuantity >= requiredQuantity;
-    }
-
-    private void deductResources(String requiredResources) {
-        String[] resourceParts = requiredResources.split(" ", 2);
-        if (resourceParts.length != 2) {
-            System.out.println("Error parsing resources: " + requiredResources);
-            return;
-        }
-        int requiredQuantity;
-        try {
-            requiredQuantity = Integer.parseInt(resourceParts[0]);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid resource quantity: " + resourceParts[0]);
-            return;
-        }
-        String resourceName = resourceParts[1];
-        if (inventory.checkItemQuantity(resourceName) >= requiredQuantity) {
-            inventory.removeItem(resourceName, requiredQuantity);
-            System.out.println("Resources deducted: " + requiredQuantity + " " + resourceName);
+            System.out.println("Invalid quantity in resource: " + part);
         }
     }
+    return resources;
+}
 
     public void render() {
         if (isVisible) {
