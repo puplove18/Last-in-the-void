@@ -16,12 +16,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.helpers.FancyFontHelper;
+import com.mygdx.managers.AssetManager;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
 import com.mygdx.objects.Universe;
 import com.mygdx.objects.Upgrades;
 import java.util.HashMap;
 import java.util.Map;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class UpgradesUI {
 
@@ -39,7 +41,8 @@ public class UpgradesUI {
     private int resourcesLevel = 1; 
     private int oxygenLevel = 1;
 
-    public float width = Gdx.graphics.getWidth() / 2;
+    public float width = Gdx.graphics.getWidth();
+    public float height = Gdx.graphics.getHeight();
     private Texture backgroundTexture;
     private NinePatchDrawable panelBackground;
     private ObjectMap<TextButton, Drawable> originalButtonBackgrounds = new ObjectMap<>();
@@ -54,7 +57,22 @@ public class UpgradesUI {
     private static final Color BUTTON_HOVER_COLOR = new Color(0.3f, 0.6f, 0.9f, 1f);
 
     private InventoryUI inventoryUI;
+    private final AssetManager assetManager;
 
+    public UpgradesUI(Player player, Inventory inventory, Universe universe, InventoryUI inventoryUI, AssetManager assetManager) {
+        this.player = player;
+        this.inventory = inventory;
+        this.universe = universe;
+        this.inventoryUI = inventoryUI;
+        this.assetManager = assetManager; // Initialize the assetManager
+        this.stage = new Stage(new ScreenViewport());
+        this.skin = new Skin(Gdx.files.internal("uiskin.json"));
+
+        Gdx.input.setInputProcessor(stage);
+        initializePanelBackground();
+        createUI();
+        possibleUpgrades();
+    }
     public UpgradesUI(Player player, Inventory inventory, Universe universe, InventoryUI inventoryUI) {
         this.player = player;
         this.inventory = inventory;
@@ -62,7 +80,7 @@ public class UpgradesUI {
         this.inventoryUI = inventoryUI; 
         this.stage = new Stage(new ScreenViewport());
         this.skin = new Skin(Gdx.files.internal("uiskin.json"));
-
+        this.assetManager = new AssetManager();
         Gdx.input.setInputProcessor(stage);
         initializePanelBackground();
         createUI();
@@ -94,11 +112,10 @@ public class UpgradesUI {
         mainTable.center();
         stage.addActor(mainTable);
     
-        // Close button aligned to top-right
+    
         TextButton closeButton = new TextButton("X", skin);
 
     
-        // Row for close button
         Table closeButtonTable = new Table();
         closeButtonTable.add(closeButton).top().right().padTop(5).padRight(5);
         closeButtonTable.top().right();
@@ -113,20 +130,20 @@ public class UpgradesUI {
         });
         stage.addActor(closeButtonTable);
     
-        // Upgrades Table
+
         upgradesTable = new Table(skin);
-        upgradesTable.top().left().pad(10);
+        upgradesTable.top().left().pad(10).center();
         upgradesTable.defaults().pad(5).left();
     
-        int fontSize = 13;
+        int fontSize = 10;
         BitmapFont headerFont = FancyFontHelper.getInstance().getFont(TITLE_COLOR, fontSize);
         Label.LabelStyle headerStyle = new Label.LabelStyle(headerFont, TITLE_COLOR);
     
         
-        upgradesTable.add(new Label("Upgrade", headerStyle)).width(width * 0.20f).padBottom(10).padLeft(10);
-        upgradesTable.add(new Label("Resources Needed", headerStyle)).width(width * 0.20f).padBottom(10);
-        upgradesTable.add(new Label("Effects", headerStyle)).width(width * 0.20f).padBottom(10);
-        upgradesTable.add(new Label("Action", headerStyle)).width(width * 0.20f).padBottom(10);
+        upgradesTable.add(new Label("Upgrade", headerStyle)).width(100).padBottom(10).padLeft(10); 
+        upgradesTable.add(new Label("Resources Needed", headerStyle)).width(100).padBottom(10);
+        upgradesTable.add(new Label("Effects", headerStyle)).width(100).padBottom(10);
+        upgradesTable.add(new Label("Action", headerStyle)).width(100).padBottom(10);
         upgradesTable.row();
     
         scrollPane = new ScrollPane(upgradesTable, skin);
@@ -149,25 +166,25 @@ public class UpgradesUI {
         final int[] levelToShow = {0};
         
         final int maxLevels = names.length;
-
+    
         Label nameLabel = new Label(names[levelToShow[0]], labelStyle);
-        Label resourcesLabel = new Label(resources[levelToShow[0]], labelStyle);
+        final Table resourcesTable = new Table(); 
+        updateResourceCells(resourcesTable, resources[levelToShow[0]], labelStyle); 
         Label effectsLabel = new Label(effects[levelToShow[0]], labelStyle);
         TextButton upgradeButton = new TextButton("Upgrade", buttonStyle);
-
-        upgradesTable.add(nameLabel);
-        upgradesTable.add(resourcesLabel);
-        upgradesTable.add(effectsLabel);
-        Cell<TextButton> buttonCell = upgradesTable.add(upgradeButton).width(width*0.2f).height(width*0.05f); //make the button place a cell to hold for the "end" String
+    
+        upgradesTable.add(nameLabel).padLeft(10);
+        upgradesTable.add(resourcesTable).width(150); 
+        upgradesTable.add(effectsLabel).width(200);
+        Cell<TextButton> buttonCell = upgradesTable.add(upgradeButton).width(width*0.2f).height(width*0.05f);
         upgradesTable.row();
-
+    
         upgradeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 String currentUpgradeName = names[levelToShow[0]];
                 String requiredResources = resources[levelToShow[0]];
                 Map<String, Integer> resourceMap = parseResourceString(requiredResources);
-                
                 
                 Upgrades upgrade = new Upgrades(inventory, resourceMap, currentUpgradeName); 
                 if (upgrade.canAffordUpgrade()) {
@@ -178,19 +195,17 @@ public class UpgradesUI {
                     levelToShow[0]++;
                     if (levelToShow[0] < maxLevels) {
                         nameLabel.setText(names[levelToShow[0]]);
-                        resourcesLabel.setText(resources[levelToShow[0]]);
+                        updateResourceCells(resourcesTable, resources[levelToShow[0]], labelStyle); 
                         effectsLabel.setText(effects[levelToShow[0]]);
                     }
                     if (levelToShow[0] == maxLevels) {
-                        upgradeButton.remove();
                         Label upgradedLabel = new Label("Fully Upgraded", labelStyle);
+                        buttonCell.clearActor();
+                        upgradeButton.remove();
                         buttonCell.setActor(upgradedLabel);
                     }
-                } else {
-                    System.out.println("Not enough resources to upgrade!");
                 }
             }
-        
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -241,15 +256,33 @@ public class UpgradesUI {
         pixmap.fill();
         return pixmap;
     }
-
+    private void updateResourceCells(Table table, String resourceString, Label.LabelStyle style) {
+        table.clear();
+        String[] requirements = resourceString.split(", ");
+        
+        for (String entry : requirements) {
+            String[] req = entry.split(" ", 2);
+            if (req.length != 2) continue;
+            
+            int quantity = Integer.parseInt(req[0]);
+            String itemName = req[1];
+            
+            Table itemGroup = new Table();
+            TextureRegionDrawable icon = assetManager.getItemIcon(itemName);
+            
+            itemGroup.add(new Image(icon)).size(24, 24).padRight(2);
+            itemGroup.add(new Label(String.valueOf(quantity), style)).padRight(8);
+            table.add(itemGroup);
+        }
+    }
     private void possibleUpgrades() {
         createUpgradeChain(
             new String[]{"Fuel Capacity I", "Fuel Capacity II", "Fuel Capacity III", "Fuel Capacity IV"},
             new String[]{
-            "10 Common Building Materials",
-            "10 Uncommon Building Materials",
-            "10 Rare Building Materials",
-            "10 Legendary Building Materials"
+            "10 Common Building Materials, 20 Common Fuel",
+            "10 Uncommon Building Materials, 15 Uncommon Fuel",
+            "10 Rare Building Materials, 10 Rare Fuel",
+            "10 Legendary Building Materials, 10 Legendary Fuel"
             },
             new String[]{
             "Double Fuel Capacity",
@@ -272,10 +305,10 @@ public class UpgradesUI {
             createUpgradeChain(
                 new String[]{"Health I", "Health II", "Health III", "Health IV"},
                 new String[]{
-                "20 Common Building Materials", //need to be verify/changed to the correct resources, with the correct String
-                "20 Uncommon Building Materials",
-                "20 Rare Building Materials",
-                "70 Legendary Building Materials"
+                "20 Common Building Materials, 20 Common Biomass", //need to be verify/changed to the correct resources, with the correct String
+                "15 Uncommon Building Materials, 15 Uncommon Biomass",
+                "10 Rare Building Materials, 10 Rare Biomass",
+                "10 Legendary Building Materials, 10 Legendary Biomass"
                 },
                 new String[]{
                 "Double Health",
@@ -299,10 +332,10 @@ public class UpgradesUI {
         createUpgradeChain(
                 new String[]{"Oxygen I", "Oxygen II", "Oxygen III", "Oxygen IV"},
                 new String[]{
-                "10 Common Building Materials, 10 Common Biomass",//need to be verify/changed to the correct resources, with the correct String
-                "30 Uncommon Building Materials, 10 Uncommon Biomass",
-                "50 Rare Building Materials, 10 Rare Biomass",
-                "70 Legendary Building Materials, 10 Legendary Biomass"
+                "10 Common Building Materials, 20 Common Biomass",//need to be verify/changed to the correct resources, with the correct String
+                "10 Uncommon Building Materials, 15 Uncommon Biomass",
+                "10 Rare Building Materials, 10 Rare Biomass",
+                "10 Legendary Building Materials, 10 Legendary Biomass"
                 },
                 new String[]{
                 "Double Oxygen",
@@ -330,10 +363,10 @@ public class UpgradesUI {
                 "Precision Landing System"
             },
             new String[]{
-                "10 Common Building Materials",
-                "30 Uncommon Building Materials",
-                "50 Rare Building Materials",
-                "70 Legendary Building Materials"
+                "20 Common Building Materials",
+                "15 Uncommon Building Materials",
+                "10 Rare Building Materials",
+                "10 Legendary Building Materials"
             },
             new String[]{
                 "Choose between 1 locations",
@@ -361,10 +394,10 @@ public class UpgradesUI {
             "Inventory Capacity IV"
             },
             new String[]{
-            "10 Common Building Materials, ",
-            "30 Uncommon Building Materials",
-            "50 Rare Building Materials",
-            "70 Legendary Building Materials"
+            "60 Common Building Materials, ",
+            "50 Uncommon Building Materials",
+            "40 Rare Building Materials",
+            "30 Legendary Building Materials"
             },
             new String[]{
             "More Inventory Space",
@@ -393,9 +426,9 @@ public class UpgradesUI {
                 
             },
             new String[]{
-                "10 Common Building Materials",
-                "30 Uncommon Building Materials",
-                "50 Rare Building Materials",
+                "50 Common Building Materials",
+                "40 Uncommon Building Materials",
+                "30 Rare Building Materials",
                 
             },
             new String[]{

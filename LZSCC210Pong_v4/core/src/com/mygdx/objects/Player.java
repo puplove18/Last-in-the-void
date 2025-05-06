@@ -80,6 +80,10 @@ public class Player{
         this.inventory.addItem("Uncommon Biomass", 500); 
         this.inventory.addItem("Rare Biomass", 500); 
         this.inventory.addItem("Legendary Biomass", 500); 
+        this.inventory.addItem("Common Fuel", 500);
+        this.inventory.addItem("Uncommon Fuel", 500);
+        this.inventory.addItem("Rare Fuel", 500);
+        this.inventory.addItem("Legendary Fuel", 500);
 
     }
 
