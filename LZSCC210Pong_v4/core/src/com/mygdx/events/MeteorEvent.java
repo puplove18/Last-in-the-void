@@ -16,23 +16,23 @@ public class MeteorEvent extends Event {
         addChoice("Brace for impact", 80,
                 player -> {
                     player.updateStat(Player.Stats.HEALTH, -5);
-                    setSuccessMessage("You weathered the storm. Minor hull damage sustained (-15%).");
+                    setSuccessMessage("You weathered the storm. Minor hull damage sustained (-15).");
                 },
                 player -> {
                     player.updateStat(Player.Stats.HEALTH, -20);
-                    setFailureMessage("A massive rock smashed into you! Significant hull damage (-30%).");
+                    setFailureMessage("A massive rock smashed into you! Significant hull damage (-30).");
                 }
         );
 
         addChoice("Evade with thrusters", 60,
                 player -> {
                     player.updateStat(Player.Stats.FUEL, -10);
-                    setSuccessMessage("Thrusters successfully dodged most meteors. Fuel consumed (-10%).");
+                    setSuccessMessage("Thrusters successfully dodged most meteors. Fuel consumed (-10).");
                 },
                 player -> {
                     player.updateStat(Player.Stats.FUEL, -20);
                     player.updateStat(Player.Stats.HEALTH, -10);
-                    setFailureMessage("Failed evasive maneuver. Fuel wasted (-20%) and hull damaged (-10%).");
+                    setFailureMessage("Failed evasive maneuver. Fuel wasted (-20%) and hull damaged (-10).");
                 }
         );
 

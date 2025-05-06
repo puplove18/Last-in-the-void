@@ -24,13 +24,13 @@ public class AggressiveRobotsEvent extends Event {
                     if (upgrades.getHealthLevel() > 2){
                         player.updateStat(Player.Stats.HEALTH, -dmg / 2);
                         setFailureMessage(
-                                "Due to high defense you only got " + dmg / 2  + "%."
+                                "Due to high defense you only got " + dmg / 2
                         );
                     }
                     else{
                     player.updateStat(Player.Stats.HEALTH, -dmg);
                     setFailureMessage(
-                            "The drones swarm and damage your hull by " + dmg + "%."
+                            "The drones swarm and damage your hull by " + dmg + "."
                     );}
                 }
         );
@@ -40,7 +40,7 @@ public class AggressiveRobotsEvent extends Event {
                     int burn = 15;
                     player.updateStat(Player.Stats.FUEL, -burn);
                     setSuccessMessage(
-                            "You outrun them, burning " + burn + "% of your fuel."
+                            "You outrun them, burning " + burn + " of your fuel."
                     );
                 },
                 player -> {
@@ -48,7 +48,7 @@ public class AggressiveRobotsEvent extends Event {
                     player.updateStat(Player.Stats.FUEL, -burn);
                     player.updateStat(Player.Stats.HEALTH, -dmg);
                     setFailureMessage(
-                            "They catch up—Fuel -" + burn + "% and hull -" + dmg + "%."
+                            "They catch up—Fuel -" + burn + "% and hull -" + dmg + "."
                     );
                 }
         );
@@ -66,7 +66,7 @@ public class AggressiveRobotsEvent extends Event {
                     player.getInventory().removeItem("Common Building Materials", thrown);
                     player.updateStat(Player.Stats.HEALTH, -dmg);
                     setFailureMessage(
-                            "They ignore the decoy, shred your cargo and damage your hull by " + dmg + "%."
+                            "They ignore the decoy, shred your cargo and damage your hull by " + dmg + "."
                     );
                 }
         );

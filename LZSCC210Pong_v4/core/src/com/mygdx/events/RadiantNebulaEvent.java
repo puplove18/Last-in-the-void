@@ -18,7 +18,7 @@ public class RadiantNebulaEvent extends Event {
                     double oxygenGain = 15 + random.nextInt(6);   //5–10%>
                     player.updateStat(Player.Stats.FUEL, fuelGain);
                     player.updateStat(Player.Stats.OXYGEN, oxygenGain);
-                    setSuccessMessage("Systems charged: +" + (int)fuelGain + "% fuel, +" +
+                    setSuccessMessage("Systems charged: +" + (int)fuelGain + " fuel, +" +
                             (int)oxygenGain + "% life support.");
                 },
                 player -> {

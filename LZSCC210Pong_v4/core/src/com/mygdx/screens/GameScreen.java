@@ -180,7 +180,7 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                     System.out.println("Not enough fuel!");
                     System.out.println("You were lost in space");
 
-                    SpaceGame.getInstance().changeScreen(this, ScreenType.MENU_UI);
+                    SpaceGame.getInstance().changeScreen(this, ScreenType.DEAD_GAME);
                     return;
                 }else if (!clicked.getHarvest()) {
                     float cost = 10f; //cost of travel planet

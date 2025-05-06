@@ -19,19 +19,19 @@ public class DerelictShipEvent extends Event {
                         setSuccessMessage("You salvaged Rare Tech and repaired your ship!!");
                     } else {
                         player.updateStat(Player.Stats.HEALTH, -10);
-                        setSuccessMessage("Salvage succeeded but you sustained minor injuries (-10% health).");
+                        setSuccessMessage("Salvage succeeded but you sustained minor injuries (-10 health).");
                     }
                 },
                 player -> {
                     player.updateStat(Player.Stats.HEALTH, -20);
-                    setFailureMessage("Hull breach on entry! You take -20% health damage.");
+                    setFailureMessage("Hull breach on entry! You take -20 health damage.");
                 }
         );
 
         addChoice("Scan from orbit", 90,
                 player -> {
                     player.updateStat(Player.Stats.FUEL, -5);
-                    setSuccessMessage("Scan reveals valuable cargo location. Fuel -5% to mark coordinates.");
+                    setSuccessMessage("Scan reveals valuable cargo location. Fuel -5 to mark coordinates.");
                 },
                 player -> {
                     setFailureMessage("Sensor malfunction. No data gained.");

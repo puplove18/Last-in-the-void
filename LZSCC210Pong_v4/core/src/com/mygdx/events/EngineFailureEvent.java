@@ -15,11 +15,11 @@ public class EngineFailureEvent extends Event {
         addChoice("Attempt emergency restart | 50", 50,
                 player -> {
                     player.updateStat(Player.Stats.FUEL, -15);
-                    setSuccessMessage("Engines rebooted! Fuel drained (-15%).");
+                    setSuccessMessage("Engines rebooted! Fuel drained (-15).");
                 },
                 player -> {
                     player.updateStat(Player.Stats.FUEL, -30);
-                    setFailureMessage("Restart failed. Major fuel loss (-30%) and systems offline.");
+                    setFailureMessage("Restart failed. Major fuel loss (-30) and systems offline.");
                 }
         );
 
@@ -29,14 +29,14 @@ public class EngineFailureEvent extends Event {
                 },
                 player -> {
                     player.updateStat(Player.Stats.HEALTH, -10);
-                    setFailureMessage("Debris collision during drift! Hull damaged (-10%).");
+                    setFailureMessage("Debris collision during drift! Hull damaged (-10).");
                 }
         );
 
         addChoice("Jettison weight to conserve power | 70", 70,
                 player -> {
                     player.updateStat(Player.Stats.FUEL, +10);
-                    setSuccessMessage("Weight shed; power returns. Fuel efficiency +10%.");
+                    setSuccessMessage("Weight shed; power returns. Fuel efficiency +10.");
                 },
                 player -> {
                     setFailureMessage("No spare mass to jettison. No effect.");

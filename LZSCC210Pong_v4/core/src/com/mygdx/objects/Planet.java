@@ -13,6 +13,7 @@ public class Planet {
     private String playerSize;
     private int maxPlanetSize = 100;
     private boolean harvestStatus = false;
+    private boolean hasAlein;
     //private Texture texture;
     Random rand = new Random();
 
@@ -89,7 +90,16 @@ public class Planet {
         this.size = size;
         this.playerSize = pSize;
         this.tier = tier;
-    }
+
+        double a = rand.nextDouble();
+        if(a < 0.2){
+        this.hasAlein = true;
+            System.out.println("alien: " + this.hasAlein);
+        }
+        else{
+            this.hasAlein = false;
+            System.out.println("alien: " + this.hasAlein);
+        }}
 
     public Planet(String name, Type star2, int size, int tier) {
         this.name = name;
@@ -164,6 +174,9 @@ public class Planet {
 
     }
 
+    public boolean getHasAlien(){
+        return this.hasAlein;
+    }
     public static void main(String[] args){
         //Test the generatePlanet method
         Planet test = new Planet();

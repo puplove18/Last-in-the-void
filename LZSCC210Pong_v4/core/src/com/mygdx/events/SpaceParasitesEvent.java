@@ -16,23 +16,23 @@ public class SpaceParasitesEvent extends Event {
                 player -> {
                     int stat = -10;
                     player.updateStat(Player.Stats.OXYGEN, stat);
-                    setSuccessMessage("Compartment sealed. Oxygen loss " + stat  + "% but infestation contained.");
+                    setSuccessMessage("Compartment sealed. Oxygen loss " + stat  + " but infestation contained.");
                 },
                 player -> {
                     int stat = 20;
                     player.updateStat(Player.Stats.OXYGEN, stat);
-                    setFailureMessage("Seal failed; parasites spread. Oxygen loss " + stat  + "%).");
+                    setFailureMessage("Seal failed; parasites spread. Oxygen loss " + stat  + ").");
                 }
         );
 
         addChoice("Use bio-filter dispensers", 40,
                 player -> {
                     player.updateStat(Player.Stats.OXYGEN, -5);
-                    setSuccessMessage("Filters worked. Minor loss of oxygen (-5%).");
+                    setSuccessMessage("Filters worked. Minor loss of oxygen (-5).");
                 },
                 player -> {
                     player.updateStat(Player.Stats.HEALTH, -15);
-                    setFailureMessage("Filters overloaded. Crew exposure! Health -15%.");
+                    setFailureMessage("Filters overloaded. Crew exposure! Health -15.");
                 }
         );
 
