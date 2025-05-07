@@ -110,7 +110,7 @@ public class UIManager {
             }
 
             Event story = null;
-            if (systemJumpCount == 3) {
+            if (systemJumpCount == 19) {
                 story = new StoryEvent1();
             }
             else if (systemJumpCount == 39) {
