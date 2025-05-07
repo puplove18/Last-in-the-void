@@ -305,7 +305,7 @@ public class UpgradesUI {
             createUpgradeChain(
                 new String[]{"Health I", "Health II", "Health III", "Health IV"},
                 new String[]{
-                "20 Common Building Materials, 20 Common Biomass", //need to be verify/changed to the correct resources, with the correct String
+                "20 Common Building Materials, 20 Common Biomass", 
                 "15 Uncommon Building Materials, 15 Uncommon Biomass",
                 "10 Rare Building Materials, 10 Rare Biomass",
                 "10 Legendary Building Materials, 10 Legendary Biomass"
@@ -332,7 +332,7 @@ public class UpgradesUI {
         createUpgradeChain(
                 new String[]{"Oxygen I", "Oxygen II", "Oxygen III", "Oxygen IV"},
                 new String[]{
-                "10 Common Building Materials, 20 Common Biomass",//need to be verify/changed to the correct resources, with the correct String
+                "10 Common Building Materials, 20 Common Biomass",
                 "10 Uncommon Building Materials, 15 Uncommon Biomass",
                 "10 Rare Building Materials, 10 Rare Biomass",
                 "10 Legendary Building Materials, 10 Legendary Biomass"
