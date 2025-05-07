@@ -394,7 +394,7 @@ public class UpgradesUI {
             "Inventory Capacity IV"
             },
             new String[]{
-            "60 Common Building Materials, ",
+            "60 Common Building Materials ",
             "50 Uncommon Building Materials",
             "40 Rare Building Materials",
             "30 Legendary Building Materials"
