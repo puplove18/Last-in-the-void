@@ -9,6 +9,7 @@ public class Inventory {
     private int maxSize;
     private boolean avoidInfiniteInventoryEmpty = false;
     private boolean hasPrintedInventory = false;
+    private static final int MAX_ITEMS_PER_SLOT = 300; // Maximum number of items per slot
     
     public Inventory(int maxSize) {
         this.items = new HashMap<>();
@@ -23,13 +24,19 @@ public class Inventory {
             return false;
         }
 
-        if (items.size() >= maxSize) {
+        if (!items.containsKey(item) && items.size() >= maxSize) {
             System.out.println("Inventory is full. Cannot add " + item);
             return false;
         }
         
+        int currentQuantity = items.getOrDefault(item, 0);
+        if (currentQuantity >= MAX_ITEMS_PER_SLOT) {
+            System.out.println("Slot for " + item + " is full (max " + MAX_ITEMS_PER_SLOT + "). Item discarded.");
+            return false;
+        }
+        
         // Increment the quantity if the item is already in the inventory
-        items.put(item, items.getOrDefault(item, 0) + 1);
+        items.put(item, currentQuantity + 1);
         System.out.println(item + " added to inventory.");
         hasPrintedInventory = false; 
         return true;
@@ -53,9 +60,29 @@ public class Inventory {
              return false;
         }
     
-        // Increment the quantity if the item is already in the inventory, or add it.
-        items.put(item, items.getOrDefault(item, 0) + quantity); 
-        System.out.println(quantity + "x " + item + " added to inventory.");
+        // Check current quantity and apply slot limit
+        int currentQuantity = items.getOrDefault(item, 0);
+        int availableSpace = MAX_ITEMS_PER_SLOT - currentQuantity;
+        
+        if (availableSpace <= 0) {
+            System.out.println("Slot for " + item + " is already full (max " + MAX_ITEMS_PER_SLOT + "). Items discarded.");
+            return false;
+        }
+        
+        // Calculate how many items can be added without exceeding the limit
+        int actualQuantityToAdd = Math.min(quantity, availableSpace);
+        
+        // If we're not adding all requested items, inform the player
+        if (actualQuantityToAdd < quantity) {
+            int discarded = quantity - actualQuantityToAdd;
+            System.out.println("Added " + actualQuantityToAdd + "x " + item + " to inventory. " + 
+                               discarded + " items discarded (slot limit of " + MAX_ITEMS_PER_SLOT + " reached).");
+        } else {
+            System.out.println(actualQuantityToAdd + "x " + item + " added to inventory.");
+        }
+        
+        // Update the inventory
+        items.put(item, currentQuantity + actualQuantityToAdd);
         hasPrintedInventory = false;
         return true;
     }
@@ -112,5 +139,10 @@ public class Inventory {
             items = new HashMap<>();
         }
         return items;
+    }
+    
+    // Get the maximum number of items per slot
+    public int getMaxItemsPerSlot() {
+        return MAX_ITEMS_PER_SLOT;
     }
 }
