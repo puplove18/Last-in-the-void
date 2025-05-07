@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.audio.AudioManager;
+import com.mygdx.events.AlienEncounterEvent;
 import com.mygdx.events.PlanetLandingEvent;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.managers.EventManager;
@@ -28,6 +29,9 @@ import com.mygdx.game.SpaceGame;
 import com.mygdx.ui.EventUI;
 import java.util.Random;
 
+import javax.swing.event.ChangeEvent;
+import com.mygdx.objects.Alien;
+import com.mygdx.events.AlienEncounterEvent;
 
 public class GameScreen extends ScreenAdapter implements EventUI.EventCompletionListener {
     private OrthographicCamera camera;
@@ -196,9 +200,23 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                         );
                         camera.update();
                         
-                        // Calls the planet landing event when a planet is clicked on
+                        // Calls the planet landing event or alien encounter event when a planet is clicked on
                         if (!eventManager.isEventActive()) {
-                            Event planetEvent = new PlanetLandingEvent(clicked);
+                            Event planetEvent;
+                            
+                            if (clicked.getHasAlien()) {
+                                // Create a random alien type
+                                String[] alienTypes = {"Humanoid", "Aggressive Xenomorph"};
+                                String alienType = alienTypes[rand.nextInt(alienTypes.length)];
+                                Alien alien = new Alien(alienType);
+
+                                // Create the alien event
+                                planetEvent = new AlienEncounterEvent(alien);
+                            } else {
+                                // If the planet has no alien then trigger planet landing event
+                                planetEvent = new PlanetLandingEvent(clicked);
+                            }
+                            
                             eventManager.setCurrentEvent(planetEvent);
                             eventManager.showCurrentEvent();
                             setPaused(true);
