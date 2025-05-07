@@ -64,7 +64,7 @@ public class UpgradesUI {
         this.inventory = inventory;
         this.universe = universe;
         this.inventoryUI = inventoryUI;
-        this.assetManager = assetManager; // Initialize the assetManager
+        this.assetManager = assetManager; 
         this.stage = new Stage(new ScreenViewport());
         this.skin = new Skin(Gdx.files.internal("uiskin.json"));
 
@@ -112,10 +112,8 @@ public class UpgradesUI {
         mainTable.center();
         stage.addActor(mainTable);
     
-    
         TextButton closeButton = new TextButton("X", skin);
 
-    
         Table closeButtonTable = new Table();
         closeButtonTable.add(closeButton).top().right().padTop(5).padRight(5);
         closeButtonTable.top().right();
@@ -129,7 +127,6 @@ public class UpgradesUI {
             }
         });
         stage.addActor(closeButtonTable);
-    
 
         upgradesTable = new Table(skin);
         upgradesTable.top().left().pad(10).center();
@@ -139,7 +136,6 @@ public class UpgradesUI {
         BitmapFont headerFont = FancyFontHelper.getInstance().getFont(TITLE_COLOR, fontSize);
         Label.LabelStyle headerStyle = new Label.LabelStyle(headerFont, TITLE_COLOR);
     
-        
         upgradesTable.add(new Label("Upgrade", headerStyle)).width(100).padBottom(10).padLeft(10); 
         upgradesTable.add(new Label("Resources Needed", headerStyle)).width(100).padBottom(10);
         upgradesTable.add(new Label("Effects", headerStyle)).width(100).padBottom(10);
@@ -156,7 +152,6 @@ public class UpgradesUI {
 
         mainTable.add(container).expand().fill();
     }
-    
     
     private void createUpgradeChain(String[] names, String[] resources, String[] effects, Runnable upgradeAction) {
         int fontSize = 8;
@@ -394,7 +389,7 @@ public class UpgradesUI {
             "Inventory Capacity IV"
             },
             new String[]{
-            "60 Common Building Materials ",
+            "60 Common Building Materials",
             "50 Uncommon Building Materials",
             "40 Rare Building Materials",
             "30 Legendary Building Materials"

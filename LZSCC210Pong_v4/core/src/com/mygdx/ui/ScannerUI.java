@@ -218,13 +218,8 @@ public class ScannerUI {
         mainTable.setVisible(visible);
 
         if (visible) {
-            previousProcessor = Gdx.input.getInputProcessor();
             Gdx.input.setInputProcessor(stage);
-        }
-        else {
-            if (previousProcessor != null) {
-                Gdx.input.setInputProcessor(previousProcessor);
-            }//ensure no access
+        
         }
     }
 
