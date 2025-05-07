@@ -223,6 +223,30 @@ public class InventoryUI {
         return 0;
     }
     
+    // Helper method to get current stat value
+    private double getCurrentStatValue(Player.Stats stat) {
+        if (stat == Player.Stats.FUEL) {
+            return player.getFuel();
+        } else if (stat == Player.Stats.OXYGEN) {
+            return player.getOxygen();
+        } else if (stat == Player.Stats.HEALTH) {
+            return player.getHealth();
+        }
+        return 0;
+    }
+
+    // Helper method to get maximum capacity for a stat
+    private double getMaxCapacity(Player.Stats stat) {
+        if (stat == Player.Stats.FUEL) {
+            return player.getFuelLim();
+        } else if (stat == Player.Stats.OXYGEN) {
+            return player.getOxygenLim();
+        } else if (stat == Player.Stats.HEALTH) {
+            return player.getHealthLim();
+        }
+        return 0;
+    }
+    
     private void refreshInventoryGrid() {
         inventoryTable.clear();
         Map<String, Integer> items = player.getInventory().getItems();
@@ -316,7 +340,9 @@ public class InventoryUI {
                                   stat == Player.Stats.OXYGEN ? "Life Support" : "";
                                   
         // Create a recovery label that will update when quantity changes
-        final Label recoveryLabel = new Label("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType,
+        // "Use to recover X of SYSTEM (current/max)"
+        final Label recoveryLabel = new Label("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType +
+            " (" + (int)(Math.min(getCurrentStatValue(stat) + (recoveryAmount * quantity[0]), getMaxCapacity(stat))) + "/" + (int)getMaxCapacity(stat) + ")",
             new Label.LabelStyle(FancyFontHelper.getInstance().getFont(TEXT_COLOR, 15), TEXT_COLOR));
             
         // Add click listeners with the recovery label update functionality
@@ -325,7 +351,8 @@ public class InventoryUI {
             public void clicked(InputEvent event, float x, float y) {
                 quantity[0] = Math.min(maxQuantity, quantity[0] + 1);
                 quantityLabel.setText(String.valueOf(quantity[0]));
-                recoveryLabel.setText("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType);
+                recoveryLabel.setText("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType +
+                    " (" + (int)(Math.min(getCurrentStatValue(stat) + (recoveryAmount * quantity[0]), getMaxCapacity(stat))) + "/" + (int)getMaxCapacity(stat) + ")");
             }
         });
         
@@ -334,7 +361,8 @@ public class InventoryUI {
             public void clicked(InputEvent event, float x, float y) {
                 quantity[0] = Math.max(1, quantity[0] - 1);
                 quantityLabel.setText(String.valueOf(quantity[0]));
-                recoveryLabel.setText("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType);
+                recoveryLabel.setText("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType +
+                    " (" + (int)(Math.min(getCurrentStatValue(stat) + (recoveryAmount * quantity[0]), getMaxCapacity(stat))) + "/" + (int)getMaxCapacity(stat) + ")");
             }
         });
         
@@ -343,7 +371,8 @@ public class InventoryUI {
             public void clicked(InputEvent event, float x, float y) {
                 quantity[0] = Math.min(maxQuantity, quantity[0] + 10);
                 quantityLabel.setText(String.valueOf(quantity[0]));
-                recoveryLabel.setText("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType);
+                recoveryLabel.setText("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType +
+                    " (" + (int)(Math.min(getCurrentStatValue(stat) + (recoveryAmount * quantity[0]), getMaxCapacity(stat))) + "/" + (int)getMaxCapacity(stat) + ")");
             }
         });
         
@@ -352,7 +381,8 @@ public class InventoryUI {
             public void clicked(InputEvent event, float x, float y) {
                 quantity[0] = Math.max(1, quantity[0] - 10);
                 quantityLabel.setText(String.valueOf(quantity[0]));
-                recoveryLabel.setText("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType);
+                recoveryLabel.setText("Use to recover " + (recoveryAmount * quantity[0]) + " " + systemType +
+                    " (" + (int)(Math.min(getCurrentStatValue(stat) + (recoveryAmount * quantity[0]), getMaxCapacity(stat))) + "/" + (int)getMaxCapacity(stat) + ")");
             }
         });
         
@@ -554,4 +584,3 @@ public class InventoryUI {
         }
     }
 }
-
