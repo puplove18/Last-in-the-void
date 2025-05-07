@@ -30,7 +30,7 @@ public class DeadGameScreen extends ScreenAdapter {
 
         Label titleLabel = new Label("GAME OVER", skin);
         titleLabel.setFontScale(1.0f);
-        Label creditsLabel = new Label("Your journey was glorios but this is the end. You couldn't return...", skin);
+        Label creditsLabel = new Label("Your journey was glorious but this is the end. You couldn't return...", skin);
         creditsLabel.setWrap(true);
         creditsLabel.setAlignment(Align.center);
         creditsLabel.setWidth(400);
