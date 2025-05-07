@@ -109,6 +109,38 @@ public class UIManager {
                 return;
             }
 
+            if (systemJumpCount == 19) {
+                Event story = new StoryEvent1();
+                gameScreen.getEventManager().setCurrentEvent(story);
+                gameScreen.getEventManager().showCurrentEvent();
+                gameScreen.setPaused(true);
+                return;
+
+            }
+            else if (systemJumpCount == 39) {
+                Event story = new StoryEvent2();
+                gameScreen.getEventManager().setCurrentEvent(story);
+                gameScreen.getEventManager().showCurrentEvent();
+                gameScreen.setPaused(true);
+                return;
+            }
+
+            else if (systemJumpCount == 59) {
+                Event story = new StoryEvent3();
+                gameScreen.getEventManager().setCurrentEvent(story);
+                gameScreen.getEventManager().showCurrentEvent();
+                gameScreen.setPaused(true);
+                return;
+            }
+
+            else if (systemJumpCount == 79) {
+                Event story = new StoryEvent4();
+                gameScreen.getEventManager().setCurrentEvent(story);
+                gameScreen.getEventManager().showCurrentEvent();
+                gameScreen.setPaused(true);
+                return;
+            }
+
             //close scanner
             scannerUI.setVisible(false);
             scannerOpen = false;
