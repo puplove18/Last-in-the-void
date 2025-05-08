@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.game.SpaceGame;
@@ -40,6 +41,7 @@ public class RenderManager {
     private BitmapFont font;
     private static final Random rand = new Random();
     private Planet.Type selectedBackgroundType;
+    private Texture debugTexture;
 
     public RenderManager(OrthographicCamera camera,
                          PlayerManager playerManager,
@@ -174,6 +176,10 @@ public class RenderManager {
         float orbitStep = maxRadius / count;
         float minSize = sh * 0.05f;
         float maxSize = sh * 0.12f;
+
+        float uiButtons = 70;
+        float bottomMargin = uiButtons + 10;
+
         for (int i = 1; i < currentSystemTextures.size(); i++) {
             float angle = planetAngles.get(i);
             float radius = orbitStep * i;
@@ -182,6 +188,13 @@ public class RenderManager {
             float planetSize = Math.max(minSize, Math.min(rawSize, maxSize));
             float px = cx + radius * (float)Math.cos(angle) - planetSize * 0.5f;
             float py = cy + radius * (float)Math.sin(angle) - planetSize * 0.5f;
+            // Boundary for orbits to avoid spawning in the bottom UI buttons area
+            if (py < bottomMargin) {
+                angle = (float)(Math.PI - (Math.random() * Math.PI)); 
+                px = cx + radius * (float)Math.cos(angle) - planetSize * 0.5f;
+                py = cy + radius * (float)Math.sin(angle) - planetSize * 0.5f;
+                planetAngles.set(i, angle);
+        }
             planetBounds.add(new Rectangle(px, py, planetSize, planetSize));
             batch.draw(currentSystemTextures.get(i), px, py, planetSize, planetSize);
         }
@@ -231,6 +244,7 @@ public class RenderManager {
                 alienY,
                 -alienTexture.getWidth(),
                 alienTexture.getHeight());
+      
     }
 
     private void renderPauseMessage() {
