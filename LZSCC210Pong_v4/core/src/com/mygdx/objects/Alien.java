@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.mygdx.helpers.BodyHelper;
-import com.mygdx.helpers.Constants;
+//import com.mygdx.helpers.BodyHelper;
+//import com.mygdx.helpers.Constants;
 import com.mygdx.helpers.ContactType;
 import com.mygdx.game.SpaceGame;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.game.SpaceGame;
-public class Alien extends InteractiveObject{
+public class Alien {
 
     private String type;
     private Attitude attitude; 

@@ -1,6 +1,6 @@
 package com.mygdx.objects;
 
-public class Resource extends InteractiveObject {
+public class Resource {
 
     private String name;
     private Type type;
