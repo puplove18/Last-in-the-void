@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -25,9 +26,10 @@ import com.badlogic.gdx.utils.Align;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.objects.Player;
 import com.mygdx.game.SpaceGame;
-
+import com.mygdx.managers.ShowStuff;
 import java.util.HashMap;
 import java.util.Map;
+
 
 
 public class InventoryUI {
@@ -44,6 +46,7 @@ public class InventoryUI {
     private TextureAtlas itemAtlas;
     private TextureRegionDrawable innerBg;
     private TextureRegionDrawable slotBg;
+    public ShowStuff showStuff;
     
     private Skin skin;
     private Table mainTable;
@@ -70,6 +73,8 @@ public class InventoryUI {
         this.atlas = new TextureAtlas(Gdx.files.internal("backgrounds.atlas"));
         this.innerBg = new TextureRegionDrawable(atlas.findRegion("GUI_note"));
         this.slotBg = new TextureRegionDrawable(atlas.findRegion("GUI_slot"));
+
+        this.showStuff = new ShowStuff(stage);
         
         initializePanelBackground();
         createUI();
@@ -274,16 +279,24 @@ public class InventoryUI {
                     final int currentQuantity = quantity;
                     slotContainer.addListener(new ClickListener() {
                         @Override
+                        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                            showStuff.show(itemName, event.getStageX(), event.getStageY());
+                        }
+
+                        @Override
+                        public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                            showStuff.hide();
+                        }
+
+                        @Override
                         public void clicked(InputEvent event, float x, float y) {
                             selectedItemName = currentItemName;
                             showItemActionDialog(currentItemName, currentQuantity);
                         }
                     });
                     
-                    // Item name (top)
-                    String displayString = itemName.length() > 10 ? itemName.substring(0, 6) + "..." : itemName;
-                    Label nameLabel = new Label(displayString, new Label.LabelStyle(FancyFontHelper.getInstance().getFont(TEXT_COLOR, 12), TEXT_COLOR));
-                    itemContainer.add(nameLabel).center().padBottom(5).row();
+                    // Show item icon
+                    
                     itemContainer.add(slotContainer).size(65, 65).row();
 
                     // Quantity (bottom)
