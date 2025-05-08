@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.helpers.GameContactListener;
+//import com.mygdx.helpers.GameContactListener;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.objects.Universe;
 
@@ -26,8 +26,8 @@ public class GameWorldManager {
         this.universe = new Universe();
 
 
-        this.world = new World(new Vector2(0, 0), false);
-        this.world.setContactListener(new GameContactListener(gameScreen));
+        //this.world = new World(new Vector2(0, 0), false);
+        //this.world.setContactListener(new GameContactListener(gameScreen));
     }
 
 

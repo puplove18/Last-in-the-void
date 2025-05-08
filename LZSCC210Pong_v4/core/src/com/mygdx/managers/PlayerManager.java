@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 //import com.mygdx.helpers.BodyHelper;
 //import com.mygdx.helpers.Constants;
-import com.mygdx.helpers.ContactType;
+//import com.mygdx.helpers.ContactType;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;

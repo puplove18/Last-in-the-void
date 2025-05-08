@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 //import com.mygdx.helpers.BodyHelper;
 //import com.mygdx.helpers.Constants;
-import com.mygdx.helpers.ContactType;
+//import com.mygdx.helpers.ContactType;
 import com.mygdx.game.SpaceGame;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.game.SpaceGame;
