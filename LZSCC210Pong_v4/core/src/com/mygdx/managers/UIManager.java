@@ -25,6 +25,10 @@ import com.mygdx.events.random_events.FriendlyTraderEvent;
 import com.mygdx.events.random_events.MeteorEvent;
 import com.mygdx.events.random_events.RadiantNebulaEvent;
 import com.mygdx.events.random_events.SpaceParasitesEvent;
+import com.mygdx.events.random_events.AbandonedStationEvent;
+import com.mygdx.events.random_events.SolarFlareEvent;
+import com.mygdx.events.random_events.PirateAmbushEvent;
+import com.mygdx.events.random_events.SpaceGardenEvent;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
@@ -80,8 +84,11 @@ public class UIManager {
             () -> new EngineFailureEvent(upgradesUI),
             () -> new FriendlyTraderEvent(upgradesUI),
             () -> new RadiantNebulaEvent(upgradesUI),
-            () -> new SpaceParasitesEvent(upgradesUI)
-
+            () -> new SpaceParasitesEvent(upgradesUI),
+            () -> new AbandonedStationEvent(upgradesUI),
+            () -> new SolarFlareEvent(upgradesUI),
+            () -> new PirateAmbushEvent(upgradesUI),
+            () -> new SpaceGardenEvent(upgradesUI)
     );
 
     public UIManager(Inventory inventory, Player player, GameScreen gameScreen, Universe universe) {
