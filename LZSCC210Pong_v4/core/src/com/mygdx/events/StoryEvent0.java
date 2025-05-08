@@ -9,9 +9,8 @@ public class StoryEvent0 extends Event {
         super("System Reboot", 
             "Good morning, Captain, you have been in cryrosleep for some time. Ship records indicate we've been adrift for *error*. Last communication with Earth: *error*. Primary directive: *error*. Emergency directive activated: return to Earth. Sensors detect nearby planets with resources. We should investigate. ");
         
-        addChoice("Begin exploration", 100, 
+        addChoice("Begin exploration...", 100, 
             player -> {
-                setSuccessMessage("Continue...");
             }, 
             player -> {}
         );

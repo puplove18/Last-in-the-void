@@ -13,6 +13,7 @@ import com.mygdx.audio.AudioManager;
 import com.mygdx.events.AggressiveAlienEncounterEvent;
 import com.mygdx.events.HumanoidAlienEncounterEvent;
 import com.mygdx.events.PlanetLandingEvent;
+import com.mygdx.events.StoryEvent0;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.managers.EventManager;
 import com.mygdx.managers.GameWorldManager;
@@ -59,7 +60,6 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                 0
         );
         initializeManagers();
-        Gdx.input.setInputProcessor(uiManager.getUIStage());
     }
 
     private void initializeManagers() {
@@ -143,6 +143,13 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
 
 
         uiManager.getUIStage().addActor(nextButton);
+        
+        // Call the first story event as soon as the game starts
+        Event startEvent = new StoryEvent0();
+        eventManager.setCurrentEvent(startEvent);
+        eventManager.showCurrentEvent();
+        setPaused(true);
+        
     }
 
     public void update() {
