@@ -140,7 +140,7 @@ public class RenderManager {
                 SpaceGame.getInstance().getWindowHeight());
         drawOrbitsAndPlanets();
 
-        playerManager.renderShip(batch);
+        //playerManager.renderShip(batch);
         playerManager.renderPlayerStats(batch);
 
         batch.end();
@@ -207,7 +207,7 @@ public class RenderManager {
                 : fallbackBackground;
         batch.draw(bg, 0, 0, w, h);
         renderEntities();
-        playerManager.renderShip(batch);
+        //playerManager.renderShip(batch);
         playerManager.renderPlayerStats(batch);
         if (inventoryOpen && !eventActive) playerManager.getInventory().showInventory();
         if (paused && !eventActive) renderPauseMessage();
