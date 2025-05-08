@@ -2,48 +2,63 @@ package com.mygdx.events.random_events;
 
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Player;
-import java.util.Random;
 import com.mygdx.ui.UpgradesUI;
+
+import java.util.Random;
 
 public class SpaceParasitesEvent extends Event {
     private final Random random = new Random();
 
     public SpaceParasitesEvent(UpgradesUI upgrades) {
-        super("Parasite Infestation",
-                "Microscopic space parasites breach your hull plating!");
+        super(
+                "Parasite Infestation",
+                "Microscopic space parasites breach your hull plating!"
+        );
 
-        addChoice("Seal affected compartments", 60,
+        addChoice(
+                "Seal affected compartments | " + (60 + upgrades.getHealthLevel() * 5),
+                60 + upgrades.getHealthLevel() * 5,
                 player -> {
-                    int stat = -10;
-                    player.updateStat(Player.Stats.OXYGEN, stat);
-                    setSuccessMessage("Compartment sealed. Oxygen loss " + stat  + " but infestation contained.");
+                    int loss = 10 - upgrades.getHealthLevel() * 2;
+                    loss = Math.max(1, loss);
+                    player.updateStat(Player.Stats.OXYGEN, -loss);
+                    setSuccessMessage("Compartment sealed. Oxygen loss " + loss);
                 },
                 player -> {
-                    int stat = 20;
-                    player.updateStat(Player.Stats.OXYGEN, stat);
-                    setFailureMessage("Seal failed; parasites spread. Oxygen loss " + stat  + ").");
+                    int loss = 20 - upgrades.getHealthLevel() * 2;
+                    loss = Math.max(1, loss);
+                    player.updateStat(Player.Stats.OXYGEN, -loss);
+                    setFailureMessage("Seal failed; oxygen loss " + loss);
                 }
         );
 
-        addChoice("Use bio-filter dispensers", 40,
+        addChoice(
+                "Use bio-filter dispensers | " + (40 + upgrades.getResourcesLevel() * 3),
+                40 + upgrades.getResourcesLevel() * 3,
                 player -> {
-                    player.updateStat(Player.Stats.OXYGEN, -5);
-                    setSuccessMessage("Filters worked. Minor loss of oxygen (-5).");
+                    int loss = 5 - upgrades.getOxygenLevel();
+                    loss = Math.max(1, loss);
+                    player.updateStat(Player.Stats.OXYGEN, -loss);
+                    setSuccessMessage("Filters worked. Oxygen loss " + loss);
                 },
                 player -> {
-                    player.updateStat(Player.Stats.HEALTH, -15);
-                    setFailureMessage("Filters overloaded. Crew exposure! Health -15.");
+                    int damage = 15 - upgrades.getHealthLevel() * 3;
+                    damage = Math.max(1, damage);
+                    player.updateStat(Player.Stats.HEALTH, -damage);
+                    setFailureMessage("Filters overloaded. Health -" + damage);
                 }
         );
 
-        addChoice("Eject contaminated systems", 30,
+        addChoice(
+                "Eject contaminated systems | " + (30 + upgrades.getInventoryLevel() * 2),
+                30 + upgrades.getInventoryLevel() * 2,
                 player -> {
-                    player.updateStat(Player.Stats.FUEL, -10);
-                    setSuccessMessage("Systems ejected. Fuel tanks vented (-10%). Infestation gone.");
+                    int burn = 10 - upgrades.getFuelLevel();
+                    burn = Math.max(1, burn);
+                    player.updateStat(Player.Stats.FUEL, -burn);
+                    setSuccessMessage("Systems ejected. Fuel loss " + burn);
                 },
-                player -> {
-                    setFailureMessage("Ejection failed. Parasites remain undisturbed.");
-                }
+                player -> setFailureMessage("Ejection failed. Parasites remain")
         );
     }
 }
