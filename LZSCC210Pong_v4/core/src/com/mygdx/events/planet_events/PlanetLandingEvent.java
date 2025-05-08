@@ -109,19 +109,19 @@ public class PlanetLandingEvent extends Event {
         switch (planet.getType()) {
             case Gas:
                 player.updateStat(Player.Stats.HEALTH, -totalCost);
-                costMessage.append("Hull Integrity: -").append(totalCost).append("%");
+                costMessage.append("Hull Integrity: -").append(totalCost);
                 break;
             case Mineral:
                 player.updateStat(Player.Stats.OXYGEN, -totalCost);
-                costMessage.append("Life Support: -").append(totalCost).append("%");
+                costMessage.append("Life Support: -").append(totalCost);
                 break;
             case Organic:
                 int halfCost = totalCost / 2;
                 int remainingCost = totalCost - halfCost;
                 player.updateStat(Player.Stats.HEALTH, -halfCost);
                 player.updateStat(Player.Stats.FUEL, -remainingCost);
-                costMessage.append("Hull Integrity: -").append(halfCost).append("%\n");
-                costMessage.append("Ship Fuel: -").append(remainingCost).append("%");
+                costMessage.append("Hull Integrity: -").append(halfCost).append("\n");
+                costMessage.append("Ship Fuel: -").append(remainingCost);
                 break;
             default:
                 System.out.println("Invalid planet type");
