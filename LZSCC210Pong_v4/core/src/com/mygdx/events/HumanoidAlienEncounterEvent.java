@@ -64,9 +64,11 @@ public class HumanoidAlienEncounterEvent extends Event {
             } else {
                 setSuccessMessage("You don't have enough resources to make this trade.");
             }
+            planet.setHarvested(true);
         }, 
         player -> {
             setFailureMessage("The alien seems displeased and refuses your offer.");
+            planet.setHarvested(true);
         });
     }
     
@@ -83,9 +85,11 @@ public class HumanoidAlienEncounterEvent extends Event {
             } else {
                 setSuccessMessage("You don't have enough resources to make this trade.");
             }
+            planet.setHarvested(true);
         }, 
         player -> {
             setFailureMessage("The alien seems displeased and refuses your offer.");
+            planet.setHarvested(true);
         });
     }
     
@@ -102,18 +106,22 @@ public class HumanoidAlienEncounterEvent extends Event {
             } else {
                 setSuccessMessage("You don't have enough resources to make this trade.");
             }
+            planet.setHarvested(true);
         }, 
         player -> {
             setFailureMessage("The alien seems displeased and refuses your offer.");
+            planet.setHarvested(true);
         });
     }
     
+    // Option to leave the planet, will still be set to harvested so the player cannot return
     private void addLeaveChoice() {
         addChoice("Leave the alien in peace", 100, player -> {
             setSuccessMessage("You leave the planet.");
+            planet.setHarvested(true);
         }, 
         player -> {
-            // This will never execute as the success rate is 100%
+            planet.setHarvested(true);
         });
     }
     

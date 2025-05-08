@@ -42,12 +42,14 @@ public class AggressiveAlienEncounterEvent extends Event {
             // Successful attack gives loot
             harvestLoot(player);
             setSuccessMessage("You defeat the alien and collect:\n" + lootResultMessage);
+            planet.setHarvested(true);
         },
         player -> {
             // Failed attack causes damage
             int damage = 20 + random.nextInt(10); 
             player.updateStat(Player.Stats.HEALTH, -damage);
             setFailureMessage("The alien overpowers you! You take " + damage + " damage to your hull integreity.");
+            planet.setHarvested(true);
         });
     }
     
@@ -57,9 +59,11 @@ public class AggressiveAlienEncounterEvent extends Event {
             int damage = 5 + random.nextInt(5); 
             player.updateStat(Player.Stats.HEALTH, -damage);
             setSuccessMessage("You successfully escape but suffer " + damage + " damage to your hull integrity in the process.");
+            planet.setHarvested(true);
         },
         player -> {
-            // No failure case
+            // No failure
+            planet.setHarvested(true);
         });
     }
     
