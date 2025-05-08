@@ -11,31 +11,44 @@ public class AggressiveRobotsEvent extends Event {
                 "Your sensors detect a squadron of hostile repair drones homing in on your hull. What do you do?"
         );
 
-        addChoice("Fight the robots | 40", 40,
+        int healthLvl    = upgrades.getHealthLevel();
+        int fuelLvl      = upgrades.getFuelLevel();
+        int resourcesLvl = upgrades.getResourcesLevel();
+
+        int fightWeight = 40 + healthLvl * 10;
+        int fleeWeight  = 30 + fuelLvl   * 5;
+        int decoyWeight = 80 + resourcesLvl * 5;
+
+        addChoice(
+                "Fight the robots | " + fightWeight,
+                fightWeight,
                 player -> {
-                    int amount = 10;
-                    player.addItemToInventory("Common Building Materials", amount);
+                    int salvage = 10;
+                    player.addItemToInventory("Common Building Materials", salvage);
                     setSuccessMessage(
-                            "You destroy the drones and salvage " + amount + "x Common Building Materials."
+                            "You destroy the drones and salvage " + salvage + "x Common Building Materials."
                     );
                 },
                 player -> {
-                    int dmg = 25;
-                    if (upgrades.getHealthLevel() > 2){
-                        player.updateStat(Player.Stats.HEALTH, -dmg / 2);
+                    int baseDmg = 25;
+                    if (healthLvl > 2) {
+                        int reduced = baseDmg / 2;
+                        player.updateStat(Player.Stats.HEALTH, -reduced);
                         setFailureMessage(
-                                "Due to high defense you only got " + dmg / 2
+                                "Your reinforced hull takes only " + reduced + " damage."
+                        );
+                    } else {
+                        player.updateStat(Player.Stats.HEALTH, -baseDmg);
+                        setFailureMessage(
+                                "The drones swarm and damage your hull by " + baseDmg + "."
                         );
                     }
-                    else{
-                    player.updateStat(Player.Stats.HEALTH, -dmg);
-                    setFailureMessage(
-                            "The drones swarm and damage your hull by " + dmg + "."
-                    );}
                 }
         );
 
-        addChoice("Try to flee | 30", 30,
+        addChoice(
+                "Try to flee | " + fleeWeight,
+                fleeWeight,
                 player -> {
                     int burn = 15;
                     player.updateStat(Player.Stats.FUEL, -burn);
@@ -48,12 +61,14 @@ public class AggressiveRobotsEvent extends Event {
                     player.updateStat(Player.Stats.FUEL, -burn);
                     player.updateStat(Player.Stats.HEALTH, -dmg);
                     setFailureMessage(
-                            "They catch up—Fuel -" + burn + "% and hull -" + dmg + "."
+                            "They catch up—Fuel -" + burn + " and hull -" + dmg + "."
                     );
                 }
         );
 
-        addChoice("let cargo as decoy | 80", 80,
+        addChoice(
+                "Drop cargo as decoy | " + decoyWeight,
+                decoyWeight,
                 player -> {
                     int thrown = 5;
                     player.getInventory().removeItem("Common Building Materials", thrown);
