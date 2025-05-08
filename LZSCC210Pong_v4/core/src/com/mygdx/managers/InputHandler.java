@@ -2,7 +2,6 @@ package com.mygdx.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.mygdx.events.AlienEncounterEvent;
 import com.mygdx.events.PlanetLandingEvent;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.objects.Alien;
@@ -30,7 +29,6 @@ public class InputHandler {
         handlePauseInput();
         handleInventoryInput();
         handleUpgradesInput();
-        handleEventInput();
     }
     
     private void handleExitInput() {
@@ -67,33 +65,6 @@ public class InputHandler {
     
                 Gdx.input.setInputProcessor(uiManager.isUpgradesOpen() ?
                     uiManager.getUpgradesStage() : uiManager.getUIStage());
-            }
-        }
-    }
-    
-    // This entire method is for testing events, it can be removed 
-    private void handleEventInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            if (!eventManager.isEventActive()) {
-                Alien sampleAlien = new Alien("Grumpy Trader"); 
-                Event alienEvent = new AlienEncounterEvent(sampleAlien);
-                eventManager.setCurrentEvent(alienEvent);
-                eventManager.showCurrentEvent();
-                gameScreen.setPaused(true);
-                uiManager.closeInventory();
-                uiManager.closeUpgrades();
-            }
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
-            if (!eventManager.isEventActive()) { 
-                Planet testPlanet = new Planet("Test Gas Planet", Planet.Type.Gas, 50, 1);
-                Event planetEvent = new PlanetLandingEvent(testPlanet);
-                eventManager.setCurrentEvent(planetEvent);
-                eventManager.showCurrentEvent();
-                gameScreen.setPaused(true);
-                uiManager.closeInventory();
-                uiManager.closeUpgrades();
             }
         }
     }
