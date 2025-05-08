@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Universe {
     private int maxDest;
-    private int universeLength = 100;
+    private int universeLength = 8;
     private int depth;
     private StarSystem[] destinations;
 

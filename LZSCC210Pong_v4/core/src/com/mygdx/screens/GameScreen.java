@@ -10,7 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.mygdx.audio.AudioManager;
-import com.mygdx.events.AlienEncounterEvent;
+import com.mygdx.events.AggressiveAlienEncounterEvent;
+import com.mygdx.events.HumanoidAlienEncounterEvent;
 import com.mygdx.events.PlanetLandingEvent;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.managers.EventManager;
@@ -31,7 +32,7 @@ import java.util.Random;
 
 import javax.swing.event.ChangeEvent;
 import com.mygdx.objects.Alien;
-import com.mygdx.events.AlienEncounterEvent;
+
 
 public class GameScreen extends ScreenAdapter implements EventUI.EventCompletionListener {
     private OrthographicCamera camera;
@@ -209,9 +210,13 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
                                 String[] alienTypes = {"Humanoid", "Aggressive Xenomorph"};
                                 String alienType = alienTypes[rand.nextInt(alienTypes.length)];
                                 Alien alien = new Alien(alienType);
-
-                                // Create the alien event
-                                planetEvent = new AlienEncounterEvent(alien);
+                                
+                                // Create the appropriate alien event based on type
+                                if (alienType.equals("Humanoid")) {
+                                    planetEvent = new HumanoidAlienEncounterEvent(alien, clicked);
+                                } else {
+                                    planetEvent = new AggressiveAlienEncounterEvent(alien, clicked);
+                                }
                             } else {
                                 // If the planet has no alien then trigger planet landing event
                                 planetEvent = new PlanetLandingEvent(clicked);
