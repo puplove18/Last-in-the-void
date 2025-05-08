@@ -49,7 +49,6 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
 
     private int starJumpCount = 0;
     private Skin skin;
-    private TextButton nextButton;
     private static final Random rand = new Random();
 
     public GameScreen(OrthographicCamera camera) {
@@ -75,74 +74,6 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         inputHandler = new InputHandler(this, uiManager, eventManager);
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
-        nextButton = new TextButton("Next System1", skin);
-        nextButton.setPosition(
-                SpaceGame.getInstance().getWindowWidth() - 800,
-                SpaceGame.getInstance().getWindowHeight() - 50
-        );
-
-
-        //this button is not used!!!
-
-
-        nextButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                // Choose a random next system:
-                StarSystem[] dests = worldManager.getUniverse().getDestinations();
-                int idx = rand.nextInt(dests.length);
-
-                // Compute your fuel cost (for example, 10 units per jump)
-                float cost = 10f;
-                Player ship = playerManager.getPlayer();
-
-                // Only jump if you have enough fuel
-                if (ship.getFuel() >= cost) {
-                    // Deduct fuel
-                    ship.setFuel(ship.getFuel() - cost);
-
-                    // Now actually travel
-                    renderManager.setSelectedBackgroundType(
-                            dests[idx].getPlanets()[0].getType()
-                    );
-                    worldManager.travelTo(idx);
-
-                    //starJumpCount++;
-
-//                    if (starJumpCount % 5 == 0) {
-//                        //Event e = eventManager.nextPlotEvent();
-//                        //eventManager.setCurrentEvent(e);
-//                        //eventManager.showCurrentEvent();
-//                        //setPaused(true);
-//                    } else if (starJumpCount % 2 == 0) {
-//                        Event e = eventManager.randomEventForCurrentSystem();
-//                        eventManager.setCurrentEvent(e);
-//                        eventManager.showCurrentEvent();
-//                        setPaused(true);
-//                    }
-                    starJumpCount++;
-
-                    if (starJumpCount % 2 == 0) {
-                        //event
-                        System.out.println("2 jump!");
-                    }
-
-                    systemView = false;
-                    camera.position.set(
-                            SpaceGame.getInstance().getWindowWidth()/2f,
-                            SpaceGame.getInstance().getWindowHeight()/2f,
-                            0
-                    );
-                    camera.update();
-                } else {
-                    // Optional: feedback to player
-                    System.out.println("Not enough fuel to jump!");
-                }
-            }
-        });
-
-
-        uiManager.getUIStage().addActor(nextButton);
         
         // Call the first story event as soon as the game starts
         Event startEvent = new StoryEvent0();
