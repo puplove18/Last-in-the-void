@@ -93,12 +93,6 @@ public class ScannerUI {
         closeButton.clearListeners();
         closeButton.addListener(new ClickListener() {
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                boolean pressed = super.touchDown(event, x, y, pointer, button);
-                event.stop();
-                return pressed;
-            }
-            @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (closeButtonListener != null) {
                     closeButtonListener.onCloseButtonClicked();
@@ -124,7 +118,7 @@ public class ScannerUI {
         
         scrollPane = new ScrollPane(scannerTable, skin);
         scrollPane.setFadeScrollBars(false);
-        scrollPane.setScrollingDisabled(true, false);
+        scrollPane.setScrollingDisabled(true, true);
 
         Table container = new Table();
         container.setFillParent(true);
@@ -161,12 +155,6 @@ public class ScannerUI {
             chooseButton.clearListeners();
             chooseButton.addListener(new ClickListener() {
                 @Override
-                public boolean touchDown(InputEvent e, float x, float y, int p, int b) {
-                    boolean pressed = super.touchDown(e,x,y,p,b);
-                    e.stop();
-                    return pressed;
-                }
-                @Override
                 public void clicked(InputEvent e, float x, float y) {
                     if (destListener != null) {
                         destListener.onDestinationChosen(destinationIndex);
@@ -174,11 +162,6 @@ public class ScannerUI {
                     getAllDestinationsInTable();
                 }
             });
-
-
-
-
-
 
             scannerTable.add(systemName).width(width * 0.25f);
             scannerTable.add(location).width(width * 0.25f);
