@@ -10,7 +10,7 @@ public class StoryEvent3 extends Event {
         
         addChoice("Board Space Station", 100, player -> {
             player.updateStat(Player.Stats.HEALTH, -10);
-            setSuccessMessage("You board the station and are immediately attacked by an alien. You manage to defeat it but not without taking some damange. After searching the station, you find logs detailing the evacuation of Earth, but the rest of the data seems to be corrupted.");
+            setSuccessMessage("You board the station and are immediately attacked by an alien. You manage to defeat it but not without taking some damage. After searching the station, you find logs detailing the evacuation of Earth, but the rest of the data seems to be corrupted.");
         },
         player -> {
         });

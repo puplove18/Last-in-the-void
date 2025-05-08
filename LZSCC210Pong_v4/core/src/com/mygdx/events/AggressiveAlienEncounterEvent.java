@@ -48,7 +48,7 @@ public class AggressiveAlienEncounterEvent extends Event {
             // Failed attack causes damage
             int damage = 20 + random.nextInt(10); 
             player.updateStat(Player.Stats.HEALTH, -damage);
-            setFailureMessage("The alien overpowers you! You take " + damage + " damage to your hull integreity.");
+            setFailureMessage("The alien overpowers you! You take " + damage + " damage to your hull integrity.");
             planet.setHarvested(true);
         });
     }
