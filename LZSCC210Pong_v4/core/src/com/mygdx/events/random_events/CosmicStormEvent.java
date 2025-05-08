@@ -1,4 +1,4 @@
-package com.mygdx.events;
+package com.mygdx.events.random_events;
 
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Player;

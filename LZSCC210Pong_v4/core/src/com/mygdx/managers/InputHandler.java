@@ -2,11 +2,11 @@ package com.mygdx.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.mygdx.events.PlanetLandingEvent;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.objects.Alien;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Planet;
+import com.mygdx.events.planet_events.PlanetLandingEvent;
 import com.mygdx.game.SpaceGame;
 import com.mygdx.screens.GameScreen;
 

@@ -1,4 +1,4 @@
-package com.mygdx.events;
+package com.mygdx.events.planet_events;
 
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Planet;

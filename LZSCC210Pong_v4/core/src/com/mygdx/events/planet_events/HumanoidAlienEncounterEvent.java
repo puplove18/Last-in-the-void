@@ -1,4 +1,4 @@
-package com.mygdx.events;
+package com.mygdx.events.planet_events;
 
 import java.util.Random;
 import com.mygdx.objects.Event;

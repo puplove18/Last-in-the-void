@@ -1,4 +1,4 @@
-package com.mygdx.events;
+package com.mygdx.events.random_events;
 
 import java.util.Map;
 import java.util.Random;
