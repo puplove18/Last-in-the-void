@@ -1,50 +1,43 @@
 package com.mygdx.events.random_events;
 
-import java.util.Map;
-import java.util.Random;
 import com.mygdx.objects.Event;
 import com.mygdx.objects.Player;
 import com.mygdx.ui.UpgradesUI;
+
+import java.util.Random;
 
 public class MeteorEvent extends Event {
     private final Random random = new Random();
 
     public MeteorEvent(UpgradesUI upgrades) {
-        super("Meteor Storm",
-                "A rogue meteor shower is barreling toward your ship! What will you do?");
+        super("Meteor Storm", "A rogue meteor shower is barreling toward your ship");
 
-        addChoice("Brace for impact", 80,
+        addChoice("Brace for impact | 80", 80,
                 player -> {
-                    player.updateStat(Player.Stats.HEALTH, -5);
-                    setSuccessMessage("You weathered the storm. Minor hull damage sustained (-15).");
+                    int dmg = upgrades.getHealthLevel() > 2 ? 3 : 5;
+                    player.updateStat(Player.Stats.HEALTH, -dmg);
+                    setSuccessMessage("You weathered the storm. Hull damage " + dmg);
                 },
                 player -> {
-                    player.updateStat(Player.Stats.HEALTH, -20);
-                    setFailureMessage("A massive rock smashed into you! Significant hull damage (-30).");
+                    int dmg = upgrades.getHealthLevel() > 2 ? 15 : 20;
+                    player.updateStat(Player.Stats.HEALTH, -dmg);
+                    setFailureMessage("A massive rock smashed into you. Hull damage " + dmg);
                 }
         );
 
-        addChoice("Evade with thrusters", 60,
+        addChoice("Evade with thrusters | 60", 60,
                 player -> {
-                    player.updateStat(Player.Stats.FUEL, -10);
-                    setSuccessMessage("Thrusters successfully dodged most meteors. Fuel consumed (-10).");
+                    int cost = upgrades.getFuelLevel() > 2 ? 8 : 10;
+                    player.updateStat(Player.Stats.FUEL, -cost);
+                    setSuccessMessage("Evasive maneuvers successful. Fuel consumed " + cost);
                 },
                 player -> {
-                    player.updateStat(Player.Stats.FUEL, -20);
-                    player.updateStat(Player.Stats.HEALTH, -10);
-                    setFailureMessage("Failed evasive maneuver. Fuel wasted (-20%) and hull damaged (-10).");
+                    int cost = upgrades.getFuelLevel() > 2 ? 15 : 20;
+                    int dmg = upgrades.getHealthLevel() > 2 ? 5 : 10;
+                    player.updateStat(Player.Stats.FUEL, -cost);
+                    player.updateStat(Player.Stats.HEALTH, -dmg);
+                    setFailureMessage("Evasion failed. Fuel " + cost + " and hull damage " + dmg);
                 }
         );
-
-    }
-
-    private void jettisonCargo(Player player) {
-        Map<String, Integer> items = player.getInventory().getItems();
-        for (String item : items.keySet()) {
-            if (item.contains("Building Materials")) {
-                player.getInventory().removeItem(item, 1);
-                return;
-            }
-        }
     }
 }
