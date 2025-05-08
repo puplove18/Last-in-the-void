@@ -1,0 +1,44 @@
+LAST IN THE VOID
+
+
+
+---RUNNING INSTRUCTIONS---
+To run the game, navigate to LZSCC210Pong_v4 and type ./gradlew run in cmd
+
+
+---INTRO---
+When you click play, you will be faced with a screen displaying a number of planets and a star. You are in control of your spaceship, and you can navigate to a planet by clicking on it. Be careful not to click on the star in the centre of the screen, or that will end your game. You can't land on a star, of course :) The goal of the game is to navigate between star systems in search of Earth.
+
+
+---THE UNIVERSE---
+The Universe is split into four equal tiers which are comprised of many systems. You start in tier one, and thus you will only find tier one systems. As you progress through, the game you will discover higher tiers.  
+
+
+---SYSTEMS---
+Systems contain a star and a number of different planets. Each system has a tier which determines what planets it has. A tier four system may have a tier four planet, although this isn't always guaranteed.
+
+
+---PLANETS---
+There are 3 different types of planet - mineral, organic, and gas. Planets may also be one of four tiers, with tier four being the best. When you land on a planet, there are 2 possible outcomes. The most likely outcome is that you will be able to harvest the planet for resources. The resources you obtain depend on the type, tier, and size of the planet you land on. The second possible outcome is that you will land on a planet with aliens; these aliens may either be friendly or hostile.
+
+
+---RESOURCES---
+There are 3 types of resources. These are building materials, biomass, and fuel. They come in 4 different rarities which are common, uncommon, rare, and legendary. This rarity correlates to the tier of planet on which they are found. Each resource serves a different purpose. Building materials can be used to restore your ship's hull integrity, biomass can be used to replenish your ship's life support systems, and fuel can be used, as you might expect, to refuel your ship. All resources can also be used to upgrade your ship.
+
+
+---INVENTORY---
+In the inventory menu, you are able to interact with the resources that you have collected. By clicking on the item, you can either remove it or 'recover' it. Recovery is when you use a resource to replenish one of your stats. If you recover some biomass, for example, you will restore some of your life support systems. Each slot in your inventory can hold a maximum of 300 items, and you are able to upgrade the total number of slots in your inventory.
+
+
+---UPGRADES---
+In the upgrades menu, you are able to spend your resources in order to improve your ship. The effects of each upgrade are described.
+
+
+---SYSTEM NAVIGATION---
+The button titled "next system" can be used to navigate between each solar system in the universe. It displays the tier of the system and also the number of planets in the system.
+
+
+---GAME END---
+The game ends either when you die or discover Earth and the fate of humanity. Good luck!
+
+
