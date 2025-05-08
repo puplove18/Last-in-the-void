@@ -95,16 +95,18 @@ public class Planet {
             double a = rand.nextDouble();
             if(a < 0.2){
                 this.hasAlien = true;
-                System.out.println("alien: " + this.hasAlien);
+                //Debug
+                //System.out.println("alien: " + this.hasAlien);
             }
             else{
                 this.hasAlien = false;
-                System.out.println("alien: " + this.hasAlien);
+                //Debug
+                //System.out.println("alien: " + this.hasAlien);
             }
         } else {
             // Tier 1 planets never have aliens
-            this.hasAlien = false;
-            System.out.println("alien: " + this.hasAlien);
+            //Debugthis.hasAlien = false;
+            //DebugSystem.out.println("alien: " + this.hasAlien);
         }
     }
 

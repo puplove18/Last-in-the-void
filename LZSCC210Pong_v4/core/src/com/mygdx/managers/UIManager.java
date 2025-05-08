@@ -100,33 +100,29 @@ public class UIManager {
             gameScreen.getWorldManager().travelTo(idx);
 
             systemJumpCount++;
-            if (systemJumpCount % 2 == 0) {
+
+            Event e = null;
+            if (systemJumpCount == 20) {
+                e = new StoryEvent1();
+            }
+            else if (systemJumpCount == 40) {
+                e = new StoryEvent2();
+            }
+
+            else if (systemJumpCount == 60) {
+                e = new StoryEvent3();
+            }
+
+            else if (systemJumpCount == 80) {
+                e = new StoryEvent4();
+            }
+
+            else if (systemJumpCount % 2 == 0) {
                 //every 2nd  jump
-                Event e = negativeEvents.get(rand.nextInt(negativeEvents.size())).get();
+                e = negativeEvents.get(rand.nextInt(negativeEvents.size())).get();
+            }
+            if (e != null) {
                 gameScreen.getEventManager().setCurrentEvent(e);
-                gameScreen.getEventManager().showCurrentEvent();
-                gameScreen.setPaused(true);
-                return;
-            }
-
-            Event story = null;
-            if (systemJumpCount == 19) {
-                story = new StoryEvent1();
-            }
-            else if (systemJumpCount == 39) {
-                story = new StoryEvent2();
-            }
-
-            else if (systemJumpCount == 59) {
-                story = new StoryEvent3();
-            }
-
-            else if (systemJumpCount == 79) {
-                story = new StoryEvent4();
-            }
-
-            if (story != null) {
-                gameScreen.getEventManager().setCurrentEvent(story);
                 gameScreen.getEventManager().showCurrentEvent();
                 gameScreen.setPaused(true);
                 return;
