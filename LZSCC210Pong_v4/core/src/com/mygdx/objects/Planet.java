@@ -90,16 +90,23 @@ public class Planet {
         this.size = size;
         this.playerSize = pSize;
         this.tier = tier;
-
-        double a = rand.nextDouble();
-        if(a < 0.2){
-        this.hasAlien = true;
-            System.out.println("alien: " + this.hasAlien);
-        }
-        else{
+        
+        if (tier > 1) {
+            double a = rand.nextDouble();
+            if(a < 0.2){
+                this.hasAlien = true;
+                System.out.println("alien: " + this.hasAlien);
+            }
+            else{
+                this.hasAlien = false;
+                System.out.println("alien: " + this.hasAlien);
+            }
+        } else {
+            // Tier 1 planets never have aliens
             this.hasAlien = false;
             System.out.println("alien: " + this.hasAlien);
-        }}
+        }
+    }
 
     public Planet(String name, Type star2, int size, int tier) {
         this.name = name;
