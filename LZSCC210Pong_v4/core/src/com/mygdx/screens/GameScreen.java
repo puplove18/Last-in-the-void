@@ -68,9 +68,10 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         worldManager = new GameWorldManager(camera, this);
         Universe universe = worldManager.getUniverse();
         playerManager = new PlayerManager(player, inventory, worldManager.getWorld());
-        renderManager = new RenderManager(camera, playerManager, worldManager);
-        uiManager = new UIManager(inventory, player, this, universe);
         eventManager = new EventManager(player, this);
+        renderManager = new RenderManager(camera, playerManager, worldManager,eventManager);
+        uiManager = new UIManager(inventory, player, this, universe);
+        
         inputHandler = new InputHandler(this, uiManager, eventManager);
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));

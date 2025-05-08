@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
 public class RenderManager {
     private OrthographicCamera camera;
     private SpriteBatch batch;
@@ -42,15 +43,17 @@ public class RenderManager {
     private static final Random rand = new Random();
     private Planet.Type selectedBackgroundType;
     private Texture debugTexture;
+    private EventManager eventManager;
 
     public RenderManager(OrthographicCamera camera,
                          PlayerManager playerManager,
-                         GameWorldManager worldManager) {
+                         GameWorldManager worldManager, EventManager eventManager) {
         this.camera = camera;
         this.playerManager = playerManager;
         this.worldManager = worldManager;
         this.universe = worldManager.getUniverse();
         this.batch = new SpriteBatch();
+        this.eventManager = eventManager;
         loadTextures();
         this.font = FancyFontHelper.getInstance().getFont(Color.WHITE, 20);
     }
@@ -237,16 +240,21 @@ public class RenderManager {
                 heroY,
                 heroTexture.getWidth(),
                 heroTexture.getHeight());
-        float alienX = w - alienTexture.getWidth();
-        float alienY = (h - alienTexture.getHeight()) / 2 + 100;
-        batch.draw(alienTexture,
-                alienX + alienTexture.getWidth(),
-                alienY,
-                -alienTexture.getWidth(),
-                alienTexture.getHeight());
+        if (eventManager.getCurrentEvent() instanceof com.mygdx.events.planet_events.AggressiveAlienEncounterEvent 
+                || eventManager.getCurrentEvent() instanceof com.mygdx.events.planet_events.HumanoidAlienEncounterEvent) {
+            float alienX = w - alienTexture.getWidth();
+            float alienY = (h - alienTexture.getHeight()) / 2 + 100;
+            batch.draw(alienTexture,
+                    alienX + alienTexture.getWidth(),
+                    alienY,
+                    -alienTexture.getWidth(),
+                    alienTexture.getHeight());
+        }
+        
       
     }
 
+        
     private void renderPauseMessage() {
         font.draw(batch,
                 "Paused",
