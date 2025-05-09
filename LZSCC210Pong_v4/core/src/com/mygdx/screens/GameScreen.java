@@ -91,6 +91,7 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         if (!paused) {
             //worldManager.update();
             //playerManager.update();
+            checkGameOver();
         }
         updateAudio();
         if (eventManager.isEventActive()) {
@@ -226,6 +227,8 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
         paused = false;
         systemView = true;
 
+        checkGameOver();
+
         // close any open panels (especially the scanner)
         uiManager.closeScanner();
         uiManager.closeInventory();
@@ -269,5 +272,27 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
 
     public GameWorldManager getWorldManager() {
         return worldManager;
+    }
+
+    public void checkGameOver() {
+        Player player = playerManager.getPlayer();
+        
+        if (player.getHealth() <= 0) {
+            System.out.println("Hull integrity critical! Game over.");
+            SpaceGame.getInstance().changeScreen(this, ScreenType.DEAD_GAME);
+            return;
+        }
+        
+        if (player.getFuel() <= 0) {
+            System.out.println("Out of fuel! Stranded in space.");
+            SpaceGame.getInstance().changeScreen(this, ScreenType.DEAD_GAME);
+            return;
+        }
+        
+        if (player.getOxygen() <= 0) {
+            System.out.println("Life support failure! Game over.");
+            SpaceGame.getInstance().changeScreen(this, ScreenType.DEAD_GAME);
+            return;
+        }
     }
 }

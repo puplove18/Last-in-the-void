@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Supplier;
+import javax.swing.event.ChangeEvent;
 import java.util.Arrays;
 import java.util.List;
 import com.mygdx.objects.Event;
@@ -112,6 +113,8 @@ public class UIManager {
                 return;
             }
             player.setFuel(player.getFuel() - cost);
+
+            gameScreen.checkGameOver();
 
             //actually change
             gameScreen.getWorldManager().travelTo(idx);
