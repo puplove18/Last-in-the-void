@@ -30,7 +30,7 @@ public class CreditsScreen extends ScreenAdapter {
 
         Label titleLabel = new Label("Credits", skin);
         titleLabel.setFontScale(1.0f);
-        Label creditsLabel = new Label("Developed by Group 2\nMusic by ArtistName\nAssets by assets\nThank you for playing!", skin);
+        Label creditsLabel = new Label("Developed by Group 2\nThank you for playing!", skin);
         creditsLabel.setWrap(true);
         creditsLabel.setAlignment(Align.center);
         creditsLabel.setWidth(400);

@@ -36,7 +36,7 @@ public class SpaceParasitesEvent extends Event {
                 "Use bio-filter dispensers | " + (40 + upgrades.getResourcesLevel() * 3),
                 40 + upgrades.getResourcesLevel() * 3,
                 player -> {
-                    int loss = 5 - upgrades.getOxygenLevel();
+                    int loss = 10 - upgrades.getOxygenLevel();
                     loss = Math.max(1, loss);
                     player.updateStat(Player.Stats.OXYGEN, -loss);
                     setSuccessMessage("Filters worked. Oxygen loss " + loss);

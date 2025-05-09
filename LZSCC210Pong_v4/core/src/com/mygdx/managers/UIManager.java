@@ -137,8 +137,8 @@ public class UIManager {
                 e = new StoryEvent4();
             }
 
-            else if (systemJumpCount % 2 == 0) {
-                //every 2nd  jump
+            else if (systemJumpCount % 3 == 0) {
+                //every 3d  jump
                 e = negativeEvents.get(rand.nextInt(negativeEvents.size())).get();
             }
             if (e != null) {
