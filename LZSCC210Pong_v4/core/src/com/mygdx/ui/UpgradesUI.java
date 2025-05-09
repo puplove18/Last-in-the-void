@@ -59,20 +59,7 @@ public class UpgradesUI {
     private InventoryUI inventoryUI;
     private final AssetManager assetManager;
 
-    public UpgradesUI(Player player, Inventory inventory, Universe universe, InventoryUI inventoryUI, AssetManager assetManager) {
-        this.player = player;
-        this.inventory = inventory;
-        this.universe = universe;
-        this.inventoryUI = inventoryUI;
-        this.assetManager = assetManager; 
-        this.stage = new Stage(new ScreenViewport());
-        this.skin = new Skin(Gdx.files.internal("uiskin.json"));
-
-        Gdx.input.setInputProcessor(stage);
-        initializePanelBackground();
-        createUI();
-        possibleUpgrades();
-    }
+    
     public UpgradesUI(Player player, Inventory inventory, Universe universe, InventoryUI inventoryUI) {
         this.player = player;
         this.inventory = inventory;
