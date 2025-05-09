@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setTitle("LZSCC.210 - game!");
 		config.setWindowedMode(800, 600);
+		config.setResizable(false);
 		new Lwjgl3Application(SpaceGame.getInstance(), config);
 	}
 }
