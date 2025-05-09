@@ -55,7 +55,7 @@ public class MenuScreen extends ScreenAdapter{
 		
 		this.batch.begin();
 		
-		this.title.draw(batch, "LZSCC.210 - game!", 30, SpaceGame.getInstance().getWindowHeight() - 50);
+		this.title.draw(batch, "LAST IN THE VOID", 30, SpaceGame.getInstance().getWindowHeight() - 50);
 		
 		this.menu.draw(batch, getMenuText(), 10, SpaceGame.getInstance().getWindowHeight() / 2);
 		

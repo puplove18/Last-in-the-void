@@ -8,7 +8,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
-		config.setTitle("LZSCC.210 - game!");
+		config.setTitle("LAST IN THE VOID");
 		config.setWindowedMode(800, 600);
 		config.setResizable(false);
 		new Lwjgl3Application(SpaceGame.getInstance(), config);
