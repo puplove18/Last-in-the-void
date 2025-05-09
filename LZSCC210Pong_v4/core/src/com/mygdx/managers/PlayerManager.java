@@ -6,13 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
-//import com.mygdx.helpers.BodyHelper;
-//import com.mygdx.helpers.Constants;
-//import com.mygdx.helpers.ContactType;
 import com.mygdx.helpers.FancyFontHelper;
 import com.mygdx.objects.Inventory;
 import com.mygdx.objects.Player;
-//import com.mygdx.objects.SpaceShip;
 import com.mygdx.game.SpaceGame;
 
 /**
@@ -21,7 +17,6 @@ import com.mygdx.game.SpaceGame;
 public class PlayerManager {
     private Player player;
     private Inventory inventory;
-    //private SpaceShip playerShip;
     
     // Fonts for player stats 
     private BitmapFont statsFontWhite;
@@ -32,20 +27,7 @@ public class PlayerManager {
     public PlayerManager(Player player, Inventory inventory, World world) {
         this.player = player;
         this.inventory = inventory;
-        
-        /* Initialize space ship
-        Body shipBody = BodyHelper.createRectangularBody(
-                SpaceGame.getInstance().getWindowWidth() / 2,
-                SpaceGame.getInstance().getWindowHeight() / 2,
-                Constants.PLAYER_PADDLE_WIDTH,
-                Constants.PLAYER_PADDLE_HEIGHT,
-                BodyType.KinematicBody, 1f, world, ContactType.PLAYER);
-        
-        this.playerShip = new SpaceShip(
-                SpaceGame.getInstance().getWindowWidth() / 2,
-                SpaceGame.getInstance().getWindowHeight() / 2,
-                shipBody);*/
-        
+
         initializeFonts();
     }
     
@@ -56,14 +38,6 @@ public class PlayerManager {
         this.statsFontYellow = fontHelper.getFont(Color.YELLOW, 16);
         this.statsFontRed = fontHelper.getFont(Color.RED, 16);
     }
-    
-    /*public void update() {
-        playerShip.update();
-    }
-    
-    public void renderShip(SpriteBatch batch) {
-        playerShip.render(batch);
-    }*/
     
     public void renderPlayerStats(SpriteBatch batch) {
         float statsX = 10;
@@ -128,10 +102,6 @@ public class PlayerManager {
     public Inventory getInventory() {
         return inventory;
     }
-    
-    //public SpaceShip getPlayerShip() {
-    //    return playerShip;
-    //}
     
     public void dispose() {
         if (statsFontWhite != null) statsFontWhite.dispose();

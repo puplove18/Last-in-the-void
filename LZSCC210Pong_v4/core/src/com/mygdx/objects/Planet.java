@@ -186,11 +186,5 @@ public class Planet {
     public boolean getHasAlien(){
         return this.hasAlien;
     }
-    public static void main(String[] args){
-        //Test the generatePlanet method
-        Planet test = new Planet();
-        Planet generated = test.generatePlanet("System", 3, 1);
-        generated.printPlanet();
-    }
 
 }

@@ -76,15 +76,4 @@ public class StarSystem{
         }
     }
 
-    public static void main(String[] args) {
-        
-        StarSystem test = new StarSystem("Andromeda", 4);
-        test.genrateStarPlanets(test.name, test.tier);
-        
-        for (int i = 0; i <= test.maxPlanets-1; i++)
-        {
-            test.planets[i].printPlanet();
-        }
-
-    }
 }

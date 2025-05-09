@@ -111,25 +111,4 @@ public class Universe {
 
     }
 
-    public static void main(String[] args) {
-        Universe test = new Universe();
-        Planet[] planets = test.currentPosition.getPlanets();
-
-        for (int i = 0; i <= planets.length-1; i ++) {
-            planets[i].printPlanet();
-        }
-
-        System.out.println("\n");
-        test.printDestinations();
-
-        for (int x = 0; x <= 100; x ++) {
-            int choice = rand.nextInt(test.getDestinations().length);
-            test.chooseDestination(choice);
-            System.out.println("Chose destination " + choice);
-            test.printDestinations();
-            
-        }
-        test.printAllDestinations();
-
-    }
 }

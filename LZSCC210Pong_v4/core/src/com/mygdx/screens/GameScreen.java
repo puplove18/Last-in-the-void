@@ -89,8 +89,6 @@ public class GameScreen extends ScreenAdapter implements EventUI.EventCompletion
             inputHandler.handleInput();
         }
         if (!paused) {
-            //worldManager.update();
-            //playerManager.update();
             checkGameOver();
         }
         updateAudio();
