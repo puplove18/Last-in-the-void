@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.mygdx.helpers.FancyFontHelper;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-
+//This class is used to show a tooltip with a message on the screen when hovering over the slots, 
+//used in inventory to show resources names
+//because the lack of space in the inventory slots columns, 
 public class ShowStuff  {
     private Table showStuffTable;
     private Label showStuffLabel;
@@ -20,7 +22,7 @@ public class ShowStuff  {
         this.stage = stage;
         initialize();
     }
-
+    //initialize the showStuffTable and showStuffLabel
     private void initialize() {
         showStuffTable = new Table();
         showStuffTable.setBackground(createshowStuffBackground());
@@ -43,7 +45,7 @@ public class ShowStuff  {
         NinePatch patch = new NinePatch(texture, 0, 0, 0, 0);
         return new NinePatchDrawable(patch);
     }
-
+    //show the showStuffTable with the text and position it on the screen
     public void show(String text, float x, float y) {
         showStuffLabel.setText(text);
         showStuffTable.pack();
