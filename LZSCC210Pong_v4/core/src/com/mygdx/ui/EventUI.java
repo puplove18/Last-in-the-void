@@ -43,7 +43,7 @@ public class EventUI {
     private EventCompletionListener completionListener;
     private ObjectMap<TextButton, Drawable> originalButtonBackgrounds = new ObjectMap<>();
 
-    // Colors for styling
+    // Colours for styling
     private final Color TITLE_COLOR = new Color(0.9f, 0.6f, 0.2f, 1f); // Gold/amber color
     private final Color TEXT_COLOR = new Color(0.9f, 0.9f, 0.9f, 1f); // Almost white
     private final Color BUTTON_COLOR = new Color(0.2f, 0.3f, 0.7f, 1f); // Blue
@@ -296,6 +296,8 @@ public class EventUI {
         return continueButton;
     }
 
+
+    // Changes how the button looks when mouse moves over it
     private void addHoverListener(final TextButton button) {
          button.addListener(new ClickListener() {
             @Override

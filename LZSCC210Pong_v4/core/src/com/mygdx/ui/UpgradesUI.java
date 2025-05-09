@@ -25,8 +25,13 @@ import java.util.HashMap;
 import java.util.Map;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+
+/**
+ * Handles display of the upgrades menu
+ */
 public class UpgradesUI {
 
+    // UI Components 
     private Stage stage;
     private Skin skin;
     private Table mainTable;
@@ -34,13 +39,16 @@ public class UpgradesUI {
     private ScrollPane scrollPane;
     private final Player player;
     private Universe universe;
-    private int destinationLevel = 2;
+
+    // Levels for each upgrade category 
+    private int destinationLevel = 2; 
     private int fuelLevel = 1;
     private int healthLevel = 1;
     private int inventoryLevel = 1;
     private int resourcesLevel = 1; 
     private int oxygenLevel = 1;
 
+    // Dimensions of menu
     public float width = Gdx.graphics.getWidth();
     public float height = Gdx.graphics.getHeight();
     private Texture backgroundTexture;
@@ -51,6 +59,7 @@ public class UpgradesUI {
     private boolean isVisible = false;
     private Upgrades upgrades;
 
+    // Colour scheme
     private static final Color TITLE_COLOR = Color.WHITE;
     private static final Color TEXT_COLOR = Color.LIGHT_GRAY;
     private static final Color BUTTON_COLOR = new Color(0.2f, 0.4f, 0.6f, 1f);
@@ -78,11 +87,13 @@ public class UpgradesUI {
         void onCloseButtonClicked();
     }
 
+    // The x button in the top-right corner to close the menu
     private CloseButtonListener closeButtonListener;
-
     public void setCloseButtonListener(CloseButtonListener listener) {
         this.closeButtonListener = listener;
     }
+
+
     private void initializePanelBackground() {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0.15f, 0.15f, 0.2f, 0.9f);
@@ -99,8 +110,8 @@ public class UpgradesUI {
         mainTable.center();
         stage.addActor(mainTable);
     
+        // Adds the close button to top right
         TextButton closeButton = new TextButton("X", skin);
-
         Table closeButtonTable = new Table();
         closeButtonTable.add(closeButton).top().right().padTop(5).padRight(5);
         closeButtonTable.top().right();
@@ -115,6 +126,7 @@ public class UpgradesUI {
         });
         stage.addActor(closeButtonTable);
 
+        // Table where the upgrades will be slected from
         upgradesTable = new Table(skin);
         upgradesTable.top().left().pad(10).center();
         upgradesTable.defaults().pad(5).left();
@@ -140,6 +152,7 @@ public class UpgradesUI {
         mainTable.add(container).expand().fill();
     }
     
+    // Creates a series of upgrades, so when one upgrade is purchased the next level becomes available 
     private void createUpgradeChain(String[] names, String[] resources, String[] effects, Runnable upgradeAction) {
         int fontSize = 8;
         BitmapFont font = FancyFontHelper.getInstance().getFont(TEXT_COLOR, fontSize);
@@ -174,6 +187,7 @@ public class UpgradesUI {
                     if (upgradeAction != null) {
                         upgradeAction.run();
                     }
+                    // Updates the level of upgrade
                     levelToShow[0]++;
                     if (levelToShow[0] < maxLevels) {
                         nameLabel.setText(names[levelToShow[0]]);
@@ -189,6 +203,7 @@ public class UpgradesUI {
                 }
             }
 
+            // Creates an effect with the mouse hovers over the button
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 if (pointer == -1) {
@@ -197,6 +212,7 @@ public class UpgradesUI {
                 }
             }
 
+            // Ensures taht when the mouse isn't hovering over the button, it is no longer highlighted
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 if (pointer == -1) {
@@ -238,6 +254,8 @@ public class UpgradesUI {
         pixmap.fill();
         return pixmap;
     }
+
+    // Ensures that the resource requirements for each upgrade level get updated
     private void updateResourceCells(Table table, String resourceString, Label.LabelStyle style) {
         table.clear();
         String[] requirements = resourceString.split(", ");
@@ -257,7 +275,11 @@ public class UpgradesUI {
             table.add(itemGroup);
         }
     }
+
+    // Creates the availabe upgrades + chain of upgrades
     private void possibleUpgrades() {
+
+        // Fuel capacity
         createUpgradeChain(
             new String[]{"Fuel Capacity I", "Fuel Capacity II", "Fuel Capacity III", "Fuel Capacity IV"},
             new String[]{
@@ -284,6 +306,7 @@ public class UpgradesUI {
             }
             }
         );
+            // Hull integrity
             createUpgradeChain(
                 new String[]{"Health I", "Health II", "Health III", "Health IV"},
                 new String[]{
@@ -311,6 +334,7 @@ public class UpgradesUI {
                 }
         );
 
+        // Life support
         createUpgradeChain(
                 new String[]{"Oxygen I", "Oxygen II", "Oxygen III", "Oxygen IV"},
                 new String[]{
@@ -337,6 +361,8 @@ public class UpgradesUI {
                 }
                 }
         );
+
+        // System scanner
         createUpgradeChain(
             new String[]{
                 "Destination Scanner I",
@@ -367,7 +393,8 @@ public class UpgradesUI {
                     }
                 }
             }
-);          
+);      
+        // Inventory capacity
         createUpgradeChain(
             new String[]{
             "Inventory Capacity I",
@@ -400,6 +427,8 @@ public class UpgradesUI {
             }
             }
         );
+
+        // Amount of resources that can be harvested
         createUpgradeChain(
             new String[]{
                 "Resources Level I",
@@ -468,6 +497,8 @@ public class UpgradesUI {
             stage.draw();
         }
     }
+
+    // Getters and setters
 
     public int getDestinationLevel() {
         return destinationLevel;

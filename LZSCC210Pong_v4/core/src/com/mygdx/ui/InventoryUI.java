@@ -31,7 +31,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
+/**
+ * Handles the display of the inventory menu
+ */
 public class InventoryUI {
     private SpaceGame game;
     private Player player;

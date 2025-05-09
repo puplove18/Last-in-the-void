@@ -19,8 +19,12 @@ import com.mygdx.objects.Player;
 import com.mygdx.objects.StarSystem;
 import com.mygdx.objects.Universe;
 
+/**
+ * The scanner menu where the player can detect systems that they are able to travel to
+ */
 public class ScannerUI {
 
+    // UI stuff
     private Stage stage;
     private Skin skin;
     private Table mainTable;
@@ -32,11 +36,13 @@ public class ScannerUI {
     private DestinationListener destListener;
 
     private InputProcessor previousProcessor;
+
+    // Hanldes appearance
     private Texture backgroundTexture;
     private NinePatchDrawable panelBackground;
     private ObjectMap<TextButton, Drawable> originalButtonBackgrounds = new ObjectMap<>();
 
-    private boolean isVisible = false;
+    private boolean isVisible = false; // Weather the scanner menu is active or not
 
     private static final Color TITLE_COLOR = Color.WHITE;
     private static final Color TEXT_COLOR = Color.LIGHT_GRAY;
@@ -63,6 +69,8 @@ public class ScannerUI {
     public void setCloseButtonListener(CloseButtonListener listener) {
         this.closeButtonListener = listener;
     }
+
+    // Creates the background for the panel
     private void initializePanelBackground() {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0.15f, 0.15f, 0.2f, 0.9f);
@@ -103,7 +111,7 @@ public class ScannerUI {
 
         stage.addActor(closeButtonTable);
 
-        
+        // Table for displaying destinations
         scannerTable = new Table(skin);
         scannerTable.top().left().pad(10);
         scannerTable.defaults().pad(5).left();
@@ -140,6 +148,7 @@ public class ScannerUI {
         scannerTable.add(new Label("Action", headerStyle)).width(width * 0.25f).padBottom(10);
         scannerTable.row();
 
+        // Stores all possible star systems player can travel to
         StarSystem[] destinations = universe.getDestinations();
 
         for (int i = 0; i < destinations.length; i++) {
