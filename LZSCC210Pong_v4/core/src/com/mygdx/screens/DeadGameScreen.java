@@ -54,8 +54,16 @@ public class DeadGameScreen extends ScreenAdapter {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        Gdx.input.setInputProcessor(stage);
+
         stage.act(delta);
         stage.draw();
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
