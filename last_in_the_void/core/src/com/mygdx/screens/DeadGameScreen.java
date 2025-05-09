@@ -14,19 +14,31 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.SpaceGame;
 import com.mygdx.helpers.ScreenType;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class DeadGameScreen extends ScreenAdapter {
     private Stage stage;
     private Skin skin;
     private Table table;
+    private Texture backgroundTexture;
 
     public DeadGameScreen() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
+        Texture bgTex = new Texture(Gdx.files.internal("bg5.jpg"));
+        Image bg = new Image(bgTex);
+        bg.setFillParent(true);
+        stage.addActor(bg);
+
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
+
 
         Label titleLabel = new Label("GAME OVER", skin);
         titleLabel.setFontScale(1.0f);
