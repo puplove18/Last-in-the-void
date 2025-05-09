@@ -1,4 +1,4 @@
-package com.mygdx.screens;
+package com.mygdx.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -20,13 +20,13 @@ import com.mygdx.game.SpaceGame;
 import com.mygdx.helpers.ScreenType;
 import com.mygdx.audio.AudioManager;
 
-public class MenuScreenUi extends ScreenAdapter {
+public class MenuScreenUI extends ScreenAdapter {
     private Stage stage;
     private Skin skin;
     private Table table;
     private Texture backgroundTexture;
 
-    public MenuScreenUi() {
+    public MenuScreenUI() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -44,19 +44,19 @@ public class MenuScreenUi extends ScreenAdapter {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                SpaceGame.getInstance().changeScreen(MenuScreenUi.this, ScreenType.GAME);
+                SpaceGame.getInstance().changeScreen(MenuScreenUI.this, ScreenType.GAME);
             }
         });
         creditsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                SpaceGame.getInstance().changeScreen(MenuScreenUi.this, ScreenType.CREDITS);
+                SpaceGame.getInstance().changeScreen(MenuScreenUI.this, ScreenType.CREDITS);
             }
         });
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                SpaceGame.getInstance().exit(MenuScreenUi.this);
+                SpaceGame.getInstance().exit(MenuScreenUI.this);
             }
         });
         Button musicButton = new Button(skin, "music");

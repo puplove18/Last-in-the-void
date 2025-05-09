@@ -10,7 +10,7 @@ import com.mygdx.screens.EndGameScreen;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.screens.InfoScreen;
 import com.mygdx.screens.MenuScreen;
-import com.mygdx.screens.MenuScreenUi;
+import com.mygdx.ui.MenuScreenUI;
 import com.mygdx.screens.CreditsScreen;
 import com.mygdx.screens.DeadGameScreen;
 
@@ -53,7 +53,7 @@ public class SpaceGame extends Game {
 		this.ortographicCamera.setToOrtho(false, this.windowWidth, this.windowHeight);
 
 		// MenuScreen is the starting screen of the game
-		setScreen(new MenuScreenUi());
+		setScreen(new MenuScreenUI());
 	}
 
 	    // Method to update window dimensions when screen size changes
@@ -86,7 +86,7 @@ public class SpaceGame extends Game {
 		if(newScreenType == ScreenType.GAME)
 			setScreen(new GameScreen(this.ortographicCamera));
 		if(newScreenType == ScreenType.MENU_UI)
-			setScreen(new MenuScreenUi());
+			setScreen(new MenuScreenUI());
 		if(newScreenType == ScreenType.INFO)
 			setScreen(new InfoScreen());
 		if(newScreenType == ScreenType.CREDITS)
