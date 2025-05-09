@@ -255,7 +255,7 @@ public class UpgradesUI {
         return pixmap;
     }
 
-    // Ensures that the resource requirements for each upgrade level get updated
+    // Ensures that the resource requirements and their icons for each upgrade level get updated
     private void updateResourceCells(Table table, String resourceString, Label.LabelStyle style) {
         table.clear();
         String[] requirements = resourceString.split(", ");
@@ -464,7 +464,7 @@ public class UpgradesUI {
 
         
     }
-    
+    // Get the the amount and resources name from the string in possibleUpgrades
     private Map<String, Integer> parseResourceString(String resourceString) {
     Map<String, Integer> resources = new HashMap<>();
     String[] parts = resourceString.split(", ");

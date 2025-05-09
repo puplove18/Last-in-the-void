@@ -37,7 +37,7 @@ public class ScannerUI {
 
     private InputProcessor previousProcessor;
 
-    // Hanldes appearance
+    // Handles appearance
     private Texture backgroundTexture;
     private NinePatchDrawable panelBackground;
     private ObjectMap<TextButton, Drawable> originalButtonBackgrounds = new ObjectMap<>();
